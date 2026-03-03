@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiddy - Materiale Educaționale</title>
+    <style>
+        /* --- Stiluri Generale & Font --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif; }
+        body { background-color: #fffdf0; overflow-x: hidden; color: #333; }
+
+        /* --- Header & Navigație --- */
+        header {
+            background: #57c1eb;
+            background: linear-gradient(180deg, #57c1eb 0%, #87CEEB 100%);
+            padding: 30px 0 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            background: #ffb400;
+            display: inline-block;
+            padding: 10px 45px;
+            border: 5px solid white;
+            border-radius: 15px;
+            box-shadow: 0 6px 0 #cc9000;
+            margin-bottom: 25px;
+        }
+        .logo-container h1 { color: white; font-size: 42px; letter-spacing: 3px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 0 20px; }
+        
+        .filter-btn {
+            background: #ff7f00; 
+            color: white; 
+            padding: 10px 22px; 
+            border-radius: 25px; 
+            font-weight: bold; 
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #cc6600;
+        }
+        .filter-btn:hover { background: #ff9429; transform: translateY(-2px); }
+        .filter-btn.active { background: #333; box-shadow: 0 4px 0 #000; }
+
+        .hero-text { color: white; margin-top: 30px; }
+        .hero-text h2 { font-size: 38px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+
+        .wave-transition {
+            background: #fffdf0;
+            height: 80px;
+            margin-top: -80px;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --- Container Carduri: 3 COLOANE --- */
+        .main-content { max-width: 1200px; margin: -20px auto 60px; padding: 0 20px; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 25px; 
+        }
+
+        @media (max-width: 992px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+        .filter-item { transition: all 0.4s ease; display: block; }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            border-bottom: 8px solid #ddd;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { transform: translateY(-8px); }
+
+        .card.pink { border-color: #ffc0cb; background: #fff5f7; }
+        .card.blue { border-color: #add8e6; background: #f0f8ff; }
+        .card.green { border-color: #90ee90; background: #f2fff2; }
+        .card.yellow { border-color: #fce709; background: #fffdf0; }
+        .card.red { border-color: #ff3939; background: #fffdf0; }
+         .card.purple { border-color: #aa1b9e; background: #fffdf0; }
+
+        .img-preview-container {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.03);
+        }
+        .img-preview-container img { width: 100%; border-radius: 12px; border: 1px solid #eee; }
+        .img-preview-container img.hidden-img { display: none; }
+
+        .pages-badge {
+            position: absolute; bottom: 10px; right: 10px;
+            background: #444; color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 11px; font-weight: bold;
+        }
+
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; margin-bottom: 10px; width: fit-content; }
+        .pink .tag { background: #ff4d8d; color: white; }
+        .blue .tag { background: #4dabff; color: white; }
+        .green .tag { background: #4caf50; color: white; }
+        .yellow .tag { background: #fce709; color: white; }
+        .red .tag {background: #ff3939; color: white;}
+        .card.purple .tag { background: #aa1b9e; color: white; }
+
+        h3 { margin-bottom: 8px; font-size: 20px; }
+        p { color: #666; font-size: 13px; line-height: 1.4; flex-grow: 1; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; align-items: stretch; }
+        .btn {
+            flex: 1; padding: 10px; border: none; border-radius: 15px;
+            cursor: pointer; font-weight: bold; transition: 0.2s;
+            font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .btn-prev { background: white; border: 2px solid #555; color: #333; }
+        .btn-down { background: #ff4d8d; color: white; box-shadow: 0 4px 0 #c22d63; }
+        .blue .btn-down { background: #4dabff; box-shadow: 0 4px 0 #2a83d1; }
+        .green .btn-down { background: #4caf50; box-shadow: 0 4px 0 #357a38; }
+        .yellow .btn-down { background: #fce709; color: white; box-shadow: 0 4px 0 #d4c205; }
+        .red .btn-down { background: #ff3939; box-shadow: 0 4px 0 #c22d63; }
+        .purple .btn-down { background: #aa1b9e; box-shadow: 0 4px 0 #79116b; color: white; }
+
+        .btn:active { transform: translateY(3px); box-shadow: none; }
+
+        /* --- Modal Galerie --- */
+        #gallery-modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            z-index: 9999; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .modal-header { color: white; margin-bottom: 15px; text-align: center; }
+        .modal-body {
+            display: flex; gap: 20px; overflow-x: auto;
+            width: 90%; padding: 20px; scroll-behavior: smooth;
+        }
+        .modal-body img { height: 75vh; border-radius: 10px; border: 4px solid white; background: white; }
+        
+        .close-modal { 
+            margin-top: 25px; color: white; cursor: pointer; 
+            font-size: 16px; background: #ff4d8d; 
+            padding: 10px 35px; border-radius: 30px;
+            border: 2px solid white; font-weight: bold;
+            z-index: 10001;
+        }
+
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-container"><h1>KIDDY</h1></div>
+    <nav>
+        <ul id="filters">
+            <li><button class="filter-btn active" data-category="toate">Toate</button></li>
+            <li><button class="filter-btn" data-category="Primăvara">Primăvara</button></li>
+            <li><button class="filter-btn" data-category="Vară">Vară</button></li>
+            <li><button class="filter-btn" data-category="Toamnă">Toamnă</button></li>
+            <li><button class="filter-btn" data-category="Iarnă">Iarnă</button></li>
+            <li><button class="filter-btn" data-category="Alfabet">Alfabet</button></li>
+            <li><button class="filter-btn" data-category="Cifre">Cifre</button></li>
+            <li><button class="filter-btn" data-category="Matematică">Matematică</button></li>
+            <li><button class="filter-btn" data-category="Engleză">Engleză</button></li>
+            <li><button class="filter-btn" data-category="Diplome">Diplome</button></li>
+              <li><button class="filter-btn" data-category="Animale">Animale</button></li>
+        </ul>
+    </nav>
+    <div class="hero-text">
+        <h2>Bine ai venit pe KIDDY!</h2>
+        <p>materiale educaționale distractive pentru pitici</p>
+    </div>
+</header>
+
+<div class="wave-transition"></div>
+
+<div class="main-content">
+    <div class="grid" id="materials-grid">
+
+        <div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/grupa mica primavara pachet 1/1.jpg" alt="P1">
+                    <img src="primavara/grupa mica primavara pachet 1/2.jpg" alt="P2">
+                    <img src="primavara/grupa mica primavara pachet 1/3.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/4.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/5.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/6.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/7.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/8.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/9.jpg" class="hidden-img">
+                    <img src="primavara/grupa mica primavara pachet 1/10.jpg" class="hidden-img">
+                    <div class="pages-badge">10 pagini</div>
+                </div>
+                <span class="tag">Primăvara</span>
+                <h3>Grupa mică Primăvara</h3>
+                <p>Fișe tematice pentru activități distractive de primăvară.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mică Primăvara', 'primavara/grupa mica primavara pachet 1/', 10, 1)">👁️ Previzualizează</button>
+                    <a href="primavara/grupa mica primavara pachet 1/grupa mica primavara pachet 1.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-item filter-Alfabet">
+            <div class="card yellow">
+                <div class="img-preview-container">
+                    <img src="alfabet/alfabet traseaza 1/126.jpg" alt="P1">
+                    <img src="alfabet/alfabet traseaza 1/127.jpg" alt="P2">
+                    <img src="alfabet/alfabet traseaza 1/128.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/129.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/130.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/131.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/132.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/133.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/134.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/135.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/136.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/137.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 1/138.jpg" class="hidden-img">
+                    <div class="pages-badge">13 pagini</div>
+                </div>
+                <span class="tag">Fise Alfabet A-M</span>
+                <h3>Grupa mare, grupa 0</h3>
+                <p>Fise de traseu pentru alfabetul român, grupa 0.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mare, grupa 0', 'alfabet/alfabet traseaza 1/', 13, 126)">👁️ Previzualizează</button>
+                    <a href="alfabet/alfabet traseaza 1/alfabet traseaza 1.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+<div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/mama melodie/mama.png" alt="P1">
+                 
+                    <div class="pages-badge">2 </div>
+                </div>
+                <span class="tag">Melodie pentru mama</span>
+                <h3>8 martie </h3>
+                <p>Dedicatie pentru mama,varianta mp3 si mp4</p>
+                <div class="btn-group">
+                    
+                        <a href="https://www.dropbox.com/scl/fi/y3x9adwqmoqw88jyvlkmj/Te-iubesc-Kiddy-MSK.mp4?rlkey=0v356dz4eb8m3z5h02q2im97q&st=bqs6zrqt&dl=0" download style="text-decoration: none; flex: 1; display: flex;">
+                            <button class="btn btn-down">📥 Descarcă mp4</button>
+                    <a href="https://www.dropbox.com/scl/fi/6cctgxsvg9w5l9f1wbkac/Mami-nu-mi-lua-cadouri-Kiddy-Msk.mp3?rlkey=qthq2tppwe5w5dqqkttmn25uy&st=ictvpwco&dl=0" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă mp3</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+  <div class="filter-item filter-Diplome">
+            <div class="card purple">
+                <div class="img-preview-container">
+                    <img src="diplome/diplome mama/1.png" alt="P1">
+                    <img src="diplome/diplome mama/2.png" alt="P2">
+                    <img src="diplome/diplome mama/3.png" class="hidden-img">
+                    <img src="diplome/diplome mama/4.png" class="hidden-img">
+                    <img src="diplome/diplome mama/5.png" class="hidden-img">
+                    <img src="diplome/diplome mama/6.png" class="hidden-img">
+                    <img src="diplome/diplome mama/7.png" class="hidden-img">
+                    <img src="diplome/diplome mama/8.png" class="hidden-img">
+                    
+            
+                    <div class="pages-badge">8 pagini</div>
+                </div>
+                <span class="tag">Diplome
+                </span>
+                <h3>Diplome 8 Martie</h3>
+                <p></p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Diplome 8 Martie', 'diplome/diplome mama/', 8, 1)">👁️ Previzualizează</button>
+                    <a href="diplome/diplome mama/diplome mama.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+            <div class="filter-item filter-Alfabet">
+            <div class="card yellow">
+                <div class="img-preview-container">
+                    <img src="alfabet/alfabet traseaza 2/139.jpg" alt="P1">
+                    <img src="alfabet/alfabet traseaza 2/140.jpg" alt="P2">
+                    <img src="alfabet/alfabet traseaza 2/141.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/142.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/143.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/144.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/145.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/146.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/147.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/148.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/149.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/150.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 2/151.jpg" class="hidden-img">
+                   
+                    <div class="pages-badge">13 pagini</div>
+                </div>
+                <span class="tag">Fise Alfabet N-Z</span>
+                <h3>Grupa mare, grupa 0</h3>
+                <p>Fise de traseu pentru alfabetul român, grupa 0.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mare, grupa 0', 'alfabet/alfabet traseaza 2/', 13, 139)">👁️ Previzualizează</button>
+                    <a href="alfabet/alfabet traseaza 2/alfabet traseaza 2.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+   <div class="filter-item filter-Animale">
+            <div class="card red">
+                <div class="img-preview-container">
+                    <img src="animale/animale domestice/60.jpg" alt="P1">
+                    <img src="animale/animale domestice/61.jpg" alt="P2">
+                    <img src="animale/animale domestice/62.jpg" class="hidden-img">
+                    <img src="animale/animale domestice/63.jpg" class="hidden-img">
+                    <img src="animale/animale domestice/64.jpg" class="hidden-img">
+                    <img src="animale/animale domestice/65.jpg" class="hidden-img">
+               
+                    <div class="pages-badge">6 pagini</div>
+                </div>
+                <span class="tag">Fise Familie Animale Domestice</span>
+                <h3>Gradinita, grupa 0</h3>
+                <p></p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Gradinita, grupa 0', 'animale/animale domestice/', 6, 60)">👁️ Previzualizează</button>
+                    <a href="animale/animale domestice/animale domestice (1).pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    <div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/1.jpg" alt="P1">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/2.jpg" alt="P2">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/3.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/4.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/5.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/6.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/7.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/8.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/9.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/10.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/11.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/12.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/13.jpg" class="hidden-img">
+                    <img src="primavara/alb-negru primavara grupa mica.pdf/14.jpg" class="hidden-img">
+                    <div class="pages-badge">14 pagini</div>
+                </div>
+                <span class="tag">Primăvara</span>
+                <h3>Grupa mică Primăvara </h3>
+                <p>Fișe alb-negru tematice pentru activități distractive de primăvară.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mică Primăvara', 'primavara/alb-negru primavara grupa mica.pdf/', 14, 1)">👁️ Previzualizează</button>
+                    <a href="primavara/alb-negru primavara grupa mica.pdf/alb-negru primavara grupa mica.pdf.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+  <div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/iubim plantele/6.jpg" alt="P1">
+                    <img src="primavara/iubim plantele/7.jpg" alt="P2">
+                    <img src="primavara/iubim plantele/8.jpg" class="hidden-img">
+                    <img src="primavara/iubim plantele/9.jpg" class="hidden-img">
+                    <img src="primavara/iubim plantele/10.jpg" class="hidden-img">
+                    
+                    <div class="pages-badge">5 pagini</div>
+                </div>
+                <span class="tag">Iubim plantele</span>
+                <h3>Gradinita, Grupa 0 </h3>
+                <p>Fișe pentru activități tematice despre plante.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Iubim plantele', 'primavara/iubim plantele/', 5, 6)">👁️ Previzualizează</button>
+                    <a href="primavara/iubim plantele/iubim plantele.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        
+            <div class="filter-item filter-Alfabet">
+            <div class="card yellow">
+                <div class="img-preview-container">
+                    <img src="alfabet/alfabet traseaza 3/100.jpg" alt="P1">
+                    <img src="alfabet/alfabet traseaza 3/101.jpg" alt="P2">
+                    <img src="alfabet/alfabet traseaza 3/102.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/103.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/104.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/105.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/106.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/107.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/108.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/109.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/110.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/111.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/112.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 3/113.jpg" class="hidden-img">
+                   
+                    <div class="pages-badge">14 pagini</div>
+                </div>
+                <span class="tag">Fise Alfabet A-N</span>
+                <h3>Grupa mare, grupa 0</h3>
+                <p>Fise de traseu pentru alfabetul român, grupa 0.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mare, grupa 0', 'alfabet/alfabet traseaza 3/', 14, 100)">👁️ Previzualizează</button>
+                    <a href="alfabet/alfabet traseaza 3/alfabet traseaza 3.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        
+            <div class="filter-item filter-Alfabet">
+            <div class="card yellow">
+                <div class="img-preview-container">
+                    <img src="alfabet/citire a/11.jpg" alt="P1">
+                    <img src="alfabet/citire a/12.jpg" alt="P2">
+                    
+                    <div class="pages-badge">2 pagini</div>
+                </div>
+                <span class="tag">Fise Citire Litera A</span>
+                <h3>Grupa mare, grupa 0</h3>
+                <p>Fise de citire pentru litera A.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mare, grupa 0', 'alfabet/citire a/', 2, 11)">👁️ Previzualizează</button>
+                    <a href="alfabet/citire a/citire a.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+<div class="filter-item filter-Iarnă">
+            <div class="card red">
+                <div class="img-preview-container">
+                    <img src="craciun/craciun/75.jpg" alt="P1">
+                    <img src="craciun/craciun/76.jpg" alt="P2">
+                    <img src="craciun/craciun/77.jpg" class="hidden-img">
+                    <img src="craciun/craciun/78.jpg" class="hidden-img">
+                    <img src="craciun/craciun/79.jpg" class="hidden-img">
+                    <img src="craciun/craciun/80.jpg" class="hidden-img">
+                     <img src="craciun/craciun/81.jpg" class="hidden-img">
+                    <img src="craciun/craciun/82.jpg" class="hidden-img">
+                    <img src="craciun/craciun/83.jpg" class="hidden-img">
+               
+                    <div class="pages-badge">9 pagini</div>
+                </div>
+                <span class="tag">Fise Craciun</span>
+                <h3>Grupa Mare, grupa 0</h3>
+                <p></p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa Mare, grupa 0', 'craciun/craciun/', 9, 75)">👁️ Previzualizează</button>
+                    <a href="craciun/craciun/craciun.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+             <div class="filter-item filter-Alfabet">
+            <div class="card yellow">
+                <div class="img-preview-container">
+                    <img src="alfabet/alfabet traseaza 4/114.jpg" alt="P1">
+                    <img src="alfabet/alfabet traseaza 4/115.jpg" alt="P2">
+                    <img src="alfabet/alfabet traseaza 4/116.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/117.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/118.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/119.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/120.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/121.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/122.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/123.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/124.jpg" class="hidden-img">
+                    <img src="alfabet/alfabet traseaza 4/125.jpg" class="hidden-img">
+                    
+        
+                    <div class="pages-badge">12 pagini</div>
+                </div>
+                <span class="tag">Fise Alfabet 0-Z</span>
+                <h3>Grupa mare, grupa 0</h3>
+                <p>Fise de traseu pentru alfabetul român, grupa 0.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa mare, grupa 0', 'alfabet/alfabet traseaza 4/', 12, 114)">👁️ Previzualizează</button>
+                    <a href="alfabet/alfabet traseaza 4/alfabet traseaza 4.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+<div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/1.jpg" alt="P1">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/2.jpg" alt="P2">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/3.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/4.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/5.jpg" class="hidden-img">
+                     <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/6.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/7.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/8.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/9.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA2/10.jpg" class="hidden-img">
+
+    
+                    
+                    <div class="pages-badge">10 pagini</div>
+                </div>
+                <span class="tag">PRIMAVARA</span>
+                <h3>Grupa Mica</h3>
+                <p>Fișe pentru activități tematice despre primăvară și plante.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Iubim plantele', 'primavara/FISE PRIMAVARA-GRUPA MICA2/', 10, 1)">👁️ Previzualizează</button>
+                    <a href="primavara/FISE PRIMAVARA-GRUPA MICA2/FISE PRIMAVARA-GRUPA MICA2.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+<div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/11.jpg" alt="P1">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/12.jpg" alt="P2">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/13.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/14.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/15.jpg" class="hidden-img">
+                     <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/16.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/17.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/18.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/19.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/20.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/21.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA3/22.jpg" class="hidden-img">
+
+    
+                    
+                    <div class="pages-badge">12 pagini</div>
+                </div>
+                <span class="tag">Grupa mica</span>
+                <h3>Grupa Mica Primavara</h3>
+                <p>Fișe pentru activități tematice despre primăvară și plante.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Iubim plantele', 'primavara/FISE PRIMAVARA-GRUPA MICA3/', 12, 11)">👁️ Previzualizează</button>
+                    <a href="primavara/FISE PRIMAVARA-GRUPA MICA3/FISE PRIMAVARA-GRUPA MICA3.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="filter-item filter-Primăvara">
+            <div class="card pink">
+                <div class="img-preview-container">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/23.jpg" alt="P1">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/24.jpg" alt="P2">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/25.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICAA4/26.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/27.jpg" class="hidden-img">
+                     <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/28.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/29.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/30.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/31.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/32.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/33.jpg" class="hidden-img">
+                    <img src="primavara/FISE PRIMAVARA-GRUPA MICA4/34.jpg" class="hidden-img">
+
+    
+                    
+                    <div class="pages-badge">12 pagini</div>
+                </div>
+                <span class="tag">Grupa mica</span>
+                <h3>Grupa Mica Primavara</h3>
+                <p>Fișe pentru activități tematice despre primăvară și plante.</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Iubim plantele', 'primavara/FISE PRIMAVARA-GRUPA MICA4/', 12, 23)">👁️ Previzualizează</button>
+                    <a href="primavara/FISE PRIMAVARA-GRUPA MICA4/FISE PRIMAVARA-GRUPA MICA4.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+<div class="filter-item filter-Iarnă">
+            <div class="card red">
+                <div class="img-preview-container">
+                    <img src="craciun/craciun2/65.jpg" alt="P1">
+                    <img src="craciun/craciun2/66.jpg" alt="P2">
+                    <img src="craciun/craciun2/67.jpg" class="hidden-img">
+                    <img src="craciun/craciun2/68.jpg" class="hidden-img">
+                    <img src="craciun/craciun2/69.jpg" class="hidden-img">
+                  
+               
+                    <div class="pages-badge">5 pagini</div>
+                </div>
+                <span class="tag">Fise Craciun</span>
+                <h3>Grupa Mica</h3>
+                <p></p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Grupa Mica, grupa 0', 'craciun/craciun2/', 5, 65)">👁️ Previzualizează</button>
+                    <a href="craciun/craciun2/craciun2.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+         <div class="filter-item filter-Animale">
+            <div class="card red">
+                <div class="img-preview-container">
+                    <img src="animale/caracteristici animale/1.jpg" alt="P1">
+                    <img src="animale/caracteristici animale/2.jpg" alt="P2">
+                    <img src="animale/caracteristici animale/3.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/4.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/5.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/6.jpg" class="hidden-img">
+                  <img src="animale/caracteristici animale/7.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/8.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/9.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/10.jpg" class="hidden-img">
+                      <img src="animale/caracteristici animale/11.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/12.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/13.jpg" class="hidden-img">
+                    <img src="animale/caracteristici animale/14.jpg" class="hidden-img">
+                    <div class="pages-badge">14 pagini</div>
+                </div>
+                <span class="tag">Gradinita, grupa 0</span>
+                <h3>Caracteristicile Animalelor</h3>
+                <p></p>
+                <div class="btn-group">
+<button class="btn btn-prev" onclick="openGallery('Caracteristicile Animalelor', 'animale/caracteristici animale/', 14, 1)">👁️ Previzualizează</button>                    <a href="animale/caracteristici ANIMALE/caracteristici ANIMALE.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="filter-item filter-Engleză">
+            <div class="card blue">
+                <div class="img-preview-container">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/1.jpg" alt="I1">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/2.jpg" alt="I2">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/3.jpg" class="hidden-img">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/4.jpg" class="hidden-img">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/5.jpg" class="hidden-img">
+                    <img src="engleza/Land Animals Coloring Pages kiddy/6.jpg" class="hidden-img">
+                     <img src="engleza/Land Animals Coloring Pages kiddy/7.jpg" class="hidden-img">
+                    <div class="pages-badge">7 pagini</div>
+                </div>
+                <span class="tag">Engleză</span>
+                <h3>Animals</h3>
+                <p>Animals coloring pages for kids</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="openGallery('Animals', 'engleza/Land Animals Coloring Pages kiddy/', 7, 1)">👁️ Previzualizează</button>
+                    <a href="engleza/Land Animals Coloring Pages kiddy/Land Animals Coloring Pages kiddy.pdf" download style="text-decoration: none; flex: 1; display: flex;">
+                        <button class="btn btn-down">📥 Descarcă</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="gallery-modal">
+    <div class="modal-header">
+        <h2 id="modal-title">Previzualizare</h2>
+        <p style="color: #ccc; font-size: 14px;">Fă scroll la dreapta pentru a vedea tot pachetul →</p>
+    </div>
+    <div class="modal-body" id="modal-content"></div>
+    <div class="close-modal" onclick="closeGallery()">✖ Închide Previzualizarea</div>
+</div>
+
+<script>
+    // --- Sistem Filtrare ---
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.filter-item');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const category = button.getAttribute('data-category');
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            items.forEach(item => {
+                item.style.animation = 'none';
+                if (category === 'toate' || item.classList.contains(`filter-${category}`)) {
+                    item.style.display = 'block';
+                    setTimeout(() => item.style.animation = 'scaleIn 0.4s ease forwards', 10);
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // --- Sistem Galerie Actualizat ---
+    // startNum este parametrul care indica numarul primei poze (ex: 126)
+    function openGallery(title, folderPath, numPages, startNum) {
+        const modal = document.getElementById('gallery-modal');
+        const content = document.getElementById('modal-content');
+        document.getElementById('modal-title').innerText = title;
+        content.innerHTML = ''; 
+
+        for (let i = 0; i < numPages; i++) {
+            const img = document.createElement('img');
+            // Calculam numarul real al pozei (startNum + index)
+            let photoNum = parseInt(startNum) + i;
+            
+            img.src = folderPath.includes('http') ? folderPath + (i+1) : folderPath + photoNum + ".jpg";
+            img.onerror = function() { this.style.display = 'none'; };
+            content.appendChild(img);
+        }
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeGallery() {
+        document.getElementById('gallery-modal').style.display = 'none';
+        document.body.style.overflow = 'auto'; 
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('gallery-modal');
+        if (event.target == modal) { closeGallery(); }
+    }
+</script>
+</body>
+</html>
