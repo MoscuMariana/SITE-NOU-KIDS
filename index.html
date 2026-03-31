@@ -162,7 +162,65 @@
         }
 
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    /* Containerul dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Stilul butonului principal de Jocuri */
+.dropbtn {
+    background-color: #ff9f43; /* O culoare diferită să iasă în evidență */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Cutia care conține link-urile către jocuri (ascunsă implicit) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+}
+
+/* Stilul link-urilor din interiorul meniului */
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+/* Efect la hover pe link-uri */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    color: #ff6b6b;
+}
+
+/* Afișarea meniului la trecerea mouse-ului */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Schimbarea culorii butonului când meniul e deschis */
+.dropdown:hover .dropbtn {
+    background-color: #e67e22;
+}
+    
     </style>
+
 </head>
 <body>
 
@@ -181,7 +239,16 @@
             <li><button class="filter-btn" data-category="Engleză">Engleză</button></li>
             <li><button class="filter-btn" data-category="Diplome">Diplome</button></li>
               <li><button class="filter-btn" data-category="Animale">Animale</button></li>
-        </ul>
+       <li class="dropdown">
+            <button class="dropbtn">Jocuri ▾</button>
+            <div class="dropdown-content">
+                <a href="joc1.html">Găsește Broscuța</a>
+                <a href="joc-memorie.html">Joc Memorie</a>
+                <a href="puzzle.html">Puzzle Interactiv</a>
+            </div>
+        </li>
+            </ul>
+        
     </nav>
     <div class="hero-text">
         <h2>Bine ai venit pe KIDDY!</h2>
