@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiddy - Materiale Educaționale & Jocuri</title>
+    <style>
+        /* --- Stiluri Generale & Font --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #fffdf0; overflow-x: hidden; color: #333; }
+
+        /* --- Header & Navigație --- */
+        header {
+            background: #57c1eb;
+            background: linear-gradient(180deg, #57c1eb 0%, #87CEEB 100%);
+            padding: 30px 0 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            background: #ffb400;
+            display: inline-block;
+            padding: 10px 45px;
+            border: 5px solid white;
+            border-radius: 15px;
+            box-shadow: 0 6px 0 #cc9000;
+            margin-bottom: 25px;
+        }
+        .logo-container h1 { color: white; font-size: 42px; letter-spacing: 3px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 0 20px; }
+        
+        .filter-btn {
+            background: #ff7f00; 
+            color: white; 
+            padding: 10px 22px; 
+            border-radius: 25px; 
+            font-weight: bold; 
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #cc6600;
+        }
+        .filter-btn:hover { background: #ff9429; transform: translateY(-2px); }
+        .filter-btn.active { background: #333; box-shadow: 0 4px 0 #000; }
+
+        .hero-text { color: white; margin-top: 30px; }
+        .hero-text h2 { font-size: 38px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+
+        .wave-transition {
+            background: #fffdf0;
+            height: 80px;
+            margin-top: -80px;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --- Secțiune Joc --- */
+        .game-section {
+            max-width: 900px;
+            margin: 20px auto 40px auto;
+            padding: 0 15px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .game-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Raport 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: #eee;
+            border-radius: 20px;
+            border: 8px solid #ffb400;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .game-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .game-title {
+            background: #ff7f00;
+            color: white;
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 20px 20px 0 0;
+            font-weight: bold;
+            margin-bottom: -5px;
+            position: relative;
+            z-index: 11;
+        }
+
+        /* --- Descriere Joc --- */
+        .game-info {
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            line-height: 1.6;
+        }
+
+        .game-info h3 { color: #ff7f00; margin-bottom: 15px; font-size: 24px; }
+        .game-info p { margin-bottom: 15px; color: #555; }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            text-align: left;
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .feature-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
+
+        .oac-footer {
+            font-weight: bold;
+            color: #4caf50;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            display: block;
+        }
+
+        /* --- Google Ads Container --- */
+        .ads-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* --- Modal Galerie --- */
+        #gallery-modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            z-index: 9999; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .modal-header { color: white; margin-bottom: 15px; text-align: center; }
+        .modal-body {
+            display: flex; gap: 20px; overflow-x: auto;
+            width: 90%; padding: 20px; scroll-behavior: smooth;
+        }
+        .modal-body img { height: 75vh; border-radius: 10px; border: 4px solid white; background: white; }
+        
+        .close-modal { 
+            margin-top: 25px; color: white; cursor: pointer; 
+            font-size: 16px; background: #ff4d8d; 
+            padding: 10px 35px; border-radius: 30px;
+            border: 2px solid white; font-weight: bold;
+            z-index: 10001;
+        }
+
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    /* Containerul dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Stilul butonului principal de Jocuri */
+.dropbtn {
+    background-color: #ff9f43; /* O culoare diferită să iasă în evidență */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Cutia care conține link-urile către jocuri (ascunsă implicit) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+}
+
+/* Stilul link-urilor din interiorul meniului */
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+/* Efect la hover pe link-uri */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    color: #ff6b6b;
+}
+
+/* Afișarea meniului la trecerea mouse-ului */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Schimbarea culorii butonului când meniul e deschis */
+.dropdown:hover .dropbtn {
+    background-color: #e67e22;
+}
+    
+    
+    
+    
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-container"><h1>KIDDY</h1></div>
+    <nav>
+        <ul id="filters">
+            <li><button class="filter-btn active" data-category="toate">Toate</button></li>
+            <li><button class="filter-btn" data-category="Primăvara">Primăvara</button></li>
+            <li><button class="filter-btn" data-category="Vară">Vară</button></li>
+            <li><button class="filter-btn" data-category="Toamnă">Toamnă</button></li>
+            <li><button class="filter-btn" data-category="Iarnă">Iarnă</button></li>
+            <li><button class="filter-btn" data-category="Alfabet">Alfabet</button></li>
+            <li><button class="filter-btn" data-category="Cifre">Cifre</button></li>
+            <li><button class="filter-btn" data-category="Matematică">Matematică</button></li>
+            <li><button class="filter-btn" data-category="Engleză">Engleză</button></li>
+            <li><button class="filter-btn" data-category="Diplome">Diplome</button></li>
+            <li><button class="filter-btn" data-category="Animale">Animale</button></li>
+        <li class="dropdown">
+            <button class="dropbtn">Jocuri ▾</button>
+            <div class="dropdown-content">
+                <a href="joc1.html">Găsește Broscuța</a>
+                <a href="joc-memorie.html">Joc Memorie</a>
+                <a href="puzzle.html">Puzzle Interactiv</a>
+            </div>
+        </li>
+       
+        </ul>
+    </nav>
+</header>
+
+<div class="wave-transition"></div>
+
+<section class="game-section">
+    <div class="game-title">🎮 Găsește Broasca - Hidden Objects</div>
+    <div class="game-container">
+        <iframe 
+            src="https://playgama.com/export/game/find-the-frog--hidden-objects?clid=p_35a36f15-9b64-4e86-8d58-6c602b5f37b6" 
+            allow="fullscreen; autoplay; encrypted-media" 
+            frameborder="0">
+        </iframe>
+    </div>
+</section>
+
+<section class="game-info">
+    <h3>🐸 Găsește Broscuța - Obiecte Ascunse</h3>
+    <p>Explorează lumi tematice magice: de la ferme primitoare și mlaștini misterioase, până la orașe aglomerate, păduri fermecate, plaje însorite și insule ale piraților!</p>
+    <p>Fiecare lume conține 3 niveluri cu broscuțe unice care așteaptă să fie descoperite. Colecționează-le pe toate pentru a-ți completa albumul – sunt atât de adorabile încât vei dori să le găsești pe toate!</p>
+    
+    <div class="features-grid">
+        <div class="feature-item">✅ Gameplay relaxant</div>
+        <div class="feature-item">✅ Control simplu (toate vârstele)</div>
+        <div class="feature-item">✅ Vizualuri alb-negru & color</div>
+        <div class="feature-item">✅ Colecție de broscuțe</div>
+        <div class="feature-item">✅ Dificultate variată</div>
+        <div class="feature-item">✅ Perfect pentru relaxare</div>
+    </div>
+
+    <p style="margin-top: 20px; font-style: italic;">„Găsește Broscuța” este o călătorie meditativă într-o lume a obiectelor ascunse care îți va oferi ore întregi de bucurie.</p>
+    <span class="oac-footer">Găsește-le pe toate, Oac-Oac!</span>
+</section>
+
+<div class="ads-container">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3657163291978156" crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3657163291978156"
+         data-ad-slot="6523339728"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<div id="gallery-modal">
+    <div class="modal-header">
+        <h2 id="modal-title">Titlu Galerie</h2>
+    </div>
+    <div class="modal-body" id="modal-content">
+        </div>
+    <div class="close-modal" onclick="closeGallery()">ÎNAPOI LA SITE</div>
+</div>
+
+<script>
+    // --- Sistem Galerie ---
+    function openGallery(title, folderPath, numPages, startNum) {
+        const modal = document.getElementById('gallery-modal');
+        const content = document.getElementById('modal-content');
+        document.getElementById('modal-title').innerText = title;
+        content.innerHTML = ''; 
+
+        for (let i = 0; i < numPages; i++) {
+            const img = document.createElement('img');
+            let photoNum = parseInt(startNum) + i;
+            img.src = folderPath.includes('http') ? folderPath + (i+1) : folderPath + photoNum + ".jpg";
+            img.onerror = function() { this.style.display = 'none'; };
+            content.appendChild(img);
+        }
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeGallery() {
+        document.getElementById('gallery-modal').style.display = 'none';
+        document.body.style.overflow = 'auto'; 
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('gallery-modal');
+        if (event.target == modal) { closeGallery(); }
+    }
+</script>
+
+</body>
+</html>
