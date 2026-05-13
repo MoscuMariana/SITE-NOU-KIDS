@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duelul Calculelor — Kiddy MSK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p1:#ff5e7e;       /* roz aprins jucator 1 */
+  --p1-dark:#c9305a;
+  --p2:#4fb6ff;       /* albastru jucator 2 */
+  --p2-dark:#1f78c7;
+  --bg1:#fff4d6;
+  --bg2:#ffd6ec;
+  --bg3:#cfe9ff;
+  --ink:#2b1a4a;
+  --gold:#ffc83d;
+  --green:#5ed27a;
+  --red:#ff5b5b;
+  --shadow: 0 6px 0 rgba(0,0,0,.18), 0 12px 24px rgba(43,26,74,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Nunito', system-ui, sans-serif;
+  font-weight:600;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, var(--bg2) 0%, transparent 40%),
+    radial-gradient(circle at 90% 20%, var(--bg3) 0%, transparent 45%),
+    radial-gradient(circle at 50% 90%, var(--bg1) 0%, transparent 50%),
+    #fff8e7;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Stelute fundal */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{
+  position:absolute;font-size:22px;opacity:.5;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-20px) rotate(15deg)}
+}
+
+.app{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:18px}
+
+/* BUTON ACASA */
+.home-btn{
+  position:fixed;
+  top:16px;left:16px;
+  z-index:50;
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px;
+  background:#fff;
+  border:4px solid var(--ink);
+  border-radius:999px;
+  font-family:'Baloo 2', cursive;
+  font-weight:800;
+  font-size:16px;
+  color:var(--ink);
+  text-decoration:none;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease, background .2s;
+}
+.home-btn:hover{
+  transform:translateY(-3px) rotate(-2deg);
+  background:var(--gold);
+}
+.home-btn:active{transform:translateY(0)}
+.home-icon{font-size:20px}
+@media (max-width:560px){
+  .home-btn{padding:8px 12px;font-size:14px;top:10px;left:10px}
+  .home-text{display:none}
+  .home-icon{font-size:22px}
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:18px 10px 10px;
+}
+.logo{
+  font-family:'Baloo 2', cursive;font-weight:800;
+  font-size:clamp(34px, 7vw, 64px);
+  line-height:1;
+  background:linear-gradient(90deg, #ff5e7e, #ffc83d, #5ed27a, #4fb6ff, #b366ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 4px 0 rgba(0,0,0,.06);
+  letter-spacing:1px;
+}
+.sub{
+  margin-top:6px;font-size:clamp(14px,2.4vw,18px);color:#5a4a8a;font-weight:500;
+}
+.site-link{
+  display:inline-block;margin-top:10px;padding:6px 14px;
+  background:#fff;border-radius:999px;border:3px solid var(--ink);
+  font-weight:600;color:var(--ink);text-decoration:none;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease;
+}
+.site-link:hover{transform:translateY(-2px)}
+
+/* CARD GENERIC */
+.card{
+  background:#fff;
+  border:4px solid var(--ink);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:24px;
+  margin-top:22px;
+}
+
+/* SCREEN VISIBILITATE */
+.screen{display:none}
+.screen.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* HOME — selectare clasa */
+.h2{
+  font-family:'Baloo 2', cursive;font-weight:800;
+  font-size:clamp(22px,4vw,30px);
+  text-align:center;margin-bottom:14px;
+}
+.grades{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:14px;
+}
+.grade-btn{
+  cursor:pointer;
+  border:4px solid var(--ink);
+  border-radius:22px;
+  padding:18px 12px;
+  font-family:'Baloo 2', cursive;font-weight:800;
+  font-size:20px;
+  color:var(--ink);
+  background:#fff;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease, background .2s;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.grade-btn .emoji{font-size:38px}
+.grade-btn .desc{font-family:'Nunito';font-size:13px;font-weight:500;color:#6b5a9c}
+.grade-btn:hover{transform:translateY(-4px) rotate(-1deg)}
+.grade-btn.g0{background:#ffe1ef}
+.grade-btn.g1{background:#fff1c2}
+.grade-btn.g2{background:#d4f7d4}
+.grade-btn.g3{background:#cfe9ff}
+.grade-btn.g4{background:#e7d6ff}
+
+/* PLAYERS SETUP */
+.players-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0;
+}
+.player-card{
+  border:4px solid var(--ink);border-radius:20px;padding:16px;text-align:center;
+}
+.player-card.p1{background:#ffe1ea}
+.player-card.p2{background:#dff0ff}
+.player-card label{font-weight:600;display:block;margin-bottom:8px}
+.player-card input{
+  width:100%;padding:10px 12px;border-radius:14px;border:3px solid var(--ink);
+  font-family:'Nunito';font-size:18px;text-align:center;background:#fff;
+}
+.avatar-row{display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.avatar{
+  font-size:26px;width:42px;height:42px;border-radius:50%;
+  border:3px solid transparent;background:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.avatar.selected{border-color:var(--ink);transform:scale(1.1)}
+
+.btn{
+  cursor:pointer;border:4px solid var(--ink);border-radius:18px;
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:20px;padding:12px 24px;
+  background:var(--gold);color:var(--ink);box-shadow:var(--shadow);
+  transition:transform .12s ease;
+}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(0);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn.full{width:100%;margin-top:8px}
+.btn.secondary{background:#fff}
+.btn.green{background:var(--green);color:#fff}
+.btn.danger{background:var(--red);color:#fff}
+
+/* GAME */
+.scoreboard{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
+  margin-bottom:14px;
+}
+.score-card{
+  border:4px solid var(--ink);border-radius:20px;padding:12px;text-align:center;
+  font-weight:600;position:relative;
+}
+.score-card.p1{background:linear-gradient(135deg, #ffd0db, #ffadc1)}
+.score-card.p2{background:linear-gradient(135deg, #cfe5ff, #9dccff)}
+.score-card .name{font-family:'Baloo 2',cursive;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;gap:6px}
+.score-card .pts{font-family:'Baloo 2',cursive;font-weight:800;font-size:34px;line-height:1;margin-top:4px}
+.score-card.active{animation:pulse 1.2s infinite}
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.04)}
+}
+.vs{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:30px;color:#fff;
+  background:var(--ink);border-radius:50%;width:60px;height:60px;
+  display:flex;align-items:center;justify-content:center;
+  border:4px solid var(--gold);
+}
+.level-bar{
+  margin:8px 0 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-weight:600;
+}
+.bar{
+  flex:1;height:18px;background:#fff;border:3px solid var(--ink);border-radius:99px;overflow:hidden;
+}
+.bar-fill{
+  height:100%;background:linear-gradient(90deg, var(--green), var(--gold), var(--p1));
+  width:0%;transition:width .4s ease;
+}
+
+.turn-banner{
+  text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;
+  padding:10px;border-radius:16px;margin-bottom:14px;
+  border:4px solid var(--ink);
+}
+.turn-banner.p1{background:var(--p1);color:#fff}
+.turn-banner.p2{background:var(--p2);color:#fff}
+
+.question-box{
+  background:#fff8e7;border:4px dashed var(--ink);border-radius:22px;
+  padding:24px;text-align:center;
+}
+.q-text{
+  font-family:'Baloo 2',cursive;font-weight:800;
+  font-size:clamp(34px, 7vw, 56px);
+  line-height:1.1;
+  letter-spacing:1px;
+}
+.q-hint{font-size:14px;color:#7a6ba3;margin-top:6px}
+
+.answers{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px;
+}
+.ans{
+  cursor:pointer;border:4px solid var(--ink);border-radius:18px;
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:26px;
+  padding:18px;background:#fff;box-shadow:var(--shadow);
+  transition:transform .12s ease, background .2s;
+}
+.ans:hover{transform:translateY(-3px)}
+.ans.correct{background:var(--green);color:#fff;animation:correct .5s ease}
+.ans.wrong{background:var(--red);color:#fff;animation:wrong .4s ease}
+@keyframes correct{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1) rotate(-2deg)}
+  100%{transform:scale(1)}
+}
+@keyframes wrong{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+
+.timer{
+  text-align:center;margin-top:14px;font-weight:600;font-size:18px;
+}
+.timer-bar{
+  height:10px;background:#fff;border:3px solid var(--ink);border-radius:99px;
+  margin-top:6px;overflow:hidden;
+}
+.timer-fill{
+  height:100%;background:linear-gradient(90deg, var(--green), var(--gold), var(--red));
+  width:100%;transition:width 1s linear;
+}
+
+.feedback{
+  text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:28px;
+  margin-top:14px;min-height:34px;
+}
+
+/* WIN */
+.win-screen{text-align:center;padding:20px}
+.trophy{font-size:90px;animation:bounce 1.2s infinite}
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:9}
+
+/* FOOTER */
+footer{
+  text-align:center;padding:20px;color:#7a6ba3;font-size:14px;
+}
+footer a{color:var(--p1);font-weight:600;text-decoration:none}
+
+@media (max-width:560px){
+  .players-row{grid-template-columns:1fr}
+  .answers{grid-template-columns:repeat(2,1fr)}
+  .scoreboard{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
+  .scoreboard .vs{grid-column:1/3;margin:0 auto;width:46px;height:46px;font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="app">
+
+  <a class="home-btn" href="https://www.kiddy-msk.com" title="Înapoi la pagina principală">
+    <span class="home-icon">🏠</span>
+    <span class="home-text">Acasă</span>
+  </a>
+
+  <div class="header">
+    <div class="logo">⚔️ Duelul Calculelor</div>
+    <div class="sub">Joc educativ de matematică • 2 jucători • 10 niveluri</div>
+    <a class="site-link" href="https://www.kiddy-msk.com" target="_blank" rel="noopener">🌟 www.kiddy-msk.com</a>
+  </div>
+
+  <!-- ECRAN 1: ALEGE CLASA -->
+  <section id="screen-grade" class="screen active">
+    <div class="card">
+      <div class="h2">📚 Alege clasa</div>
+      <div class="grades" id="grades">
+        <button class="grade-btn g0" data-grade="0">
+          <span class="emoji">🧸</span>
+          <span>Grupa 0</span>
+          <span class="desc">Pregătitoare • numere 1–10</span>
+        </button>
+        <button class="grade-btn g1" data-grade="1">
+          <span class="emoji">🍎</span>
+          <span>Clasa 1</span>
+          <span class="desc">Adunări/scăderi 0–20</span>
+        </button>
+        <button class="grade-btn g2" data-grade="2">
+          <span class="emoji">🚀</span>
+          <span>Clasa 2</span>
+          <span class="desc">Adunări/scăderi 0–100, ×</span>
+        </button>
+        <button class="grade-btn g3" data-grade="3">
+          <span class="emoji">🦊</span>
+          <span>Clasa 3</span>
+          <span class="desc">Înmulțiri, împărțiri, 0–1000</span>
+        </button>
+        <button class="grade-btn g4" data-grade="4">
+          <span class="emoji">🧠</span>
+          <span>Clasa 4</span>
+          <span class="desc">Fracții, ordinea operațiilor</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECRAN 2: JUCATORI -->
+  <section id="screen-players" class="screen">
+    <div class="card">
+      <div class="h2">👤 Cine joacă?</div>
+      <div class="players-row">
+        <div class="player-card p1">
+          <label>Jucător 1</label>
+          <input id="p1name" maxlength="14" placeholder="Numele tău" value="Jucător 1">
+          <div class="avatar-row" data-player="1">
+            <div class="avatar selected">🦁</div>
+            <div class="avatar">🐯</div>
+            <div class="avatar">🐰</div>
+            <div class="avatar">🐶</div>
+            <div class="avatar">🦄</div>
+          </div>
+        </div>
+        <div class="player-card p2">
+          <label>Jucător 2</label>
+          <input id="p2name" maxlength="14" placeholder="Numele lui" value="Jucător 2">
+          <div class="avatar-row" data-player="2">
+            <div class="avatar selected">🐼</div>
+            <div class="avatar">🦊</div>
+            <div class="avatar">🐸</div>
+            <div class="avatar">🐵</div>
+            <div class="avatar">🐲</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn green full" id="startBtn">🎮 START DUEL</button>
+      <button class="btn secondary full" id="backToGrade">↩ Schimbă clasa</button>
+    </div>
+  </section>
+
+  <!-- ECRAN 3: JOC -->
+  <section id="screen-game" class="screen">
+    <div class="card">
+      <div class="scoreboard">
+        <div class="score-card p1" id="sc1">
+          <div class="name"><span id="av1">🦁</span><span id="n1">Jucător 1</span></div>
+          <div class="pts" id="pts1">0</div>
+        </div>
+        <div class="vs">VS</div>
+        <div class="score-card p2" id="sc2">
+          <div class="name"><span id="av2">🐼</span><span id="n2">Jucător 2</span></div>
+          <div class="pts" id="pts2">0</div>
+        </div>
+      </div>
+
+      <div class="level-bar">
+        <span id="lvlLabel">Nivel 1 / 10</span>
+        <div class="bar"><div class="bar-fill" id="lvlFill"></div></div>
+        <span id="gradeLabel">📚</span>
+      </div>
+
+      <div class="turn-banner p1" id="turnBanner">🦁 Rândul lui Jucător 1</div>
+
+      <div class="question-box">
+        <div class="q-text" id="qText">2 + 2 = ?</div>
+        <div class="q-hint" id="qHint">Atinge răspunsul corect</div>
+      </div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="timer">
+        <span id="timerText">⏱ 15s</span>
+        <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </section>
+
+  <!-- ECRAN 4: CASTIGATOR -->
+  <section id="screen-win" class="screen">
+    <div class="card win-screen">
+      <div class="trophy">🏆</div>
+      <div class="h2" id="winTitle">Câștigător!</div>
+      <div id="winSub" style="font-size:18px;margin:10px 0 20px;color:#5a4a8a"></div>
+      <div id="finalScores" style="font-size:20px;font-weight:600;margin-bottom:18px"></div>
+      <button class="btn green full" id="playAgain">🔁 Joacă din nou</button>
+      <button class="btn secondary full" id="changeGrade">📚 Alege altă clasă</button>
+      <a class="btn full" href="https://www.kiddy-msk.com" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;background:var(--p1);color:#fff">🌟 Vezi mai multe pe Kiddy-MSK</a>
+    </div>
+  </section>
+
+  <footer>
+    Creat cu ❤️ pentru micii matematicieni • <a href="https://www.kiddy-msk.com" target="_blank">www.kiddy-msk.com</a>
+  </footer>
+</div>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+/* ============ FUNDAL CU STELUTE ============ */
+(function(){
+  const wrap = document.getElementById('stars');
+  const emojis = ['⭐','✨','💫','🌟','➕','➖','✖️','🔢'];
+  for(let i=0;i<22;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left = Math.random()*100+'%';
+    s.style.top  = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*6)+'s';
+    s.style.animationDuration = (5+Math.random()*5)+'s';
+    s.style.fontSize = (16+Math.random()*16)+'px';
+    wrap.appendChild(s);
+  }
+})();
+
+/* ============ UTILITARE ============ */
+const rnd = (a,b)=> Math.floor(Math.random()*(b-a+1))+a;
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const shuffle = arr => arr.sort(()=>Math.random()-0.5);
+
+/* ============ GENERATORI DE INTREBARI ============
+   10 niveluri per clasa. Dificultatea creste gradual.
+   Programa: Grupa 0, Clasele 1-4 din Romania.
+*/
+const generators = {
+  // GRUPA 0 (pregatitoare): numere 1-10, comparatii, numarare
+  0: [
+    // Nivel 1: numarare 1-5
+    ()=>{const a=rnd(1,5);return {q:`Câte 🍎? ${'🍎'.repeat(a)}`, ans:a};},
+    // Nivel 2: numarare 1-10
+    ()=>{const a=rnd(3,10);return {q:`Câte ⭐? ${'⭐'.repeat(a)}`, ans:a};},
+    // Nivel 3: ce numar urmeaza (1-10)
+    ()=>{const a=rnd(1,8);return {q:`Ce număr urmează după ${a}?`, ans:a+1};},
+    // Nivel 4: numar dinainte
+    ()=>{const a=rnd(2,10);return {q:`Ce număr este înainte de ${a}?`, ans:a-1};},
+    // Nivel 5: adunare cu obiecte 1-5
+    ()=>{const a=rnd(1,3),b=rnd(1,2);return {q:`${'🐰'.repeat(a)} + ${'🐰'.repeat(b)} = ?`, ans:a+b};},
+    // Nivel 6: adunare 1-10
+    ()=>{const a=rnd(1,5),b=rnd(1,5);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // Nivel 7: scadere mica
+    ()=>{const a=rnd(3,8),b=rnd(1,a-1);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // Nivel 8: comparatie mai mare
+    ()=>{const a=rnd(2,9),b=rnd(2,9);if(a===b)return generators[0][7]();return {q:`Care e mai mare: ${a} sau ${b}?`, ans:Math.max(a,b)};},
+    // Nivel 9: adunare pana la 10
+    ()=>{const a=rnd(2,7),b=rnd(1,10-a);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // Nivel 10: dublu
+    ()=>{const a=rnd(2,5);return {q:`Dublul lui ${a} = ?`, ans:a*2};},
+  ],
+
+  // CLASA 1: numere 0-100, adunari/scaderi fara/cu trecere peste 10
+  1: [
+    ()=>{const a=rnd(1,9),b=rnd(1,10-a);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    ()=>{const a=rnd(2,10),b=rnd(1,a);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // trecere peste 10
+    ()=>{const a=rnd(6,9),b=rnd(11-a,9);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    ()=>{const a=rnd(11,20),b=rnd(2,a-10);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // adunare 0-30
+    ()=>{const a=rnd(10,20),b=rnd(5,15);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // scadere 0-30
+    ()=>{const a=rnd(15,30),b=rnd(5,a-5);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // termen necunoscut
+    ()=>{const a=rnd(3,9),s=rnd(a+1,15);return {q:`${a} + ? = ${s}`, ans:s-a};},
+    // adunare cu zeci
+    ()=>{const a=rnd(2,9)*10,b=rnd(1,9);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // 0-100 simplu
+    ()=>{const a=rnd(20,60),b=rnd(10,30);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // problema text
+    ()=>{const a=rnd(5,12),b=rnd(3,8);return {q:`Ana are ${a} bomboane și primește ${b}. Câte are acum?`, ans:a+b};},
+  ],
+
+  // CLASA 2: 0-1000, adunari/scaderi, introducere inmultire
+  2: [
+    ()=>{const a=rnd(20,50),b=rnd(20,50);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    ()=>{const a=rnd(50,99),b=rnd(20,49);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // cu trecere 0-100
+    ()=>{const a=rnd(35,75),b=rnd(15,55);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // 0-1000 zeci rotunde
+    ()=>{const a=rnd(10,90)*10,b=rnd(10,90)*10;return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // introducere inmultire tablu 2
+    ()=>{const a=2,b=rnd(2,10);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // tabla 5
+    ()=>{const a=5,b=rnd(2,10);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // tabla 10
+    ()=>{const a=10,b=rnd(2,10);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // tabla 3
+    ()=>{const a=3,b=rnd(2,10);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // 0-1000 adunare cu sute
+    ()=>{const a=rnd(100,500),b=rnd(100,400);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // problema
+    ()=>{const a=rnd(3,9),b=rnd(2,8);return {q:`${a} copii au câte ${b} mere. Câte mere în total?`, ans:a*b};},
+  ],
+
+  // CLASA 3: inmultiri/impartiri, 0-10000
+  3: [
+    ()=>{const a=rnd(2,9),b=rnd(2,10);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    ()=>{const b=rnd(2,9),c=rnd(2,9);return {q:`${b*c} : ${b} = ?`, ans:c};},
+    // adunare 0-1000
+    ()=>{const a=rnd(150,499),b=rnd(150,499);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // scadere 0-1000
+    ()=>{const a=rnd(500,999),b=rnd(150,499);return {q:`${a} - ${b} = ?`, ans:a-b};},
+    // tabla peste 5
+    ()=>{const a=rnd(6,9),b=rnd(6,9);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // impartire cu rest 0
+    ()=>{const b=rnd(3,9),c=rnd(3,9);return {q:`${b*c} : ${c} = ?`, ans:b};},
+    // termen necunoscut inmultire
+    ()=>{const a=rnd(2,9),b=rnd(2,9);return {q:`${a} × ? = ${a*b}`, ans:b};},
+    // 0-10000
+    ()=>{const a=rnd(1000,4000),b=rnd(1000,3000);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // dublu/triplu
+    ()=>{const a=rnd(15,40);return {q:`Triplul lui ${a} = ?`, ans:a*3};},
+    // problema combinata
+    ()=>{const a=rnd(4,8),b=rnd(3,7),c=rnd(5,15);return {q:`${a} cutii cu câte ${b} jucării. Dăruim ${c}. Câte rămân?`, ans:a*b-c};},
+  ],
+
+  // CLASA 4: fractii simple, ordinea operatiilor, numere mari
+  4: [
+    // ordinea operatiilor simpla
+    ()=>{const a=rnd(2,9),b=rnd(2,9),c=rnd(2,9);return {q:`${a} + ${b} × ${c} = ?`, ans:a+b*c};},
+    ()=>{const a=rnd(2,9),b=rnd(2,9),c=rnd(2,9);return {q:`${a*b} - ${c} × ${b===c?2:1} = ?`, ans:a*b-c*(b===c?2:1)};},
+    // paranteze
+    ()=>{const a=rnd(3,9),b=rnd(2,5),c=rnd(2,5);return {q:`(${a} + ${b}) × ${c} = ?`, ans:(a+b)*c};},
+    // inmultire 2 cifre
+    ()=>{const a=rnd(11,19),b=rnd(3,9);return {q:`${a} × ${b} = ?`, ans:a*b};},
+    // impartire cu rest 0
+    ()=>{const b=rnd(4,9),c=rnd(11,25);return {q:`${b*c} : ${b} = ?`, ans:c};},
+    // fractie din intreg
+    ()=>{const den=pick([2,3,4,5]),n=rnd(2,9)*den;return {q:`1/${den} din ${n} = ?`, ans:n/den};},
+    // fractie 2/n
+    ()=>{const den=pick([3,4,5]),n=rnd(2,6)*den;return {q:`2/${den} din ${n} = ?`, ans:2*n/den};},
+    // numere mari
+    ()=>{const a=rnd(2500,7500),b=rnd(1500,4500);return {q:`${a} + ${b} = ?`, ans:a+b};},
+    // ordinea operatiilor complexa
+    ()=>{const a=rnd(3,7),b=rnd(2,5),c=rnd(2,5),d=rnd(2,5);return {q:`${a} × ${b} + ${c} × ${d} = ?`, ans:a*b+c*d};},
+    // problema combinata
+    ()=>{const a=rnd(120,250),b=rnd(3,6),c=rnd(50,100);return {q:`Un magazin are ${a} kg de mere. Vinde ${b} saci de câte ${c} kg. Câte kg rămân?`, ans:a-b*c<0 ? a : a-b*c};},
+  ],
+};
+
+/* ============ STARE JOC ============ */
+const state = {
+  grade: 0,
+  level: 0,         // 0..9
+  current: 0,       // 0 = J1, 1 = J2
+  scores: [0,0],
+  names: ['Jucător 1', 'Jucător 2'],
+  avatars: ['🦁','🐼'],
+  timer: null,
+  timeLeft: 15,
+  answered: false,
+};
+
+/* ============ NAVIGARE ECRANE ============ */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Selectare clasa */
+document.querySelectorAll('.grade-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    state.grade = parseInt(b.dataset.grade);
+    show('screen-players');
+  });
+});
+
+document.getElementById('backToGrade').addEventListener('click', ()=>show('screen-grade'));
+document.getElementById('changeGrade').addEventListener('click', ()=>show('screen-grade'));
+
+/* Selectare avatar */
+document.querySelectorAll('.avatar-row').forEach(row=>{
+  const player = parseInt(row.dataset.player);
+  row.querySelectorAll('.avatar').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      row.querySelectorAll('.avatar').forEach(x=>x.classList.remove('selected'));
+      a.classList.add('selected');
+      state.avatars[player-1] = a.textContent;
+    });
+  });
+});
+
+/* Start joc */
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  const n1 = document.getElementById('p1name').value.trim() || 'Jucător 1';
+  const n2 = document.getElementById('p2name').value.trim() || 'Jucător 2';
+  state.names = [n1, n2];
+  state.scores = [0,0];
+  state.level = 0;
+  state.current = 0;
+
+  // Setup UI joc
+  document.getElementById('n1').textContent = n1;
+  document.getElementById('n2').textContent = n2;
+  document.getElementById('av1').textContent = state.avatars[0];
+  document.getElementById('av2').textContent = state.avatars[1];
+  document.getElementById('pts1').textContent = '0';
+  document.getElementById('pts2').textContent = '0';
+
+  const gradeNames = {0:'Grupa 0 🧸',1:'Clasa 1 🍎',2:'Clasa 2 🚀',3:'Clasa 3 🦊',4:'Clasa 4 🧠'};
+  document.getElementById('gradeLabel').textContent = gradeNames[state.grade];
+
+  show('screen-game');
+  nextQuestion();
+});
+
+/* ============ DESFASURARE JOC ============ */
+function timePerLevel(){
+  // mai mult timp pentru clase mai mici, mai putin pe nivele mari
+  const base = [25, 22, 18, 16, 14][state.grade];
+  return Math.max(8, base - state.level);
+}
+
+function nextQuestion(){
+  if(state.level >= 10){ finishGame(); return; }
+  state.answered = false;
+  document.getElementById('feedback').textContent = '';
+
+  // Update level bar
+  document.getElementById('lvlLabel').textContent = `Nivel ${state.level+1} / 10`;
+  document.getElementById('lvlFill').style.width = ((state.level/10)*100)+'%';
+
+  // Turn banner
+  const banner = document.getElementById('turnBanner');
+  banner.className = 'turn-banner ' + (state.current===0?'p1':'p2');
+  banner.textContent = `${state.avatars[state.current]} Rândul lui ${state.names[state.current]}`;
+
+  // Active scorecard
+  document.getElementById('sc1').classList.toggle('active', state.current===0);
+  document.getElementById('sc2').classList.toggle('active', state.current===1);
+
+  // Genereaza intrebarea
+  const gen = generators[state.grade][state.level];
+  const q = gen();
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qHint').textContent = `Nivel ${state.level+1} • ${state.level<3?'Ușor':state.level<6?'Mediu':state.level<8?'Greu':'Expert'}`;
+
+  // Genereaza variante (1 corect + 3 gresite)
+  const wrongs = new Set();
+  while(wrongs.size < 3){
+    let delta = rnd(-Math.max(3,Math.abs(q.ans)>>1), Math.max(3,Math.abs(q.ans)>>1));
+    if(delta===0) delta = pick([-1,1,2,-2]);
+    const w = q.ans + delta;
+    if(w !== q.ans && w >= 0) wrongs.add(w);
+  }
+  const opts = shuffle([q.ans, ...wrongs]);
+  const wrap = document.getElementById('answers');
+  wrap.innerHTML = '';
+  opts.forEach(v=>{
+    const b = document.createElement('button');
+    b.className = 'ans';
+    b.textContent = v;
+    b.addEventListener('click', ()=>handleAnswer(b, v, q.ans));
+    wrap.appendChild(b);
+  });
+
+  // Timer
+  state.timeLeft = timePerLevel();
+  updateTimerUI();
+  if(state.timer) clearInterval(state.timer);
+  state.timer = setInterval(()=>{
+    state.timeLeft--;
+    updateTimerUI();
+    if(state.timeLeft <= 0){
+      clearInterval(state.timer);
+      if(!state.answered) handleTimeout(q.ans);
+    }
+  }, 1000);
+}
+
+function updateTimerUI(){
+  document.getElementById('timerText').textContent = `⏱ ${state.timeLeft}s`;
+  const total = timePerLevel();
+  document.getElementById('timerFill').style.width = ((state.timeLeft/total)*100)+'%';
+}
+
+function handleAnswer(btn, val, correct){
+  if(state.answered) return;
+  state.answered = true;
+  clearInterval(state.timer);
+
+  if(val === correct){
+    btn.classList.add('correct');
+    const pts = state.level + 1; // nivel mai mare = mai multe puncte
+    state.scores[state.current] += pts;
+    document.getElementById('pts'+(state.current+1)).textContent = state.scores[state.current];
+    document.getElementById('feedback').textContent = `✅ Corect! +${pts} puncte`;
+    burstConfetti(state.current);
+  } else {
+    btn.classList.add('wrong');
+    // arata raspunsul corect
+    document.querySelectorAll('.ans').forEach(a=>{
+      if(parseInt(a.textContent)===correct) a.classList.add('correct');
+    });
+    document.getElementById('feedback').textContent = `❌ Răspunsul corect era ${correct}`;
+  }
+
+  // Trece la celalalt jucator dupa pauza scurta
+  setTimeout(()=>{
+    // Alternativa: dupa fiecare 2 raspunsuri (cate unul de fiecare), creste nivelul
+    if(state.current === 1){
+      state.level++;
+    }
+    state.current = 1 - state.current;
+    nextQuestion();
+  }, 1500);
+}
+
+function handleTimeout(correct){
+  state.answered = true;
+  document.querySelectorAll('.ans').forEach(a=>{
+    if(parseInt(a.textContent)===correct) a.classList.add('correct');
+  });
+  document.getElementById('feedback').textContent = `⏰ Timpul a expirat! Răspunsul era ${correct}`;
+  setTimeout(()=>{
+    if(state.current === 1) state.level++;
+    state.current = 1 - state.current;
+    nextQuestion();
+  }, 1700);
+}
+
+/* ============ SFARSIT JOC ============ */
+function finishGame(){
+  const [s1,s2] = state.scores;
+  let title, sub;
+  if(s1 > s2){
+    title = `🏆 ${state.names[0]} câștigă!`;
+    sub = `Felicitări! Excelente calcule.`;
+  } else if(s2 > s1){
+    title = `🏆 ${state.names[1]} câștigă!`;
+    sub = `Felicitări! Excelente calcule.`;
+  } else {
+    title = `🤝 Egalitate!`;
+    sub = `Amândoi sunteți campioni la matematică!`;
+  }
+  document.getElementById('winTitle').textContent = title;
+  document.getElementById('winSub').textContent = sub;
+  document.getElementById('finalScores').innerHTML = `
+    ${state.avatars[0]} ${state.names[0]}: <strong>${s1}</strong> pct &nbsp; • &nbsp;
+    ${state.avatars[1]} ${state.names[1]}: <strong>${s2}</strong> pct
+  `;
+  show('screen-win');
+  bigConfetti();
+}
+
+document.getElementById('playAgain').addEventListener('click', ()=>{
+  state.scores=[0,0];state.level=0;state.current=0;
+  document.getElementById('pts1').textContent='0';
+  document.getElementById('pts2').textContent='0';
+  show('screen-game');
+  nextQuestion();
+});
+
+/* ============ CONFETTI ============ */
+const cv = document.getElementById('confetti');
+const ctx = cv.getContext('2d');
+let confettiPieces = [];
+function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+
+function burstConfetti(player){
+  const colors = player===0 ? ['#ff5e7e','#ffc83d','#ff9ec0'] : ['#4fb6ff','#9dccff','#ffc83d'];
+  for(let i=0;i<40;i++){
+    confettiPieces.push({
+      x: cv.width/2, y: cv.height/3,
+      vx: (Math.random()-0.5)*10,
+      vy: (Math.random()-1)*10,
+      g: 0.3, life: 60, size: 4+Math.random()*5,
+      color: pick(colors), rot: Math.random()*360, vr:(Math.random()-0.5)*10
+    });
+  }
+  if(confettiPieces.length>0 && !animating) animate();
+}
+function bigConfetti(){
+  for(let i=0;i<200;i++){
+    confettiPieces.push({
+      x: Math.random()*cv.width, y: -20,
+      vx: (Math.random()-0.5)*6,
+      vy: Math.random()*4+2,
+      g: 0.15, life: 200, size: 5+Math.random()*8,
+      color: pick(['#ff5e7e','#ffc83d','#5ed27a','#4fb6ff','#b366ff']),
+      rot:Math.random()*360, vr:(Math.random()-0.5)*8
+    });
+  }
+  if(!animating) animate();
+}
+let animating=false;
+function animate(){
+  animating=true;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  confettiPieces = confettiPieces.filter(p=>p.life>0 && p.y<cv.height+20);
+  confettiPieces.forEach(p=>{
+    p.vy += p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+    ctx.save();
+    ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+    ctx.restore();
+  });
+  if(confettiPieces.length>0) requestAnimationFrame(animate);
+  else { animating=false; ctx.clearRect(0,0,cv.width,cv.height); }
+}
+</script>
+</body>
+</html>
