@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aventura Matematicii 🎉 | Kiddy MSK</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive;
+    background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 50%, #B5E7A0 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+  
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 100px;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud1 { width: 100px; height: 30px; top: 50px; left: 10%; animation: drift 30s infinite linear; }
+  .cloud1::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+  .cloud1::after { width: 40px; height: 40px; top: -15px; right: 15px; }
+  
+  .cloud2 { width: 120px; height: 35px; top: 100px; right: 15%; animation: drift 40s infinite linear reverse; }
+  .cloud2::before { width: 60px; height: 60px; top: -25px; left: 20px; }
+  .cloud2::after { width: 45px; height: 45px; top: -18px; right: 20px; }
+  
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(100px); }
+  }
+  
+  .hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .hud-box {
+    background: rgba(255,255,255,0.95);
+    border: 4px solid #FF6B35;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2C3E50;
+    box-shadow: 0 6px 0 #C44424, 0 8px 15px rgba(0,0,0,0.2);
+  }
+  .hud-box.score { border-color: #F7B801; box-shadow: 0 6px 0 #C49001, 0 8px 15px rgba(0,0,0,0.2); }
+  .hud-box.level { border-color: #7FB069; box-shadow: 0 6px 0 #5C8A4A, 0 8px 15px rgba(0,0,0,0.2); }
+  .hud-box.timer { border-color: #3498DB; box-shadow: 0 6px 0 #21618C, 0 8px 15px rgba(0,0,0,0.2); }
+  .hud-box.timer.warning { border-color: #E74C3C; box-shadow: 0 6px 0 #922B21, 0 8px 15px rgba(0,0,0,0.2); animation: pulse 0.5s infinite; }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .screen.hidden { display: none; }
+  
+  .start-logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2));
+  }
+  
+  .title {
+    font-size: clamp(36px, 7vw, 70px);
+    color: #FF6B35;
+    text-shadow: 4px 4px 0 #FFF, 8px 8px 0 rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+  }
+  
+  .subtitle {
+    font-size: clamp(18px, 3vw, 26px);
+    color: #2C3E50;
+    background: rgba(255,255,255,0.9);
+    padding: 15px 30px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    max-width: 600px;
+    line-height: 1.4;
+  }
+  
+  .btn {
+    font-family: inherit;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 18px 50px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background: linear-gradient(180deg, #FF8C42 0%, #FF6B35 100%);
+    color: white;
+    box-shadow: 0 8px 0 #C44424, 0 12px 20px rgba(0,0,0,0.3);
+    transition: all 0.1s;
+    margin: 8px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  }
+  
+  .btn:hover { transform: translateY(2px); box-shadow: 0 6px 0 #C44424, 0 10px 15px rgba(0,0,0,0.3); }
+  .btn:active { transform: translateY(8px); box-shadow: 0 0 0 #C44424; }
+  
+  .btn.green { background: linear-gradient(180deg, #95D26C 0%, #7FB069 100%); box-shadow: 0 8px 0 #5C8A4A, 0 12px 20px rgba(0,0,0,0.3); }
+  .btn.green:hover { box-shadow: 0 6px 0 #5C8A4A, 0 10px 15px rgba(0,0,0,0.3); }
+  .btn.green:active { box-shadow: 0 0 0 #5C8A4A; }
+  
+  #gameArea {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+  
+  .basket {
+    position: absolute;
+    bottom: 50px;
+    width: 120px;
+    height: 80px;
+    font-size: 80px;
+    text-align: center;
+    line-height: 80px;
+    transition: left 0.05s linear, transform 0.15s;
+    z-index: 50;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+  }
+  
+  .falling {
+    position: absolute;
+    font-size: 50px;
+    z-index: 40;
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+  }
+  
+  .level-banner {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+    color: white;
+    padding: 30px 60px;
+    border-radius: 30px;
+    font-size: 50px;
+    font-weight: bold;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    z-index: 150;
+    text-align: center;
+    border: 6px solid white;
+  }
+  
+  .level-banner.show {
+    animation: levelShow 2.5s ease-out forwards;
+  }
+  
+  @keyframes levelShow {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+    30% { transform: translate(-50%, -50%) scale(1.2) rotate(0); }
+    50% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8) rotate(0); opacity: 0; }
+  }
+  
+  .question-screen {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
+  }
+  
+  .question-card {
+    background: white;
+    border-radius: 30px;
+    padding: 35px;
+    max-width: 650px;
+    width: 92%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    border: 6px solid #FF6B35;
+    animation: cardIn 0.5s ease-out;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  
+  @keyframes cardIn {
+    from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  
+  .operation-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 25px 20px;
+    background: linear-gradient(135deg, #FFF5E1 0%, #FFE5B4 100%);
+    border-radius: 20px;
+    border: 3px dashed #FF6B35;
+  }
+  
+  .op-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    background: white;
+    padding: 12px 16px;
+    border-radius: 15px;
+    border: 2px solid #FF6B35;
+    box-shadow: 0 3px 0 #C44424;
+  }
+  
+  .op-emoji {
+    font-size: 32px;
+    animation: pop 0.4s ease-out backwards;
+    display: inline-block;
+  }
+  
+  @keyframes pop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+  
+  .op-sign {
+    font-size: 50px;
+    font-weight: bold;
+    color: #FF6B35;
+    margin: 0 8px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  }
+  
+  .op-number-label {
+    background: #FF6B35;
+    color: white;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 6px;
+    box-shadow: 0 3px 0 #C44424;
+  }
+  
+  .question-text {
+    font-size: 26px;
+    color: #2C3E50;
+    text-align: center;
+    margin: 20px 0;
+    line-height: 1.4;
+    font-weight: bold;
+  }
+  
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .answer-btn {
+    font-family: inherit;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 18px;
+    border: 4px solid #2C3E50;
+    border-radius: 20px;
+    cursor: pointer;
+    background: white;
+    color: #2C3E50;
+    box-shadow: 0 6px 0 #2C3E50;
+    transition: all 0.1s;
+  }
+  
+  .answer-btn:hover:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 4px 0 #2C3E50;
+    background: #FFF5E1;
+  }
+  
+  .answer-btn:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0 0 #2C3E50; }
+  .answer-btn.correct { background: #95D26C; color: white; border-color: #5C8A4A; box-shadow: 0 6px 0 #5C8A4A; animation: shake-correct 0.5s; }
+  .answer-btn.wrong { background: #E74C3C; color: white; border-color: #922B21; box-shadow: 0 6px 0 #922B21; animation: shake-wrong 0.5s; }
+  .answer-btn:disabled { cursor: default; }
+  
+  @keyframes shake-correct {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  @keyframes shake-wrong {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+  
+  .feedback {
+    font-size: 26px;
+    text-align: center;
+    margin-top: 18px;
+    font-weight: bold;
+    min-height: 35px;
+  }
+  
+  .feedback.good { color: #5C8A4A; }
+  .feedback.bad { color: #C44424; }
+  
+  .confetti {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+    z-index: 300;
+  }
+  
+  .stars {
+    font-size: 60px;
+    margin: 15px 0;
+    letter-spacing: 10px;
+  }
+  
+  .star {
+    display: inline-block;
+    animation: starPop 0.6s ease-out backwards;
+  }
+  
+  @keyframes starPop {
+    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  
+  /* Logo end screen */
+  .end-logo {
+    width: 130px;
+    height: auto;
+    margin: 15px 0 5px;
+    animation: spin-in 1s ease-out;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+  }
+  
+  @keyframes spin-in {
+    from { transform: scale(0) rotate(-360deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  
+  /* Logo + site in question card on success */
+  .card-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px dashed #FFD7B5;
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .card-brand img {
+    width: 50px;
+    height: auto;
+  }
+  
+  .card-brand a {
+    color: #FF6B35;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .card-brand a:hover { text-decoration: underline; }
+  
+  /* Footer cu site-ul - permanent */
+  .site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.92);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 90;
+    border-top: 3px solid #FF6B35;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .site-footer img {
+    width: 28px;
+    height: auto;
+  }
+  
+  .site-footer a {
+    color: #2C3E50;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .site-footer a:hover { color: #FF6B35; }
+  
+  .site-footer .heart {
+    color: #E74C3C;
+    animation: heartbeat 1.5s infinite;
+    display: inline-block;
+  }
+  
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+  
+  @media (max-width: 600px) {
+    .hud-box { font-size: 14px; padding: 6px 12px; }
+    .question-card { padding: 20px; }
+    .question-text { font-size: 20px; }
+    .answer-btn { font-size: 28px; padding: 14px; }
+    .basket { width: 100px; height: 70px; font-size: 70px; }
+    .falling { font-size: 42px; }
+    .level-banner { font-size: 32px; padding: 20px 40px; }
+    .op-emoji { font-size: 26px; }
+    .op-sign { font-size: 38px; margin: 0 4px; }
+    .op-group { padding: 8px 10px; }
+    .op-number-label { width: 28px; height: 28px; font-size: 16px; }
+    .start-logo { width: 130px; }
+    .end-logo { width: 100px; }
+    .site-footer a { font-size: 14px; }
+    .site-footer img { width: 24px; }
+    .home-btn { width: 50px; height: 50px; font-size: 24px; }
+  }
+  
+  /* Buton Acasă - permanent în colț */
+  .home-btn {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #5DADE2 0%, #3498DB 100%);
+    border: 4px solid white;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 250;
+    box-shadow: 0 6px 0 #21618C, 0 8px 15px rgba(0,0,0,0.3);
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+  }
+  
+  .home-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 4px 0 #21618C, 0 6px 10px rgba(0,0,0,0.3);
+  }
+  
+  .home-btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0 0 #21618C;
+  }
+  
+  /* Dialog confirmare ieșire */
+  .confirm-dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 400;
+    padding: 20px;
+  }
+  
+  .confirm-dialog.show { display: flex; }
+  
+  .confirm-card {
+    background: white;
+    border-radius: 30px;
+    padding: 35px;
+    max-width: 450px;
+    width: 92%;
+    text-align: center;
+    border: 6px solid #FF6B35;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    animation: cardIn 0.4s ease-out;
+  }
+  
+  .confirm-card h2 {
+    font-size: 32px;
+    color: #FF6B35;
+    margin-bottom: 15px;
+  }
+  
+  .confirm-card p {
+    font-size: 20px;
+    color: #2C3E50;
+    margin-bottom: 25px;
+    line-height: 1.4;
+  }
+  
+  .confirm-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .confirm-buttons .btn {
+    font-size: 20px;
+    padding: 14px 30px;
+    margin: 0;
+  }
+
+  /* BUTON ACASA */
+.home-btn{
+  position:fixed;
+  top:16px;left:16px;
+  z-index:50;
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px;
+  background:#fff;
+  border:4px solid var(--ink);
+  border-radius:999px;
+  font-family:'Baloo 2', cursive;
+  font-weight:800;
+  font-size:16px;
+  color:var(--ink);
+  text-decoration:none;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease, background .2s;
+}
+.home-btn:hover{
+  transform:translateY(-3px) rotate(-2deg);
+  background:var(--gold);
+}
+.home-btn:active{transform:translateY(0)}
+.home-icon{font-size:20px}
+@media (max-width:560px){
+  .home-btn{padding:8px 12px;font-size:14px;top:10px;left:10px}
+  .home-text{display:none}
+  .home-icon{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+
+ <a class="home-btn" href="https://www.kiddy-msk.com" title="Înapoi la pagina principală">
+    <span class="home-icon">🏠</span>
+    <span class="home-text">Acasă</span>
+  </a>
+
+<!-- Dialog confirmare ieșire -->
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-card">
+    <h2>🏠 Mergi acasă?</h2>
+    <p>Ești sigur că vrei să părăsești jocul?<br>Progresul tău se va pierde!</p>
+    <div class="confirm-buttons">
+      <button class="btn green" onclick="cancelHome()">↩️ Nu, continui</button>
+      <button class="btn" onclick="confirmHome()">🏠 Da, acasă</button>
+    </div>
+  </div>
+</div>
+
+<div class="hud" id="hud" style="display:none;">
+  <div class="hud-box level">📍 Nivel: <span id="levelDisplay">1</span>/10</div>
+  <div class="hud-box timer" id="timerBox">⏱️ <span id="timerDisplay">15</span>s</div>
+  <div class="hud-box score">⭐ Scor: <span id="scoreDisplay">0</span></div>
+</div>
+
+<div class="screen" id="startScreen">
+  <img src="kiddy-logo.jpg" alt="Kiddy MSK" class="start-logo" onerror="this.style.display='none'">
+  <h1 class="title">🍎 Aventura Matematicii 🍐</h1>
+  <p class="subtitle">
+    Prinde cât mai multe fructe în coș! 🧺<br>
+    La final, calculează câte ai prins!<br>
+    Mișcă coșul cu mouse-ul sau cu degetul 👆<br>
+    <strong>10 nivele</strong> te așteaptă! 🌟
+  </p>
+  <button class="btn" onclick="startGame()">🚀 ÎNCEPE JOCUL</button>
+</div>
+
+<div id="gameArea"></div>
+
+<div class="level-banner" id="levelBanner"></div>
+
+<div class="screen question-screen hidden" id="questionScreen">
+  <div class="question-card">
+    <div class="operation-display" id="operationDisplay"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="answers" id="answersGrid"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="card-brand" id="cardBrand" style="display:none;">
+      <img src="kiddy-logo.jpg" alt="Kiddy MSK" onerror="this.style.display='none'">
+      <a href="https://www.kiddy-msk.com" target="_blank">www.kiddy-msk.com</a>
+    </div>
+  </div>
+</div>
+
+<div class="screen hidden" id="endScreen">
+  <img src="kiddy-logo.jpg" alt="Kiddy MSK" class="end-logo" onerror="this.style.display='none'">
+  <h1 class="title" id="endTitle">🎉 BRAVO! 🎉</h1>
+  <div class="stars" id="endStars"></div>
+  <p class="subtitle" id="endMessage"></p>
+  <button class="btn green" onclick="restartGame()">🔄 Joacă din nou</button>
+</div>
+
+<!-- Footer cu site -->
+<div class="site-footer">
+  <img src="kiddy-logo.jpg" alt="Kiddy MSK" onerror="this.style.display='none'">
+  <span>Joc creat cu <span class="heart">❤</span> de</span>
+  <a href="https://www.kiddy-msk.com" target="_blank">www.kiddy-msk.com</a>
+</div>
+
+<script>
+// === NIVELE ===
+const LEVELS = [
+  { items: [{emoji:'🍎'}, {emoji:'🍐'}],                    duration: 12, speed: 1.6, spawnRate: 700, operation: 'add',    maxPerType: 5 },
+  { items: [{emoji:'🍓'}, {emoji:'🍌'}],                    duration: 12, speed: 1.8, spawnRate: 700, operation: 'add',    maxPerType: 6 },
+  { items: [{emoji:'🍊'}, {emoji:'🍇'}],                    duration: 13, speed: 2.0, spawnRate: 650, operation: 'add',    maxPerType: 7 },
+  { items: [{emoji:'🍉'}, {emoji:'🥝'}],                    duration: 13, speed: 2.1, spawnRate: 650, operation: 'sub',    maxPerType: 9 },
+  { items: [{emoji:'🐝'}, {emoji:'🦋'}],                    duration: 14, speed: 2.3, spawnRate: 600, operation: 'add',    maxPerType: 9 },
+  { items: [{emoji:'⭐'}, {emoji:'🌙'}, {emoji:'☀️'}],      duration: 15, speed: 2.4, spawnRate: 600, operation: 'addAll', maxPerType: 6 },
+  { items: [{emoji:'🐠'}, {emoji:'🐙'}],                    duration: 14, speed: 2.6, spawnRate: 550, operation: 'sub',    maxPerType: 10 },
+  { items: [{emoji:'🎈'}, {emoji:'🎁'}],                    duration: 15, speed: 2.8, spawnRate: 550, operation: 'add',    maxPerType: 10 },
+  { items: [{emoji:'🌸'}, {emoji:'🌻'}, {emoji:'🌷'}],      duration: 16, speed: 3.0, spawnRate: 500, operation: 'addAll', maxPerType: 7 },
+  { items: [{emoji:'💎'}, {emoji:'👑'}, {emoji:'🏆'}],      duration: 16, speed: 3.3, spawnRate: 480, operation: 'addAll', maxPerType: 8 }
+];
+
+let state = {
+  currentLevel: 0,
+  score: 0,
+  collected: [],
+  basketX: 0,
+  fallingItems: [],
+  spawning: false,
+  gameArea: null,
+  basket: null,
+  spawnInterval: null,
+  fallInterval: null,
+  timerInterval: null,
+  timeLeft: 0
+};
+
+function startGame() {
+  state.currentLevel = 0;
+  state.score = 0;
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('hud').style.display = 'flex';
+  document.getElementById('homeBtn').style.display = 'flex';
+  startLevel();
+}
+
+function startLevel() {
+  const level = LEVELS[state.currentLevel];
+  document.getElementById('levelDisplay').textContent = state.currentLevel + 1;
+  document.getElementById('scoreDisplay').textContent = state.score;
+  document.getElementById('timerDisplay').textContent = level.duration;
+  document.getElementById('timerBox').classList.remove('warning');
+  
+  const banner = document.getElementById('levelBanner');
+  banner.textContent = `🌟 Nivelul ${state.currentLevel + 1} 🌟`;
+  banner.classList.remove('show');
+  void banner.offsetWidth;
+  banner.classList.add('show');
+  
+  setTimeout(() => {
+    setupCatchPhase(level);
+  }, 2000);
+}
+
+function setupCatchPhase(level) {
+  const gameArea = document.getElementById('gameArea');
+  gameArea.innerHTML = '';
+  state.gameArea = gameArea;
+  state.collected = level.items.map(item => ({emoji: item.emoji, count: 0}));
+  state.fallingItems = [];
+  state.timeLeft = level.duration;
+  
+  const basket = document.createElement('div');
+  basket.className = 'basket';
+  basket.textContent = '🧺';
+  gameArea.appendChild(basket);
+  state.basket = basket;
+  state.basketX = window.innerWidth / 2 - 60;
+  basket.style.left = state.basketX + 'px';
+  
+  document.addEventListener('mousemove', moveBasket);
+  document.addEventListener('touchmove', moveBasketTouch, {passive: false});
+  
+  state.spawning = true;
+  spawnFruit(level);
+  state.spawnInterval = setInterval(() => spawnFruit(level), level.spawnRate);
+  state.fallInterval = setInterval(() => updateFalling(level), 30);
+  
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    document.getElementById('timerDisplay').textContent = state.timeLeft;
+    if (state.timeLeft <= 5) {
+      document.getElementById('timerBox').classList.add('warning');
+    }
+    if (state.timeLeft <= 0) {
+      endCatchPhase(level);
+    }
+  }, 1000);
+}
+
+function moveBasket(e) {
+  if (!state.basket) return;
+  const x = e.clientX - 60;
+  state.basketX = Math.max(0, Math.min(window.innerWidth - 120, x));
+  state.basket.style.left = state.basketX + 'px';
+}
+
+function moveBasketTouch(e) {
+  if (!state.basket) return;
+  e.preventDefault();
+  const x = e.touches[0].clientX - 60;
+  state.basketX = Math.max(0, Math.min(window.innerWidth - 120, x));
+  state.basket.style.left = state.basketX + 'px';
+}
+
+function spawnFruit(level) {
+  if (!state.spawning) return;
+  
+  const item = level.items[Math.floor(Math.random() * level.items.length)];
+  
+  const fruit = document.createElement('div');
+  fruit.className = 'falling';
+  fruit.textContent = item.emoji;
+  
+  const x = Math.random() * (window.innerWidth - 60);
+  fruit.style.left = x + 'px';
+  fruit.style.top = '-60px';
+  
+  state.gameArea.appendChild(fruit);
+  state.fallingItems.push({
+    el: fruit,
+    x: x,
+    y: -60,
+    emoji: item.emoji,
+    speed: level.speed + Math.random() * 0.5
+  });
+}
+
+function updateFalling(level) {
+  // Coșul e la bottom: 50px (deasupra footer-ului)
+  const basketRect = {
+    left: state.basketX,
+    right: state.basketX + 120,
+    top: window.innerHeight - 130,
+    bottom: window.innerHeight - 50
+  };
+  
+  state.fallingItems = state.fallingItems.filter(f => {
+    f.y += f.speed;
+    f.el.style.top = f.y + 'px';
+    
+    if (f.y >= basketRect.top - 30 && f.y <= basketRect.bottom &&
+        f.x + 25 >= basketRect.left && f.x + 25 <= basketRect.right) {
+      catchFruit(f.emoji, level);
+      f.el.remove();
+      return false;
+    }
+    
+    if (f.y > window.innerHeight) {
+      f.el.remove();
+      return false;
+    }
+    
+    return true;
+  });
+}
+
+function catchFruit(emoji, level) {
+  const idx = state.collected.findIndex(c => c.emoji === emoji);
+  if (idx === -1) return;
+  
+  if (state.collected[idx].count >= level.maxPerType) {
+    showFloatText('MAX!', state.basketX + 60, window.innerHeight - 130, '#999');
+    return;
+  }
+  
+  state.collected[idx].count++;
+  state.score += 5;
+  document.getElementById('scoreDisplay').textContent = state.score;
+  
+  state.basket.style.transform = 'scale(1.2)';
+  setTimeout(() => state.basket.style.transform = 'scale(1)', 150);
+  
+  showFloatText('+5', state.basketX + 60, window.innerHeight - 130, '#5C8A4A');
+}
+
+function showFloatText(text, x, y, color) {
+  const t = document.createElement('div');
+  t.textContent = text;
+  t.style.cssText = `position:fixed; left:${x}px; top:${y}px; color:${color}; font-size:30px; font-weight:bold; z-index:200; pointer-events:none; text-shadow: 2px 2px 0 white;`;
+  document.body.appendChild(t);
+  t.animate([
+    {transform: 'translateY(0)', opacity: 1},
+    {transform: 'translateY(-60px)', opacity: 0}
+  ], {duration: 800, easing: 'ease-out'}).onfinish = () => t.remove();
+}
+
+function endCatchPhase(level) {
+  state.spawning = false;
+  clearInterval(state.spawnInterval);
+  clearInterval(state.fallInterval);
+  clearInterval(state.timerInterval);
+  
+  document.removeEventListener('mousemove', moveBasket);
+  document.removeEventListener('touchmove', moveBasketTouch);
+  
+  state.fallingItems.forEach(f => f.el.remove());
+  state.fallingItems = [];
+  
+  const totalCaught = state.collected.reduce((sum, c) => sum + c.count, 0);
+  if (totalCaught === 0) {
+    showNoCatchMessage();
+    return;
+  }
+  
+  setTimeout(() => showQuestion(level), 600);
+}
+
+function showNoCatchMessage() {
+  // Dacă nu a prins nimic, îi dăm tot o întrebare cu numere generate
+  // ca să poată trece nivelul (răspunzând corect)
+  const screen = document.getElementById('questionScreen');
+  const display = document.getElementById('operationDisplay');
+  const qText = document.getElementById('questionText');
+  const answers = document.getElementById('answersGrid');
+  const feedback = document.getElementById('feedback');
+  const brand = document.getElementById('cardBrand');
+  
+  display.innerHTML = '<div style="font-size:60px;">😅</div>';
+  qText.textContent = 'Nu ai prins niciun fruct! Hai să încercăm o problemă oricum...';
+  answers.innerHTML = '';
+  feedback.textContent = '';
+  brand.style.display = 'none';
+  
+  screen.classList.remove('hidden');
+  
+  // După 2 secunde, generăm o întrebare cu numere aleator
+  setTimeout(() => {
+    regenerateQuestion();
+  }, 2000);
+}
+
+function showQuestion(level) {
+  const screen = document.getElementById('questionScreen');
+  const display = document.getElementById('operationDisplay');
+  const qText = document.getElementById('questionText');
+  const feedback = document.getElementById('feedback');
+  const brand = document.getElementById('cardBrand');
+  
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  brand.style.display = 'none';
+  
+  let actualOperation = level.operation;
+  
+  if (actualOperation === 'sub') {
+    if (state.collected[0].count < state.collected[1].count) {
+      state.collected.reverse();
+    }
+    if (state.collected[0].count === 0 || state.collected[1].count === 0) {
+      actualOperation = 'add';
+    }
+  }
+  
+  const nonZero = state.collected.filter(c => c.count > 0);
+  
+  if (nonZero.length === 1 && actualOperation !== 'sub') {
+    showSimpleQuestion(nonZero[0]);
+    return;
+  }
+  
+  display.innerHTML = '';
+  let correctAnswer;
+  
+  if (actualOperation === 'sub') {
+    const a = state.collected[0];
+    const b = state.collected[1];
+    display.appendChild(buildGroup(a.emoji, a.count));
+    display.appendChild(buildSign('−'));
+    display.appendChild(buildGroup(b.emoji, b.count));
+    display.appendChild(buildSign('='));
+    display.appendChild(buildQuestion());
+    
+    qText.textContent = `Ai prins ${a.count} ${a.emoji} și ai dat ${b.count} unui prieten. Câte îți rămân?`;
+    correctAnswer = a.count - b.count;
+    
+  } else {
+    nonZero.forEach((g, i) => {
+      display.appendChild(buildGroup(g.emoji, g.count));
+      if (i < nonZero.length - 1) {
+        display.appendChild(buildSign('+'));
+      }
+    });
+    display.appendChild(buildSign('='));
+    display.appendChild(buildQuestion());
+    
+    correctAnswer = nonZero.reduce((sum, g) => sum + g.count, 0);
+    let parts = nonZero.map(g => `${g.count} ${g.emoji}`).join(' și ');
+    qText.textContent = `Ai prins ${parts}. Câte ai în total?`;
+  }
+  
+  showAnswerButtons(correctAnswer);
+  screen.classList.remove('hidden');
+}
+
+function showSimpleQuestion(group) {
+  const display = document.getElementById('operationDisplay');
+  const qText = document.getElementById('questionText');
+  
+  display.innerHTML = '';
+  display.appendChild(buildGroup(group.emoji, group.count));
+  display.appendChild(buildSign('='));
+  display.appendChild(buildQuestion());
+  
+  qText.textContent = `Ai prins ${group.count} ${group.emoji}. Câte ai în total?`;
+  showAnswerButtons(group.count);
+  document.getElementById('questionScreen').classList.remove('hidden');
+}
+
+function buildGroup(emoji, count) {
+  const g = document.createElement('div');
+  g.className = 'op-group';
+  let html = '';
+  if (count === 0) {
+    html = '<span style="font-size:30px; color:#999;">0</span>';
+  } else {
+    for (let i = 0; i < count; i++) {
+      html += `<span class="op-emoji" style="animation-delay:${i*0.05}s">${emoji}</span>`;
+    }
+    html += `<span class="op-number-label">${count}</span>`;
+  }
+  g.innerHTML = html;
+  return g;
+}
+
+function buildSign(sign) {
+  const s = document.createElement('div');
+  s.className = 'op-sign';
+  s.textContent = sign;
+  return s;
+}
+
+function buildQuestion() {
+  const q = document.createElement('div');
+  q.className = 'op-sign';
+  q.textContent = '?';
+  q.style.color = '#3498DB';
+  q.style.fontSize = '60px';
+  return q;
+}
+
+// === GENERARE OPȚIUNI DE RĂSPUNS - VERSIUNE CORECTATĂ ===
+// Acum ne asigurăm că răspunsul corect este ÎNTOTDEAUNA printre opțiuni
+function generateAnswerOptions(correct) {
+  // Asigurăm că `correct` e număr întreg
+  correct = Math.round(correct);
+  
+  const optionsSet = new Set();
+  optionsSet.add(correct); // răspunsul corect mereu inclus
+  
+  // Adăugăm valori din apropiere (±1, ±2, ±3)
+  const candidates = [
+    correct + 1, correct - 1,
+    correct + 2, correct - 2,
+    correct + 3, correct - 3
+  ].filter(v => v >= 0 && v !== correct);
+  
+  // Amestecăm candidații
+  candidates.sort(() => Math.random() - 0.5);
+  
+  // Adăugăm până avem 4 opțiuni
+  for (const c of candidates) {
+    if (optionsSet.size >= 4) break;
+    optionsSet.add(c);
+  }
+  
+  // Fallback: dacă încă nu avem 4 (improbabil), adăugăm valori mai mari
+  let extra = 4;
+  while (optionsSet.size < 4) {
+    if (correct + extra >= 0) optionsSet.add(correct + extra);
+    extra++;
+    if (extra > 20) break; // safety
+  }
+  
+  // Convertim în array și amestecăm
+  const arr = Array.from(optionsSet);
+  arr.sort(() => Math.random() - 0.5);
+  
+  return arr;
+}
+
+function showAnswerButtons(correct) {
+  // Asigurăm că răspunsul corect e număr întreg
+  correct = Math.round(correct);
+  
+  const answers = document.getElementById('answersGrid');
+  answers.innerHTML = '';
+  
+  const allAnswers = generateAnswerOptions(correct);
+  
+  // Verificare dublă: dacă din vreun motiv corect nu e printre opțiuni, îl adăugăm
+  if (!allAnswers.includes(correct)) {
+    allAnswers[0] = correct;
+  }
+  
+  allAnswers.forEach(ans => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = ans;
+    // Pasăm valorile ca numere, nu ca string
+    btn.dataset.value = ans;
+    btn.onclick = () => checkAnswer(ans, correct, btn);
+    answers.appendChild(btn);
+  });
+}
+
+function checkAnswer(chosen, correct, btn) {
+  // Comparăm ca numere întregi
+  chosen = Math.round(Number(chosen));
+  correct = Math.round(Number(correct));
+  
+  const buttons = document.querySelectorAll('.answer-btn');
+  buttons.forEach(b => b.disabled = true);
+  
+  const feedback = document.getElementById('feedback');
+  const brand = document.getElementById('cardBrand');
+  
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    state.score += 20;
+    document.getElementById('scoreDisplay').textContent = state.score;
+    feedback.textContent = '🎉 BRAVO! Ai răspuns corect!';
+    feedback.className = 'feedback good';
+    
+    // Afișăm logo + site la felicitări
+    brand.style.display = 'flex';
+    
+    launchConfetti();
+    
+    // RĂSPUNS CORECT → trece la nivel următor
+    setTimeout(() => {
+      document.getElementById('questionScreen').classList.add('hidden');
+      nextLevel();
+    }, 2400);
+  } else {
+    // RĂSPUNS GREȘIT → încearcă din nou cu o întrebare nouă (NU trecem la nivel următor)
+    btn.classList.add('wrong');
+    feedback.textContent = `❌ Greșit! Răspunsul era ${correct}. Mai încearcă cu o problemă nouă!`;
+    feedback.className = 'feedback bad';
+    
+    // Marcăm vizual butonul corect
+    buttons.forEach(b => {
+      const bv = Math.round(Number(b.dataset.value));
+      if (bv === correct) {
+        b.classList.add('correct');
+      }
+    });
+    
+    // După ce vede răspunsul corect, generăm o întrebare NOUĂ (alte numere/fructe)
+    setTimeout(() => {
+      regenerateQuestion();
+    }, 2500);
+  }
+}
+
+// Generează o întrebare NOUĂ pentru același nivel, dar cu numere/fructe diferite
+function regenerateQuestion() {
+  const level = LEVELS[state.currentLevel];
+  
+  // Generăm cantități noi aleator pentru a forța o întrebare diferită
+  // Folosim limite în funcție de nivel ca să rămână potrivite pentru clasa 1
+  const maxPerType = level.maxPerType;
+  
+  // Pentru fiecare tip de fruct, generăm un număr nou aleator
+  state.collected = level.items.map(item => {
+    // Cantități între 1 și maxPerType (cel puțin 1 ca să avem mereu o problemă)
+    const newCount = 1 + Math.floor(Math.random() * Math.min(maxPerType, 6));
+    return { emoji: item.emoji, count: newCount };
+  });
+  
+  // Pentru scădere, ne asigurăm că primul e mai mare ca al doilea
+  if (level.operation === 'sub') {
+    if (state.collected[0].count <= state.collected[1].count) {
+      // Inversăm sau ajustăm
+      const temp = state.collected[0].count;
+      state.collected[0].count = state.collected[1].count + 1 + Math.floor(Math.random() * 3);
+      state.collected[1].count = temp;
+      // Limităm la max
+      if (state.collected[0].count > maxPerType) state.collected[0].count = maxPerType;
+    }
+  }
+  
+  // Resetăm starea ecranului de întrebare
+  const feedback = document.getElementById('feedback');
+  const brand = document.getElementById('cardBrand');
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  brand.style.display = 'none';
+  
+  // Afișăm noua întrebare (rămânem pe același ecran, doar înlocuim conținutul)
+  showQuestion(level);
+}
+
+function nextLevel() {
+  state.currentLevel++;
+  if (state.currentLevel >= LEVELS.length) {
+    showEndScreen();
+  } else {
+    startLevel();
+  }
+}
+
+function showEndScreen() {
+  document.getElementById('hud').style.display = 'none';
+  const endScreen = document.getElementById('endScreen');
+  const stars = document.getElementById('endStars');
+  const message = document.getElementById('endMessage');
+  const title = document.getElementById('endTitle');
+  
+  const percent = state.score / 400;
+  let starCount = 1;
+  if (percent > 0.4) starCount = 2;
+  if (percent > 0.7) starCount = 3;
+  
+  let starsHTML = '';
+  for (let i = 0; i < 3; i++) {
+    if (i < starCount) {
+      starsHTML += `<span class="star" style="animation-delay:${i*0.3}s">⭐</span>`;
+    } else {
+      starsHTML += `<span class="star" style="animation-delay:${i*0.3}s; opacity:0.3">⭐</span>`;
+    }
+  }
+  stars.innerHTML = starsHTML;
+  
+  if (starCount === 3) {
+    title.textContent = '🏆 MAGNIFIC! 🏆';
+    message.innerHTML = `Ești un MATEMATICIAN GENIAL! 🌟<br>Scor final: <strong>${state.score} puncte</strong><br><br>🎓 <a href="https://www.kiddy-msk.com" target="_blank" style="color:#FF6B35; text-decoration:none; font-weight:bold;">www.kiddy-msk.com</a>`;
+  } else if (starCount === 2) {
+    title.textContent = '🎉 BRAVO! 🎉';
+    message.innerHTML = `Ai făcut treabă bună! 👏<br>Scor final: <strong>${state.score} puncte</strong><br><br>🎓 <a href="https://www.kiddy-msk.com" target="_blank" style="color:#FF6B35; text-decoration:none; font-weight:bold;">www.kiddy-msk.com</a>`;
+  } else {
+    title.textContent = '😊 Bun început!';
+    message.innerHTML = `Mai exersează și vei deveni mai bun!<br>Scor final: <strong>${state.score} puncte</strong><br><br>🎓 <a href="https://www.kiddy-msk.com" target="_blank" style="color:#FF6B35; text-decoration:none; font-weight:bold;">www.kiddy-msk.com</a>`;
+  }
+  
+  endScreen.classList.remove('hidden');
+  launchConfetti();
+  setTimeout(launchConfetti, 800);
+}
+
+function restartGame() {
+  document.getElementById('endScreen').classList.add('hidden');
+  startGame();
+}
+
+function launchConfetti() {
+  const colors = ['#FF6B35', '#F7B801', '#7FB069', '#3498DB', '#E74C3C', '#9B59B6', '#FF69B4'];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.left = (Math.random() * window.innerWidth) + 'px';
+    c.style.top = '-20px';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    c.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(c);
+    
+    c.animate([
+      {transform: `translateY(0) rotate(0deg)`, opacity: 1},
+      {transform: `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg)`, opacity: 0}
+    ], {
+      duration: 2000 + Math.random() * 2000,
+      easing: 'cubic-bezier(0.5, 0, 0.5, 1)'
+    }).onfinish = () => c.remove();
+  }
+}
+
+// === BUTON ACASĂ ===
+// URL-ul către pagina principală - poate fi modificat ușor
+const HOME_URL = 'index.html'; // Schimbă cu '/' sau 'https://www.kiddy-msk.com' dacă vrei
+
+function goHome() {
+  // Pauzăm jocul (oprim spawning și timer)
+  if (state.spawning) {
+    state.spawning = false;
+    clearInterval(state.spawnInterval);
+    clearInterval(state.fallInterval);
+    clearInterval(state.timerInterval);
+  }
+  document.getElementById('confirmDialog').classList.add('show');
+}
+
+function cancelHome() {
+  document.getElementById('confirmDialog').classList.remove('show');
+  
+  // Verificăm dacă suntem în faza de prindere (coșul există și nu suntem pe ecran de întrebare)
+  const questionVisible = !document.getElementById('questionScreen').classList.contains('hidden');
+  
+  // Dacă era afișată o întrebare, nu repornim intervale (utilizatorul răspunde la întrebare)
+  if (questionVisible) return;
+  
+  // Dacă mai e timp și suntem în faza de prindere, repornim
+  if (state.basket && state.timeLeft > 0) {
+    const level = LEVELS[state.currentLevel];
+    state.spawning = true;
+    state.spawnInterval = setInterval(() => spawnFruit(level), level.spawnRate);
+    state.fallInterval = setInterval(() => updateFalling(level), 30);
+    state.timerInterval = setInterval(() => {
+      state.timeLeft--;
+      document.getElementById('timerDisplay').textContent = state.timeLeft;
+      if (state.timeLeft <= 5) {
+        document.getElementById('timerBox').classList.add('warning');
+      }
+      if (state.timeLeft <= 0) {
+        endCatchPhase(level);
+      }
+    }, 1000);
+  }
+}
+
+function confirmHome() {
+  window.location.href = HOME_URL;
+}
+</script>
+
+</body>
+</html>
