@@ -53,6 +53,34 @@
   .hero h1 .g2{color:var(--green);}
   .hero p{color:var(--ink-soft);font-size:16.5px;font-weight:600;margin-top:10px;}
 
+  /* about / how-to-play */
+  .about-toggle{margin-top:18px;font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;cursor:pointer;
+    background:#fff;color:var(--green-deep);border:2px solid var(--green-soft);padding:10px 22px;border-radius:30px;
+    display:inline-flex;align-items:center;gap:9px;transition:all .18s;box-shadow:0 4px 12px rgba(61,145,64,.1);}
+  .about-toggle:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 18px rgba(61,145,64,.18);}
+  .about-toggle .ai{font-size:17px;}
+  .about-toggle .chev{transition:transform .25s;font-size:13px;}
+  .about-toggle.open .chev{transform:rotate(180deg);}
+
+  .about-panel{max-height:0;overflow:hidden;transition:max-height .4s ease, margin .4s ease, opacity .3s ease;
+    opacity:0;margin:0 auto;max-width:760px;}
+  .about-panel.open{max-height:900px;opacity:1;margin:0 auto 30px;}
+  .about-inner{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:30px 30px 26px;
+    box-shadow:0 16px 40px rgba(61,145,64,.1);text-align:left;}
+  .about-inner h3{font-family:'Baloo 2',cursive;font-weight:800;font-size:23px;color:var(--green-deep);margin-bottom:10px;}
+  .about-inner p{color:var(--ink-soft);font-weight:600;font-size:15px;line-height:1.55;margin-bottom:16px;}
+  .about-inner p b{color:var(--ink);}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+  .about-step{display:flex;gap:12px;align-items:flex-start;background:var(--green-soft);border-radius:16px;padding:14px 16px;}
+  .about-step .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 7px rgba(84,185,72,.3);}
+  .about-step div{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.45;}
+  .about-step div b{color:var(--green-darker);font-family:'Baloo 2',cursive;font-weight:700;}
+  .about-tip{background:var(--yellow-soft);border-radius:14px;padding:13px 16px;font-size:14px !important;
+    color:var(--ink) !important;margin-bottom:0 !important;border:1.5px solid #ffe9a8;}
+  .about-tip b{color:var(--yellow-deep);}
+  @media(max-width:680px){ .about-grid{grid-template-columns:1fr;} }
+
   .panel{background:var(--paper);border-radius:30px;padding:38px 34px;
     box-shadow:0 22px 56px rgba(61,145,64,.12);border:1px solid var(--line);position:relative;overflow:hidden;}
   .panel#picker::before{content:"";position:absolute;top:-50px;right:-50px;width:180px;height:180px;
@@ -140,10 +168,15 @@
   .sheet-logo .nm{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--yellow-deep);line-height:.85;}
   .sheet-logo .nm small{display:block;font-family:'Nunito';font-size:9px;font-weight:800;letter-spacing:3px;color:var(--ink-soft);}
 
-  .meta-row{display:flex;gap:16px;padding:24px 40px 6px;}
-  .meta-box{flex:1;border:2px solid var(--green-soft);border-radius:30px;padding:11px 20px;display:flex;align-items:center;gap:10px;}
+  .meta-row{display:flex;gap:14px;padding:24px 40px 6px;}
+  .meta-box{flex:1;min-width:0;border:2px solid var(--green-soft);border-radius:30px;padding:11px 18px;display:flex;align-items:center;gap:9px;}
+  .meta-box:first-child{flex:1.4;}
   .meta-box .lbl{font-family:'Baloo 2',cursive;font-weight:800;color:var(--green-deep);font-size:14px;letter-spacing:.5px;}
   .meta-box .fill{flex:1;border-bottom:2px dotted #bcd9bc;height:1px;margin-top:6px;}
+  .meta-box .fill-input{flex:1;border:none;border-bottom:2px dotted #bcd9bc;background:transparent;
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;color:var(--ink);padding:2px 4px 4px;outline:none;min-width:0;}
+  .meta-box .fill-input:focus{border-bottom-color:var(--green);}
+  .meta-box .fill-input::placeholder{color:#cfe0cc;}
 
   .directions{display:flex;align-items:center;gap:14px;padding:16px 40px 4px;flex-wrap:wrap;}
   .dir-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;
@@ -276,6 +309,23 @@
     <span class="eyebrow">Joc & Fișe de lucru · Matematică</span>
     <h1><span class="g1">Aventura</span> <span class="g2">Matematicii</span></h1>
     <p>Joacă-te direct pe ecran sau printează fișele — tu alegi! ✏️</p>
+    <button class="about-toggle screen-only" id="aboutToggle" onclick="toggleAbout()">
+      <span class="ai">ℹ️</span> Cum se joacă? <span class="chev" id="aboutChev">▾</span>
+    </button>
+  </div>
+
+  <div class="about-panel screen-only" id="aboutPanel">
+    <div class="about-inner">
+      <h3>🐝 Despre joc</h3>
+      <p><b>Aventura Matematicii</b> este un joc educativ creat de Kiddy MSK pentru copiii de la grupa pregătitoare până la clasa a 4-a, aliniat la programa școlară din România. Fiecare nivel are exerciții potrivite pentru vârsta copilului.</p>
+      <div class="about-grid">
+        <div class="about-step"><span class="n">1</span><div><b>Alege nivelul</b><br>Selectează clasa copilului — dificultatea se adaptează automat.</div></div>
+        <div class="about-step"><span class="n">2</span><div><b>Joacă pe ecran</b><br>Scrie răspunsul în norișor și apasă „Verifică". Răspunsurile corecte devin verzi 🟢, cele greșite roșii 🔴 și îți arată soluția corectă.</div></div>
+        <div class="about-step"><span class="n">3</span><div><b>Vezi scorul</b><br>La final apare punctajul și un mesaj încurajator. Apasă „Mai încearcă" ca să reiei fișa.</div></div>
+        <div class="about-step"><span class="n">4</span><div><b>Printează fișele</b><br>Treci pe „Mod printare" și tipărește fișa cu norii goi, pentru scris cu pixul. Numele copilului se păstrează pe toate fișele.</div></div>
+      </div>
+      <p class="about-tip">💡 <b>Sfat:</b> ai 10 fișe pentru fiecare nivel. Când le termini, apasă „Fișe noi" pentru un set complet nou de exerciții generate automat.</p>
+    </div>
   </div>
 
   <div class="panel" id="picker">
@@ -336,7 +386,8 @@ const LEVELS = [
 
 const SHEETS_PER_LEVEL = 10;
 const PROBLEMS_PER_SHEET = 14;
-let state = { level:null, sheets:[], current:0, done:new Set(), mode:'game', showAnswers:false, checked:false };
+let state = { level:null, sheets:[], current:0, done:new Set(), mode:'game', showAnswers:false, checked:false,
+  pupil:{ nume:'', clasa:'', data:'' } };
 
 const rnd = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
 
@@ -467,6 +518,16 @@ function renderTabs(){
 }
 function opClass(op){return op==='-'?'sub':op==='×'?'mul':op==='÷'?'div':'add';}
 
+/* persist pupil info for the whole session (until app is closed/refreshed) */
+function savePupil(field,val){ state.pupil[field]=val; }
+function escapeAttr(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* show/hide the "how to play" panel — only on click, never in print */
+function toggleAbout(){
+  document.getElementById('aboutPanel').classList.toggle('open');
+  document.getElementById('aboutToggle').classList.toggle('open');
+}
+
 function renderSheet(){
   const lvl=LEVELS[state.level];
   const probs=state.sheets[state.current];
@@ -498,9 +559,9 @@ function renderSheet(){
       </a>
     </div>
     <div class="meta-row">
-      <div class="meta-box"><span class="lbl">Nume</span><span class="fill"></span></div>
-      <div class="meta-box"><span class="lbl">Clasa</span><span class="fill"></span></div>
-      <div class="meta-box"><span class="lbl">Data</span><span class="fill"></span></div>
+      <div class="meta-box"><span class="lbl">Nume</span><input class="fill-input" id="pupilNume" type="text" value="${escapeAttr(state.pupil.nume)}" placeholder="..." oninput="savePupil('nume',this.value)"></div>
+      <div class="meta-box"><span class="lbl">Clasa</span><input class="fill-input" id="pupilClasa" type="text" value="${escapeAttr(state.pupil.clasa)}" placeholder="..." oninput="savePupil('clasa',this.value)"></div>
+      <div class="meta-box"><span class="lbl">Data</span><input class="fill-input" id="pupilData" type="text" value="${escapeAttr(state.pupil.data)}" placeholder="..." oninput="savePupil('data',this.value)"></div>
     </div>
     <div class="directions">
       <span class="dir-badge">💡 Cerință</span>
