@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aventura Matematicii · Kiddy MSK</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root{
+    --green:#54b948;--green-deep:#3d9140;--green-darker:#2f7233;--green-soft:#eaf6e8;
+    --red:#ee3b34;--red-deep:#cf2a24;--red-soft:#fdeae9;
+    --yellow:#ffc62e;--yellow-deep:#f4a900;--yellow-soft:#fff6dd;
+    --blue:#3fa9e0;--purple:#8b6fc9;
+    --ink:#33373d;--ink-soft:#6b727b;--line:#e8ece8;--paper:#ffffff;--bg:#f6faf4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Nunito',sans-serif;color:var(--ink);
+    background:
+      radial-gradient(circle at 88% 6%, rgba(255,198,46,.18), transparent 40%),
+      radial-gradient(circle at 6% 22%, rgba(84,185,72,.14), transparent 44%),
+      radial-gradient(circle at 50% 108%, rgba(84,185,72,.20), transparent 55%),
+      linear-gradient(180deg,#fbfdfa 0%, var(--bg) 100%);
+    min-height:100vh;padding:0 0 70px;-webkit-font-smoothing:antialiased;
+  }
+  .decor{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .shape{position:absolute;opacity:.5;animation:drift 11s ease-in-out infinite;}
+  .shape.c{border-radius:50%;}
+  .shape.s1{width:46px;height:46px;background:var(--yellow);top:16%;left:5%;animation-delay:0s;}
+  .shape.s2{width:30px;height:30px;background:var(--red);top:34%;right:7%;animation-delay:2s;}
+  .shape.s3{width:38px;height:38px;background:var(--green);bottom:24%;left:8%;animation-delay:4s;}
+  .shape.s4{width:24px;height:24px;background:var(--blue);bottom:32%;right:10%;animation-delay:1s;}
+  .shape.tri{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:30px solid var(--yellow);background:none;top:60%;left:4%;animation-delay:3s;opacity:.4;}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-24px) rotate(12deg)}}
+
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px;}
+
+  .topbar{display:flex;align-items:center;justify-content:center;padding:32px 0 4px;}
+  .logo{display:flex;align-items:center;gap:12px;text-decoration:none;transition:transform .25s ease;}
+  .logo:hover{transform:scale(1.04);}
+  .logo .mark{width:54px;height:54px;border-radius:18px;background:linear-gradient(145deg,var(--yellow),var(--yellow-deep));
+    display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 18px rgba(244,169,0,.35);}
+  .logo .txt{font-family:'Baloo 2',cursive;line-height:.9;}
+  .logo .txt b{display:block;font-size:28px;font-weight:800;color:var(--yellow-deep);letter-spacing:.3px;}
+  .logo .txt span{display:block;font-size:12px;font-weight:800;color:var(--ink-soft);letter-spacing:5px;font-family:'Nunito';}
+
+  .hero{text-align:center;margin:16px 0 30px;}
+  .hero .eyebrow{display:inline-block;font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+    color:var(--green-deep);background:var(--green-soft);padding:7px 18px;border-radius:30px;margin-bottom:14px;}
+  .hero h1{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.0;letter-spacing:-.5px;}
+  .hero h1 .g1{color:var(--red);}
+  .hero h1 .g2{color:var(--green);}
+  .hero p{color:var(--ink-soft);font-size:16.5px;font-weight:600;margin-top:10px;}
+
+  .panel{background:var(--paper);border-radius:30px;padding:38px 34px;
+    box-shadow:0 22px 56px rgba(61,145,64,.12);border:1px solid var(--line);position:relative;overflow:hidden;}
+  .panel#picker::before{content:"";position:absolute;top:-50px;right:-50px;width:180px;height:180px;
+    background:radial-gradient(circle,var(--yellow-soft),transparent 70%);border-radius:50%;}
+
+  .section-label{font-family:'Baloo 2',cursive;font-size:25px;font-weight:800;color:var(--ink);
+    display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .section-label .num{font-size:15px;font-weight:900;color:#fff;font-family:'Nunito';background:var(--red);
+    border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(238,59,52,.3);}
+  .section-hint{color:var(--ink-soft);font-weight:600;margin-bottom:26px;font-size:15px;}
+  .section-hint b{color:var(--green-deep);}
+
+  .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:16px;}
+  .level-card{cursor:pointer;text-align:left;border:none;color:#fff;border-radius:22px;padding:22px 20px;
+    position:relative;overflow:hidden;font-family:'Nunito';
+    transition:transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s;box-shadow:0 10px 22px var(--glow);}
+  .level-card:hover{transform:translateY(-7px) scale(1.02);box-shadow:0 18px 34px var(--glow);}
+  .level-card:active{transform:translateY(-2px) scale(.99);}
+  .level-card::before{content:"";position:absolute;top:-30px;right:-30px;width:90px;height:90px;background:rgba(255,255,255,.18);border-radius:50%;}
+  .level-card .icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+    font-size:26px;margin-bottom:14px;background:rgba(255,255,255,.25);position:relative;}
+  .level-card .lvl-name{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;line-height:1.0;position:relative;}
+  .level-card .lvl-age{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;margin-top:6px;
+    background:rgba(255,255,255,.28);padding:3px 10px;border-radius:20px;text-transform:uppercase;position:relative;}
+  .level-card .lvl-desc{font-size:13px;font-weight:700;opacity:.95;margin-top:11px;line-height:1.4;position:relative;}
+  .lv0{background:linear-gradient(140deg,#ff9a52,#f4760f);--glow:rgba(244,118,15,.32);}
+  .lv1{background:linear-gradient(140deg,#46c4d4,#2ba0b3);--glow:rgba(43,160,179,.32);}
+  .lv2{background:linear-gradient(140deg,#62c956,#3d9140);--glow:rgba(61,145,64,.32);}
+  .lv3{background:linear-gradient(140deg,#4eb0e6,#2f86c4);--glow:rgba(47,134,196,.32);}
+  .lv4{background:linear-gradient(140deg,#a586e0,#7a59c4);--glow:rgba(122,89,196,.32);}
+  .lv5{background:linear-gradient(140deg,#ee5a54,#cf2a24);--glow:rgba(207,42,36,.32);}
+
+  /* mode toggle */
+  .mode-row{display:flex;gap:10px;margin-bottom:26px;background:var(--green-soft);padding:6px;border-radius:18px;width:fit-content;}
+  .mode-btn{font-family:'Baloo 2',cursive;font-weight:700;font-size:15px;border:none;cursor:pointer;
+    padding:10px 22px;border-radius:13px;background:transparent;color:var(--green-darker);transition:all .18s;display:flex;align-items:center;gap:7px;}
+  .mode-btn.active{background:#fff;color:var(--green-deep);box-shadow:0 4px 12px rgba(61,145,64,.18);}
+
+  .board{display:none;}
+  .board.active{display:block;animation:fadeUp .45s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  .controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:22px;}
+  .btn{font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;border:none;cursor:pointer;
+    padding:12px 20px;border-radius:14px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s, box-shadow .15s;letter-spacing:.2px;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn:active{transform:translateY(0);}
+  .btn-back{background:#eef1ee;color:var(--ink-soft);}
+  .btn-back:hover{background:var(--line);}
+  .btn-check{background:linear-gradient(135deg,#54b948,#3d9140);color:#fff;box-shadow:0 8px 18px rgba(61,145,64,.32);}
+  .btn-print{background:linear-gradient(135deg,#54b948,#3d9140);color:#fff;box-shadow:0 8px 18px rgba(61,145,64,.32);}
+  .btn-new{background:linear-gradient(135deg,#ff9a52,#f4760f);color:#fff;box-shadow:0 8px 18px rgba(244,118,15,.32);}
+  .btn-retry{background:#fff;color:var(--green-deep);border:2px solid var(--line);}
+  .btn-answers{background:#fff;color:var(--green-deep);border:2px solid var(--line);}
+  .btn-answers.on{background:linear-gradient(135deg,var(--yellow),var(--yellow-deep));color:#fff;border-color:var(--yellow-deep);}
+
+  .progress-wrap{flex:1;min-width:210px;display:flex;align-items:center;gap:12px;margin-left:auto;}
+  .progress-track{flex:1;height:11px;border-radius:20px;background:#e7ede6;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);}
+  .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--green));border-radius:20px;transition:width .45s cubic-bezier(.34,1.2,.64,1);}
+  .progress-label{font-weight:800;color:var(--ink-soft);font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+  .sheet-tabs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;}
+  .tab{width:44px;height:44px;border-radius:13px;border:2px solid var(--line);background:var(--paper);
+    cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--ink-soft);
+    transition:all .16s;display:flex;align-items:center;justify-content:center;position:relative;}
+  .tab:hover{border-color:var(--green);color:var(--green-deep);transform:translateY(-2px);}
+  .tab.current{background:var(--green);border-color:var(--green-deep);color:#fff;box-shadow:0 8px 16px rgba(84,185,72,.4);}
+  .tab.done:not(.current){border-color:var(--green);color:var(--green-deep);background:var(--green-soft);}
+  .tab.done::after{content:"✓";position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--yellow-deep);
+    color:#fff;border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+
+  .sheet{background:#fff;border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 44px rgba(61,145,64,.13);}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 40px 22px;position:relative;}
+  .sheet-head::after{content:"";position:absolute;left:40px;right:40px;bottom:0;height:4px;border-radius:4px;
+    background:linear-gradient(90deg,var(--red) 0%, var(--yellow) 50%, var(--green) 100%);}
+  .qr{width:72px;height:72px;flex-shrink:0;border-radius:12px;overflow:hidden;display:block;border:3px solid var(--green-soft);}
+  .qr svg{width:100%;height:100%;display:block;}
+  .sheet-title{text-align:center;flex:1;}
+  .sheet-title .kicker{font-size:11px;font-weight:900;letter-spacing:3px;color:var(--yellow-deep);text-transform:uppercase;margin-bottom:5px;}
+  .sheet-title h2{font-family:'Baloo 2',cursive;font-weight:800;font-size:33px;line-height:.95;letter-spacing:-.3px;}
+  .sheet-title h2 .a{color:var(--red);}
+  .sheet-title h2 .b{color:var(--green);}
+  .sheet-logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;}
+  .sheet-logo .mk{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,var(--yellow),var(--yellow-deep));display:flex;align-items:center;justify-content:center;font-size:23px;}
+  .sheet-logo .nm{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--yellow-deep);line-height:.85;}
+  .sheet-logo .nm small{display:block;font-family:'Nunito';font-size:9px;font-weight:800;letter-spacing:3px;color:var(--ink-soft);}
+
+  .meta-row{display:flex;gap:16px;padding:24px 40px 6px;}
+  .meta-box{flex:1;border:2px solid var(--green-soft);border-radius:30px;padding:11px 20px;display:flex;align-items:center;gap:10px;}
+  .meta-box .lbl{font-family:'Baloo 2',cursive;font-weight:800;color:var(--green-deep);font-size:14px;letter-spacing:.5px;}
+  .meta-box .fill{flex:1;border-bottom:2px dotted #bcd9bc;height:1px;margin-top:6px;}
+
+  .directions{display:flex;align-items:center;gap:14px;padding:16px 40px 4px;flex-wrap:wrap;}
+  .dir-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;padding:8px 16px;border-radius:10px;box-shadow:0 4px 10px rgba(238,59,52,.28);letter-spacing:.3px;}
+  .dir-text{font-weight:700;color:var(--ink);font-size:15.5px;}
+  .lvl-pill{margin-left:auto;background:var(--yellow-soft);color:var(--yellow-deep);font-weight:800;font-size:12.5px;padding:7px 15px;border-radius:30px;letter-spacing:.3px;}
+
+  .problems{display:grid;grid-template-columns:1fr 1fr;gap:2px 44px;padding:16px 44px 8px;}
+  .prob{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid #f1f5f0;}
+  .prob:nth-last-child(1),.prob:nth-last-child(2){border-bottom:none;}
+  .prob .qn{font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;color:#fff;width:28px;height:28px;flex-shrink:0;
+    background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 7px rgba(84,185,72,.3);}
+  .prob .expr{display:flex;align-items:center;gap:11px;font-family:'Baloo 2',cursive;font-weight:700;font-size:30px;color:var(--ink);white-space:nowrap;}
+  .prob .op{font-weight:800;}
+  .prob .op.add{color:var(--green-deep);}.prob .op.sub{color:var(--blue);}.prob .op.mul{color:var(--red);}.prob .op.div{color:var(--purple);}
+  .prob .eq{color:var(--ink-soft);}
+
+  /* answer cloud — works both as print-blank and as interactive input */
+  .cloud{position:relative;width:92px;height:56px;flex-shrink:0;}
+  .cloud svg{width:100%;height:100%;display:block;}
+  .cloud .ans{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:26px;color:var(--green-deep);opacity:0;transition:opacity .25s;padding-bottom:2px;}
+  .sheet.show-answers .cloud .ans{opacity:1;}
+  /* interactive input inside the cloud */
+  .cloud input{position:absolute;inset:0;width:100%;height:100%;border:none;background:transparent;text-align:center;
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:24px;color:var(--ink);padding-bottom:2px;outline:none;
+    -moz-appearance:textfield;}
+  .cloud input::-webkit-outer-spin-button,.cloud input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .cloud input:focus{color:var(--green-deep);}
+  /* feedback states */
+  .prob.correct .cloud svg path{stroke:var(--green) !important;}
+  .prob.correct .cloud input{color:var(--green-deep);}
+  .prob.wrong .cloud svg path{stroke:var(--red) !important;}
+  .prob.wrong .cloud input{color:var(--red-deep);}
+  .prob .mark{position:absolute;right:-6px;top:-8px;width:24px;height:24px;border-radius:50%;display:none;
+    align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;border:2px solid #fff;}
+  .prob.correct .mark{display:flex;background:var(--green);}
+  .prob.wrong .mark{display:flex;background:var(--red);}
+  .prob .correct-hint{position:absolute;left:0;bottom:-16px;font-family:'Nunito';font-weight:800;font-size:11px;color:var(--green-deep);display:none;white-space:nowrap;}
+  .prob.wrong .correct-hint{display:block;}
+  .prob{position:relative;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .prob.wrong .cloud{animation:shake .35s ease;}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  .prob.correct .cloud{animation:bounce .35s ease;}
+
+  .sheet-foot{margin-top:14px;padding:18px 40px 22px;background:var(--green-soft);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative;}
+  .sheet-foot::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:repeating-linear-gradient(90deg,var(--green) 0 14px, transparent 14px 26px);opacity:.4;}
+  .foot-tag{display:flex;align-items:center;gap:9px;color:var(--green-darker);font-weight:700;font-size:13.5px;}
+  .foot-tag .leaf{font-size:18px;}
+  .foot-link{text-decoration:none;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--green);padding:9px 18px;border-radius:30px;transition:all .18s;}
+  .foot-link:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(84,185,72,.22);}
+  .foot-link .url{font-family:'Baloo 2',cursive;font-weight:800;color:var(--green-deep);font-size:15px;}
+  .foot-link .dot{width:8px;height:8px;border-radius:50%;background:var(--yellow-deep);}
+
+  /* score banner (game mode) */
+  .scorebar{display:none;margin-top:18px;border-radius:20px;padding:22px 28px;align-items:center;gap:20px;
+    box-shadow:0 14px 36px rgba(61,145,64,.16);animation:pop .5s cubic-bezier(.34,1.56,.64,1);flex-wrap:wrap;}
+  .scorebar.show{display:flex;}
+  .scorebar.good{background:linear-gradient(135deg,#eaf6e8,#d6efd2);border:2px solid var(--green);}
+  .scorebar.mid{background:linear-gradient(135deg,#fff6dd,#ffeebb);border:2px solid var(--yellow-deep);}
+  .scorebar.low{background:linear-gradient(135deg,#fdeae9,#fbd5d3);border:2px solid var(--red);}
+  .scorebar .emoji{font-size:54px;line-height:1;}
+  .scorebar .txt{flex:1;min-width:200px;}
+  .scorebar .txt h3{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;margin-bottom:4px;}
+  .scorebar.good .txt h3{color:var(--green-deep);}
+  .scorebar.mid .txt h3{color:var(--yellow-deep);}
+  .scorebar.low .txt h3{color:var(--red-deep);}
+  .scorebar .txt p{font-weight:700;color:var(--ink-soft);font-size:15px;}
+  .scorebar .big{font-family:'Baloo 2',cursive;font-weight:800;font-size:40px;color:var(--ink);white-space:nowrap;}
+  .scorebar .big small{font-size:22px;color:var(--ink-soft);}
+  @keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+
+  .celebrate{display:none;text-align:center;padding:44px 34px;background:var(--paper);border-radius:26px;margin-top:22px;border:1px solid var(--line);box-shadow:0 18px 44px rgba(61,145,64,.13);}
+  .celebrate.show{display:block;animation:pop .55s cubic-bezier(.34,1.56,.64,1);}
+  .celebrate .medal{font-size:64px;margin-bottom:4px;}
+  .celebrate h2{font-family:'Baloo 2',cursive;font-weight:800;font-size:30px;color:var(--green-deep);margin-bottom:8px;}
+  .celebrate h2 em{font-style:normal;color:var(--red);}
+  .celebrate p{color:var(--ink-soft);font-weight:600;font-size:16px;margin-bottom:24px;max-width:440px;margin:0 auto 24px;}
+
+  @media(max-width:680px){
+    .problems{grid-template-columns:1fr;}
+    .prob:nth-last-child(2){border-bottom:1px solid #f1f5f0;}
+    .prob .expr{font-size:25px;}
+    .sheet-title h2{font-size:23px;}
+    .sheet-head{padding:22px 22px 18px;}.sheet-head::after{left:22px;right:22px;}
+    .problems{padding:14px 24px 8px;}
+    .meta-row,.directions,.sheet-foot{padding-left:24px;padding-right:24px;}
+    .progress-wrap{margin-left:0;}
+  }
+
+  .print-only{display:none;}
+  @media print{
+    @page{size:A4 portrait;margin:9mm;}
+    html,body{background:#fff !important;padding:0;margin:0;}
+    /* hide everything that is not the worksheet */
+    .decor,.topbar,.hero,.panel#picker,.controls,.sheet-tabs,.celebrate,.scorebar,.mode-row{display:none !important;}
+    .wrap{max-width:none;margin:0;padding:0;}
+    .board{display:block !important;}
+    .panel.board{padding:0 !important;background:none !important;border:none !important;box-shadow:none !important;}
+    #sheetHost{display:block !important;}
+    .sheet{box-shadow:none !important;border:1px solid #ddd;border-radius:0;page-break-inside:avoid;}
+    /* clean blank clouds: hide the typed answers, the feedback marks and the hints */
+    .cloud input{display:none !important;}
+    .prob .mark,.prob .correct-hint{display:none !important;}
+    .prob.correct,.prob.wrong{}
+    .prob.correct .cloud svg path,.prob.wrong .cloud svg path{stroke:#54b948 !important;}
+    .sheet.show-answers .cloud .ans{opacity:1;}
+    .foot-link{box-shadow:none;}
+    .screen-only{display:none !important;}
+    .print-only{display:inline !important;}
+    /* force brand colours to actually print */
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  }
+</style>
+</head>
+<body>
+<div class="decor">
+  <span class="shape c s1"></span><span class="shape c s2"></span><span class="shape c s3"></span><span class="shape c s4"></span><span class="shape tri"></span>
+</div>
+
+<div class="wrap">
+  <div class="topbar">
+    <a class="logo" href="https://www.kiddy-msk.com" target="_blank" rel="noopener">
+      <span class="mark">🐝</span><span class="txt"><b>Kiddy</b><span>MSK</span></span>
+    </a>
+  </div>
+
+  <div class="hero">
+    <span class="eyebrow">Joc & Fișe de lucru · Matematică</span>
+    <h1><span class="g1">Aventura</span> <span class="g2">Matematicii</span></h1>
+    <p>Joacă-te direct pe ecran sau printează fișele — tu alegi! ✏️</p>
+  </div>
+
+  <div class="panel" id="picker">
+    <div class="section-label"><span class="num">1</span> Alege nivelul</div>
+    <div class="section-hint">Fiecare nivel are <b>10 fișe</b>. Le poți juca pe ecran (cu verificare automată) sau le poți printa!</div>
+    <div class="levels" id="levelList"></div>
+  </div>
+
+  <div class="panel board" id="board">
+    <div class="mode-row">
+      <button class="mode-btn active" id="mGame" onclick="setMode('game')">🎮 Joc pe ecran</button>
+      <button class="mode-btn" id="mPrint" onclick="setMode('print')">🖨 Mod printare</button>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-back" onclick="goHome()">← Înapoi la nivele</button>
+      <button class="btn btn-check" id="checkBtn" onclick="checkAnswers()">✓ Verifică</button>
+      <button class="btn btn-retry" id="retryBtn" onclick="retrySheet()" style="display:none;">↺ Mai încearcă</button>
+      <button class="btn btn-answers" id="ansBtn" onclick="toggleAnswers()" style="display:none;">👁 Arată răspunsurile</button>
+      <button class="btn btn-print" id="printBtn" onclick="printSheet()">🖨 Printează fișa</button>
+      <button class="btn btn-new" onclick="regenerate()">↻ Fișe noi</button>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+        <span class="progress-label" id="progLabel">0 / 10</span>
+      </div>
+    </div>
+
+    <div class="sheet-tabs" id="tabs"></div>
+    <div id="sheetHost"></div>
+
+    <div class="scorebar" id="scorebar">
+      <span class="emoji" id="scoreEmoji">🎉</span>
+      <div class="txt"><h3 id="scoreTitle"></h3><p id="scoreMsg"></p></div>
+      <div class="big"><span id="scoreNum">0</span><small>/14</small></div>
+    </div>
+
+    <div class="celebrate" id="celebrate">
+      <div class="medal">🏆</div>
+      <h2>Bravo! Ai parcurs toate <em>cele 10 fișe</em>!</h2>
+      <p>Ești un adevărat campion la matematică. Vrei un set complet nou de provocări?</p>
+      <button class="btn btn-new" style="margin:0 auto;" onclick="regenerate()">↻ Generează fișe noi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   KIDDY MSK · Aventura Matematicii  (joc interactiv + fișe)
+   ============================================================ */
+
+const LEVELS = [
+  { id:0, name:"Grupa Preg.", age:"5–6 ani",  icon:"🐣", cls:"lv0", desc:"Adunare și scădere până la 10" },
+  { id:1, name:"Clasa 1",     age:"7 ani",    icon:"🌱", cls:"lv1", desc:"Operații până la 20" },
+  { id:2, name:"Clasa 2",     age:"8 ani",    icon:"⭐", cls:"lv2", desc:"Până la 100 · înmulțiri ușoare" },
+  { id:3, name:"Clasa 3",     age:"9 ani",    icon:"🚀", cls:"lv3", desc:"Tabla înmulțirii · împărțiri" },
+  { id:4, name:"Clasa 4",     age:"10 ani",   icon:"🧠", cls:"lv4", desc:"Toate operațiile · numere mari" },
+];
+
+const SHEETS_PER_LEVEL = 10;
+const PROBLEMS_PER_SHEET = 14;
+let state = { level:null, sheets:[], current:0, done:new Set(), mode:'game', showAnswers:false, checked:false };
+
+const rnd = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+
+function makeProblem(level){
+  let a,b,op,res;
+  switch(level){
+    /* Grupa Pregătitoare — 5-6 ani: adunare ȘI scădere până la 10 */
+    case 0:
+      if(Math.random()<.5){ a=rnd(1,9); b=rnd(1,10-a); op='+'; res=a+b; }
+      else { a=rnd(3,10); b=rnd(1,a); op='-'; res=a-b; } break;
+    /* Clasa 1 — 7 ani: operații până la 20 */
+    case 1:
+      if(Math.random()<.5){ a=rnd(2,15); b=rnd(1,20-a); op='+'; res=a+b; }
+      else { a=rnd(5,20); b=rnd(1,a); op='-'; res=a-b; } break;
+    /* Clasa 2 — 8 ani: până la 100 + înmulțiri ușoare */
+    case 2:{ const r=Math.random();
+      if(r<.4){ a=rnd(10,80); b=rnd(2,100-a); op='+'; res=a+b; }
+      else if(r<.8){ a=rnd(20,99); b=rnd(1,a); op='-'; res=a-b; }
+      else { a=rnd(2,9); b=rnd(2,9); op='×'; res=a*b; } break; }
+    /* Clasa 3 — 9 ani: tabla înmulțirii + împărțiri */
+    case 3:{ const r=Math.random();
+      if(r<.45){ a=rnd(2,10); b=rnd(2,10); op='×'; res=a*b; }
+      else if(r<.8){ b=rnd(2,9); res=rnd(2,9); a=b*res; op='÷'; }
+      else if(r<.9){ a=rnd(100,500); b=rnd(50,400); op='+'; res=a+b; }
+      else { a=rnd(200,900); b=rnd(50,a); op='-'; res=a-b; } break; }
+    /* Clasa 4 — 10 ani: toate operațiile, numere mari */
+    case 4:{ const r=Math.random();
+      if(r<.3){ a=rnd(2,12); b=rnd(2,12); op='×'; res=a*b; }
+      else if(r<.55){ b=rnd(2,12); res=rnd(2,12); a=b*res; op='÷'; }
+      else if(r<.8){ a=rnd(100,900); b=rnd(100,900); op='+'; res=a+b; }
+      else { a=rnd(300,999); b=rnd(50,a-1); op='-'; res=a-b; } break; }
+  }
+  return {a,b,op,res};
+}
+function makeSheet(level){
+  const seen=new Set(), out=[]; let guard=0;
+  while(out.length<PROBLEMS_PER_SHEET && guard<600){
+    guard++; const p=makeProblem(level); const key=`${p.a}${p.op}${p.b}`;
+    if(seen.has(key)) continue; seen.add(key); out.push(p);
+  }
+  return out;
+}
+function buildLevelSheets(level){const s=[];for(let i=0;i<SHEETS_PER_LEVEL;i++)s.push(makeSheet(level));return s;}
+
+function qrSVG(){
+  const N=21, cell=4, pad=3; let rects='';
+  const seedRand=(()=>{let s=24680;return()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;};})();
+  const finder=(x,y)=>{
+    rects+=`<rect x="${x*cell+pad}" y="${y*cell+pad}" width="${7*cell}" height="${7*cell}" rx="4" fill="#33373d"/>`;
+    rects+=`<rect x="${(x+1)*cell+pad}" y="${(y+1)*cell+pad}" width="${5*cell}" height="${5*cell}" rx="3" fill="#fff"/>`;
+    rects+=`<rect x="${(x+2)*cell+pad}" y="${(y+2)*cell+pad}" width="${3*cell}" height="${3*cell}" rx="2" fill="#33373d"/>`;
+  };
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9); if(inF) continue;
+    if(seedRand()>0.53) rects+=`<rect x="${x*cell+pad}" y="${y*cell+pad}" width="${cell}" height="${cell}" rx="1" fill="#33373d"/>`;
+  }
+  finder(0,0); finder(N-7,0); finder(0,N-7);
+  const size=N*cell+pad*2;
+  return `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" aria-label="kiddy-msk.com"><rect width="${size}" height="${size}" fill="#fff"/>${rects}</svg>`;
+}
+function cloudSVG(){
+  return `<svg viewBox="0 0 110 62" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 50 C13 50 9 34 21 30 C17 17 38 12 46 21 C52 9 75 11 78 24 C95 21 102 39 89 47 C92 54 81 56 77 52 C68 58 39 58 35 52 C33 54 29 53 28 50 Z"
+      fill="#fff" stroke="#54b948" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+
+function renderLevels(){
+  document.getElementById('levelList').innerHTML = LEVELS.map(l=>`
+    <button class="level-card ${l.cls}" onclick="openLevel(${l.id})">
+      <span class="icon">${l.icon}</span>
+      <span class="lvl-name">${l.name}</span><br>
+      <span class="lvl-age">${l.age}</span>
+      <span class="lvl-desc">${l.desc}</span>
+    </button>`).join('');
+}
+
+function openLevel(id){
+  state.level=id; state.sheets=buildLevelSheets(id);
+  state.current=0; state.done=new Set(); state.showAnswers=false; state.checked=false;
+  document.getElementById('picker').style.display='none';
+  document.getElementById('board').classList.add('active');
+  resetAnsBtn();
+  document.getElementById('celebrate').classList.remove('show');
+  renderTabs(); renderSheet(); updateProgress(); applyModeUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goHome(){
+  document.getElementById('board').classList.remove('active');
+  document.getElementById('picker').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- mode switch ---------- */
+function setMode(m){
+  state.mode=m;
+  document.getElementById('mGame').classList.toggle('active',m==='game');
+  document.getElementById('mPrint').classList.toggle('active',m==='print');
+  state.checked=false; state.showAnswers=false;
+  resetAnsBtn();
+  renderSheet(); applyModeUI();
+}
+function applyModeUI(){
+  const g = state.mode==='game';
+  document.getElementById('checkBtn').style.display = g ? 'inline-flex':'none';
+  document.getElementById('retryBtn').style.display = (g && state.checked) ? 'inline-flex':'none';
+  document.getElementById('printBtn').style.display = 'inline-flex'; // mereu vizibil
+  document.getElementById('ansBtn').style.display = g ? 'none':'inline-flex';
+  document.getElementById('scorebar').classList.remove('show');
+}
+
+/* Print always produces a clean blank worksheet (clouds empty), whatever the mode */
+function printSheet(){
+  document.body.classList.add('printing');
+  // small delay so the layout settles before the print dialog opens
+  setTimeout(()=>{ window.print(); }, 50);
+}
+window.addEventListener('afterprint', ()=>{ document.body.classList.remove('printing'); });
+
+function renderTabs(){
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  for(let i=0;i<SHEETS_PER_LEVEL;i++){
+    const b=document.createElement('button');
+    b.className='tab'+(i===state.current?' current':'')+(state.done.has(i)?' done':'');
+    b.textContent=i+1;
+    b.onclick=()=>{ state.current=i; state.checked=false; resetAnsBtn(); renderTabs(); renderSheet(); applyModeUI(); };
+    t.appendChild(b);
+  }
+}
+function opClass(op){return op==='-'?'sub':op==='×'?'mul':op==='÷'?'div':'add';}
+
+function renderSheet(){
+  const lvl=LEVELS[state.level];
+  const probs=state.sheets[state.current];
+  const game = state.mode==='game';
+
+  const problemsHTML = probs.map((p,i)=>{
+    const answerCell = game
+      ? `<span class="cloud">${cloudSVG()}<input type="number" inputmode="numeric" data-i="${i}" aria-label="răspuns ${i+1}"></span><span class="mark"></span><span class="correct-hint"></span>`
+      : `<span class="cloud">${cloudSVG()}<span class="ans">${p.res}</span></span>`;
+    return `<div class="prob" data-i="${i}">
+      <span class="qn">${i+1}</span>
+      <span class="expr">
+        <span>${p.a}</span><span class="op ${opClass(p.op)}">${p.op}</span><span>${p.b}</span><span class="eq">=</span>
+        ${answerCell}
+      </span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('sheetHost').innerHTML = `
+  <div class="sheet${state.showAnswers?' show-answers':''}" id="theSheet">
+    <div class="sheet-head">
+      <a class="qr" href="https://www.kiddy-msk.com" target="_blank" rel="noopener" title="www.kiddy-msk.com">${qrSVG()}</a>
+      <div class="sheet-title">
+        <div class="kicker">Kiddy MSK · Fișa ${state.current+1}</div>
+        <h2><span class="a">Matematică</span> <span class="b">Distractivă</span></h2>
+      </div>
+      <a class="sheet-logo" href="https://www.kiddy-msk.com" target="_blank" rel="noopener">
+        <span class="mk">🐝</span><span class="nm">Kiddy<small>MSK</small></span>
+      </a>
+    </div>
+    <div class="meta-row">
+      <div class="meta-box"><span class="lbl">Nume</span><span class="fill"></span></div>
+      <div class="meta-box"><span class="lbl">Clasa</span><span class="fill"></span></div>
+      <div class="meta-box"><span class="lbl">Data</span><span class="fill"></span></div>
+    </div>
+    <div class="directions">
+      <span class="dir-badge">💡 Cerință</span>
+      <span class="dir-text screen-only">${game ? 'Scrie răspunsul în norișor, apoi apasă „Verifică"!' : 'Calculează și scrie răspunsul corect în norișor!'}</span>
+      <span class="dir-text print-only">Calculează și scrie răspunsul corect în norișor!</span>
+      <span class="lvl-pill">${lvl.icon} ${lvl.name} · ${lvl.age}</span>
+    </div>
+    <div class="problems">${problemsHTML}</div>
+    <div class="sheet-foot">
+      <span class="foot-tag"><span class="leaf">🌿</span> Educație creativă pentru cei mici</span>
+      <a class="foot-link" href="https://www.kiddy-msk.com" target="_blank" rel="noopener">
+        <span class="dot"></span><span class="url">www.kiddy-msk.com</span>
+      </a>
+    </div>
+  </div>`;
+
+  // enter key jumps to next input; enter on last = check
+  if(game){
+    const inputs=[...document.querySelectorAll('.cloud input')];
+    inputs.forEach((inp,idx)=>{
+      inp.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){ e.preventDefault();
+          if(idx<inputs.length-1) inputs[idx+1].focus(); else checkAnswers();
+        }
+      });
+    });
+  }
+
+  state.done.add(state.current);
+  renderTabs(); updateProgress(); maybeCelebrate();
+}
+
+/* ---------- GAME: check answers ---------- */
+function checkAnswers(){
+  const probs=state.sheets[state.current];
+  let correct=0, filled=0;
+  document.querySelectorAll('.prob').forEach(row=>{
+    const i=+row.dataset.i;
+    const inp=row.querySelector('input');
+    if(!inp) return;
+    const val=inp.value.trim();
+    row.classList.remove('correct','wrong');
+    if(val==='') { return; } // leave blank ones neutral
+    filled++;
+    if(Number(val)===probs[i].res){ correct++; row.classList.add('correct'); }
+    else {
+      row.classList.add('wrong');
+      row.querySelector('.correct-hint').textContent='Corect: '+probs[i].res;
+    }
+  });
+  state.checked=true;
+  document.getElementById('retryBtn').style.display='inline-flex';
+  showScore(correct, probs.length, filled);
+}
+
+function showScore(correct,total,filled){
+  const bar=document.getElementById('scorebar');
+  const pct = correct/total;
+  bar.classList.remove('good','mid','low');
+  let cls,emoji,title,msg;
+  if(pct===1){ cls='good'; emoji='🏆'; title='Perfect! Toate corecte!'; msg='Ești un campion! Treci la fișa următoare 🎉'; }
+  else if(pct>=0.7){ cls='good'; emoji='🌟'; title='Foarte bine!'; msg='Aproape perfect — verifică răspunsurile colorate cu roșu.'; }
+  else if(pct>=0.4){ cls='mid'; emoji='💪'; title='Bun început!'; msg='Mai exersează puțin, poți și mai bine!'; }
+  else { cls='low'; emoji='🌱'; title='Hai să mai încercăm!'; msg='Privește răspunsurile corecte și apasă „Mai încearcă".'; }
+  if(filled<total && filled>0){ msg += ` (Ai completat ${filled} din ${total}.)`; }
+  bar.classList.add(cls,'show');
+  document.getElementById('scoreEmoji').textContent=emoji;
+  document.getElementById('scoreTitle').textContent=title;
+  document.getElementById('scoreMsg').textContent=msg;
+  document.getElementById('scoreNum').textContent=correct;
+  bar.querySelector('.big small').textContent='/'+total;
+  bar.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function retrySheet(){
+  state.checked=false;
+  document.querySelectorAll('.prob').forEach(r=>r.classList.remove('correct','wrong'));
+  document.querySelectorAll('.cloud input').forEach(inp=>{inp.value='';});
+  document.getElementById('scorebar').classList.remove('show');
+  document.getElementById('retryBtn').style.display='none';
+  const first=document.querySelector('.cloud input'); if(first) first.focus();
+}
+
+/* ---------- PRINT mode answer toggle ---------- */
+function resetAnsBtn(){
+  const b=document.getElementById('ansBtn');
+  b.classList.remove('on'); b.innerHTML='👁 Arată răspunsurile'; state.showAnswers=false;
+}
+function toggleAnswers(){
+  state.showAnswers=!state.showAnswers;
+  const btn=document.getElementById('ansBtn'); const sheet=document.getElementById('theSheet');
+  if(state.showAnswers){ sheet.classList.add('show-answers'); btn.classList.add('on'); btn.innerHTML='🙈 Ascunde răspunsurile'; }
+  else { sheet.classList.remove('show-answers'); btn.classList.remove('on'); btn.innerHTML='👁 Arată răspunsurile'; }
+}
+
+function updateProgress(){
+  const n=state.done.size;
+  document.getElementById('progFill').style.width=(n/SHEETS_PER_LEVEL*100)+'%';
+  document.getElementById('progLabel').textContent=`${n} / ${SHEETS_PER_LEVEL}`;
+}
+function maybeCelebrate(){ if(state.done.size>=SHEETS_PER_LEVEL) document.getElementById('celebrate').classList.add('show'); }
+
+function regenerate(){
+  state.sheets=buildLevelSheets(state.level);
+  state.current=0; state.done=new Set(); state.checked=false;
+  resetAnsBtn();
+  document.getElementById('celebrate').classList.remove('show');
+  document.getElementById('scorebar').classList.remove('show');
+  renderTabs(); renderSheet(); updateProgress(); applyModeUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderLevels();
+</script>
+</body>
+</html>
