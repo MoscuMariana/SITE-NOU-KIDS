@@ -139,7 +139,18 @@
   .foot-logo .logo-text span{color:var(--accent)}
   footer p{font-size:14px;opacity:.7}
   .hidden{display:none!important}
-  @media(max-width:640px){.logo-text{font-size:21px}.top-nav button{padding:8px 13px;font-size:14px}.hero{padding:30px 0 16px}}
+  @media(max-width:640px){
+    .logo-mark{width:34px;height:34px}
+    .logo-text{font-size:17px}
+    .topbar{padding:10px 0;gap:6px}
+    .top-nav{gap:3px}
+    .top-nav button{padding:6px 9px;font-size:12px}
+    .hero{padding:30px 0 16px}
+  }
+  @media(max-width:400px){
+    .logo-text{display:none}
+    .top-nav button{padding:6px 7px;font-size:11px}
+  }
 </style>
 </head>
 <body>
@@ -150,6 +161,7 @@
     <nav class="top-nav">
       <button id="nav-fise" class="active" onclick="showTab('fise')">📚 Fișe</button>
       <button id="nav-jocuri" onclick="showTab('jocuri')">🎮 Jocuri</button>
+      <button id="nav-curriculum" onclick="window.location.href='curriculum.html'">🗺️ Curriculum</button>
        <button id="nav-diplome" onclick="showTab('diplome')">🏆 Diplome</button>
 <button id="nav-blog" onclick="window.location.href='kiddy-msk-blog.html'">Blog</button>    </nav>
   </div>
