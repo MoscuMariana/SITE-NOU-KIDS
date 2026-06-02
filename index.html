@@ -33,6 +33,7 @@
     --c-animale:#ff8a3d;   --c-animale-bg:#fff0e3;
     --c-diplome:#e8b23a;   --c-diplome-bg:#fdf4dd;
     --c-sarbatori:#e0556b; --c-sarbatori-bg:#fdebee;
+    --colorat:#c85fa3;     --colorat-soft:#fde8f6;   /* roz-mov — planșe colorat */
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
@@ -132,6 +133,28 @@
   .game-card h3{font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;margin:4px 0 4px}
   .game-card p{font-size:14px;opacity:.95}
 
+  /* PLANȘE DE COLORAT */
+  .colorat-filters{margin:8px auto 0;max-width:960px}
+  .colorat-block{background:#fff;border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;box-shadow:0 4px 16px -10px rgba(58,46,42,.25);border:1px solid #f3e7d9;border-top:5px solid var(--colorat);background:linear-gradient(180deg,var(--colorat-soft),#fff 60%)}
+  .colorat-chip-group{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .colorat-chip{font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;border:2px solid #efe3d4;background:#fff;color:var(--ink-soft);padding:9px 16px;border-radius:999px;cursor:pointer;transition:.18s;box-shadow:0 2px 5px -3px rgba(58,46,42,.2)}
+  .colorat-chip.active{background:var(--colorat);color:#fff;border-color:var(--colorat)}
+  @media (hover:hover){
+    .colorat-chip:not(.active):hover{transform:translateY(-2px);border-color:var(--colorat);color:var(--colorat)}
+  }
+  .colorat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px;padding:26px 0 60px;justify-content:center}
+  .colorat-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;animation:pop .4s ease backwards;border:2px solid var(--colorat)}
+  .colorat-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+  .colorat-thumb{height:150px;position:relative;display:grid;place-items:center;font-size:52px;background:#fde8f6;overflow:hidden}
+  .colorat-thumb img{width:100%;height:100%;object-fit:cover;object-position:top center}
+  .colorat-thumb .pages{position:absolute;top:10px;right:10px;background:rgba(58,46,42,.82);color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px}
+  .colorat-thumb .cat-tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;color:#fff;background:var(--colorat);text-transform:uppercase;letter-spacing:.4px}
+  .colorat-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;background:#fff}
+  .colorat-body h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;margin:4px 0 6px;line-height:1.15;color:var(--colorat)}
+  .colorat-body p{font-size:14px;color:var(--ink-soft);flex:1}
+  .colorat-placeholder{text-align:center;padding:60px 20px;color:var(--ink-soft);grid-column:1/-1}
+  .colorat-placeholder .big{font-size:60px;margin-bottom:10px}
+
   footer{background:var(--ink);color:#f6ece0;padding:36px 0;margin-top:20px}
   .foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
   .foot-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
@@ -161,9 +184,12 @@
     <nav class="top-nav">
       <button id="nav-fise" class="active" onclick="showTab('fise')">📚 Fișe</button>
       <button id="nav-jocuri" onclick="showTab('jocuri')">🎮 Jocuri</button>
+      <button id="nav-colorat" onclick="showTab('colorat')">🎨 Colorat</button>
+      <button id="nav-poezii" onclick="window.location.href='poezii.html'">📖 Poezii</button>
       <button id="nav-curriculum" onclick="window.location.href='curriculum.html'">🗺️ Curriculum</button>
-       <button id="nav-diplome" onclick="showTab('diplome')">🏆 Diplome</button>
-<button id="nav-blog" onclick="window.location.href='kiddy-msk-blog.html'">Blog</button>    </nav>
+      <button id="nav-diplome" onclick="showTab('diplome')">🏆 Diplome</button>
+      <button id="nav-blog" onclick="window.location.href='kiddy-msk-blog.html'">Blog</button>
+    </nav>
   </div>
 </header>
 
@@ -229,6 +255,37 @@
     <p>Jocuri în browser pentru matematică, citit și logică — direct, fără instalare.</p>
   </section>
   <section class="wrap"><div class="games-grid" id="games-grid"></div></section>
+</main>
+
+<!-- TAB PLANȘE DE COLORAT -->
+<main id="tab-colorat" class="hidden">
+  <section class="hero wrap">
+    <span class="badge" style="background:var(--colorat);color:#fff">🎨 Gratuit · Printează acasă</span>
+    <h1>Planșe de <em style="color:var(--colorat)">colorat</em></h1>
+    <p>Planșe de colorat tematice pentru grădiniță și școală — printează, colorează, bucură-te!</p>
+  </section>
+
+  <section class="colorat-filters wrap">
+    <div class="colorat-block">
+      <div class="block-title" style="color:var(--colorat);font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">🎨 Categorie</div>
+      <div class="colorat-chip-group">
+        <button class="colorat-chip" data-cat="animale" onclick="toggleColorat(this)">🐾 Animale</button>
+        <button class="colorat-chip" data-cat="primavara" onclick="toggleColorat(this)">🌸 Primăvara</button>
+        <button class="colorat-chip" data-cat="vara" onclick="toggleColorat(this)">☀️ Vara</button>
+        <button class="colorat-chip" data-cat="toamna" onclick="toggleColorat(this)">🍂 Toamna</button>
+        <button class="colorat-chip" data-cat="iarna" onclick="toggleColorat(this)">❄️ Iarna</button>
+        <button class="colorat-chip" data-cat="sarbatori" onclick="toggleColorat(this)">🎄 Sărbători</button>
+        <button class="colorat-chip" data-cat="personaje" onclick="toggleColorat(this)">🧚 Personaje</button>
+        <button class="colorat-chip" data-cat="mandala" onclick="toggleColorat(this)">🌀 Mandala</button>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <span class="result-count" id="colorat-count"></span>
+      <button class="clear-btn hidden" id="colorat-clear-btn" onclick="clearColorat()">✕ Resetează</button>
+    </div>
+  </section>
+
+  <section class="wrap"><div class="colorat-grid" id="colorat-grid"></div></section>
 </main>
 
 <footer>
@@ -674,26 +731,128 @@ function renderJocuri(){
 function toggleLevel(b){
   const l=b.dataset.level;
   const wasActive=activeLevels.has(l);
-  // selecție UNICĂ: golim toate nivelurile, apoi activăm doar pe cel apăsat
   activeLevels.clear();
   document.querySelectorAll(".chip.lvl-gradi.active, .chip.lvl-scoala.active").forEach(c=>c.classList.remove("active"));
-  if(!wasActive){activeLevels.add(l);b.classList.add("active");} // re-apăsarea aceluiași = deselectare
+  if(!wasActive){activeLevels.add(l);b.classList.add("active");}
   renderFise();
 }
 function toggleTheme(b){
   const t=b.dataset.theme;
   const wasActive=activeThemes.has(t);
-  // selecție UNICĂ: golim toate temele, apoi activăm doar pe cea apăsată
   activeThemes.clear();
   document.querySelectorAll(".chip.theme.active").forEach(c=>c.classList.remove("active"));
-  if(!wasActive){activeThemes.add(t);b.classList.add("active");} // re-apăsarea aceleiași = deselectare
+  if(!wasActive){activeThemes.add(t);b.classList.add("active");}
   renderFise();
 }
 function clearFilters(){activeLevels.clear();activeThemes.clear();document.querySelectorAll(".chip.active").forEach(c=>c.classList.remove("active"));renderFise();}
-function showTab(t){document.getElementById("tab-fise").classList.toggle("hidden",t!=="fise");document.getElementById("tab-jocuri").classList.toggle("hidden",t!=="jocuri");document.getElementById("nav-fise").classList.toggle("active",t==="fise");document.getElementById("nav-jocuri").classList.toggle("active",t==="jocuri");window.scrollTo({top:0,behavior:"smooth"});}
+
+/* =============================================
+   PLANȘE DE COLORAT
+   Adaugă obiectele tale în array-ul PLANSE:
+   {
+     title: "Numele planșei",
+     cat: "animale",          // categoria (folosită la filtrare)
+     catLabel: "Animale",     // eticheta afișată pe card
+     desc: "Descriere scurtă",
+     pages: 4,                // nr. de pagini
+     img: "https://...",      // preview prima pagină
+     pdf: "https://..."       // link descărcare PDF
+   }
+   ============================================= */
+const PLANSE = [
+  /* Exemplu — șterge / înlocuiește cu datele tale:
+  {
+    title: "Animale de la fermă",
+    cat: "animale", catLabel: "Animale",
+    desc: "Vaca, oaia, porcul, găina — de colorat.",
+    pages: 6,
+    img: "https://kiddy-msk.com/colorat/ferma/1.jpg",
+    pdf: "https://kiddy-msk.com/colorat/ferma/ferma.pdf"
+  },
+  */
+];
+
+let activeColoratCat = null;
+
+function renderColorat() {
+  const grid = document.getElementById("colorat-grid");
+  const filtered = activeColoratCat
+    ? PLANSE.filter(p => p.cat === activeColoratCat)
+    : PLANSE;
+
+  document.getElementById("colorat-count").textContent =
+    filtered.length + (filtered.length === 1 ? " planșă găsită" : " planșe găsite");
+  document.getElementById("colorat-clear-btn").classList.toggle("hidden", !activeColoratCat);
+
+  if (PLANSE.length === 0) {
+    grid.innerHTML = `
+      <div class="colorat-placeholder">
+        <div class="big">🎨</div>
+        <strong>Planșele de colorat vin în curând!</strong><br>
+        Adaugă fișierele pe site și completează array-ul <code>PLANSE</code> din cod.
+      </div>`;
+    return;
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="colorat-placeholder"><div class="big">🔎</div><strong>Nimic în această categorie</strong><br>Încearcă altă categorie.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <article class="colorat-card" style="animation-delay:${i * 0.04}s">
+      <div class="colorat-thumb">
+        ${p.img
+          ? `<img src="${encodeURI(p.img)}" alt="${p.title}" loading="lazy"
+               onerror="this.style.display='none';this.parentElement.querySelector('.thumb-fallback').style.display='block'">`
+          : ''}
+        <span class="thumb-fallback" style="${p.img ? 'display:none' : ''}">🎨</span>
+        <span class="cat-tag">${p.catLabel || p.cat}</span>
+        <span class="pages">${p.pages} pag.</span>
+      </div>
+      <div class="colorat-body">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="card-actions" style="margin-top:12px">
+          ${p.img ? `<a class="btn btn-prev" href="${encodeURI(p.img)}" target="_blank">👁️ Vezi</a>` : ''}
+          <a class="btn btn-dl" href="${encodeURI(p.pdf)}" target="_blank" style="background:var(--colorat)">📥 Descarcă</a>
+        </div>
+      </div>
+    </article>`).join("");
+}
+
+function toggleColorat(b) {
+  const cat = b.dataset.cat;
+  const wasActive = activeColoratCat === cat;
+  document.querySelectorAll(".colorat-chip.active").forEach(c => c.classList.remove("active"));
+  if (wasActive) {
+    activeColoratCat = null;
+  } else {
+    activeColoratCat = cat;
+    b.classList.add("active");
+  }
+  renderColorat();
+}
+
+function clearColorat() {
+  activeColoratCat = null;
+  document.querySelectorAll(".colorat-chip.active").forEach(c => c.classList.remove("active"));
+  renderColorat();
+}
+
+function showTab(t){
+  ["fise","jocuri","colorat"].forEach(id => {
+    const tab = document.getElementById("tab-"+id);
+    const btn = document.getElementById("nav-"+id);
+    if (tab) tab.classList.toggle("hidden", t !== id);
+    if (btn) btn.classList.toggle("active", t === id);
+  });
+  // tab-uri fără main propriu (diplome) — lasă logica existentă
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 function goHome(){showTab("fise");clearFilters();}
 
-renderFise();renderJocuri();
+renderFise();renderJocuri();renderColorat();
 </script>
 </body>
 </html>
