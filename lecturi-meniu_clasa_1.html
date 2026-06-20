@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="google-adsense-account" content="ca-pub-3657163291978156">
+<title>Lecturi Clasa 1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Arial', 'Trebuchet MS', sans-serif;
+    background: linear-gradient(135deg, #ffd6e0 0%, #c5e8ff 100%);
+    min-height: 100vh;
+    padding: 15px;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  h1 {
+    text-align: center;
+    color: #d63384;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .menu-item {
+    background: linear-gradient(135deg, #fff9e6, #ffe5b4);
+    border: 3px solid #ffc107;
+    border-radius: 15px;
+    padding: 15px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: bold;
+  }
+  .menu-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #ffe5b4, #ffd591);
+  }
+  .menu-item.completed {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    border-color: #4caf50;
+  }
+  .menu-num {
+    font-size: 1em;
+    color: #d84315;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+  }
+  .menu-emoji {
+    font-size: 2em;
+    margin: 5px 0;
+  }
+  .menu-title {
+    font-size: 0.95em;
+    color: #333;
+    letter-spacing: 1px;
+  }
+  .menu-check {
+    color: #2e7d32;
+    font-size: 1.2em;
+    margin-top: 5px;
+  }
+  .back-btn {
+    background: #ffab91;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  .progress {
+    text-align: center;
+    background: #fff3cd;
+    padding: 8px;
+    border-radius: 12px;
+    margin: 15px 0;
+    font-size: 1em;
+    color: #856404;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .text-card {
+    background: #fff9e6;
+    border: 3px solid #ffc107;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+  .text-title {
+    color: #d84315;
+    font-size: 1.4em;
+    margin-bottom: 12px;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .text-content {
+    font-size: 1.4em;
+    line-height: 1.9;
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 5px solid #ff9800;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #222;
+  }
+  .question {
+    background: #e3f2fd;
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px 0;
+  }
+  .question-text {
+    font-weight: bold;
+    color: #1565c0;
+    margin-bottom: 10px;
+    font-size: 1.15em;
+    letter-spacing: 1px;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: white;
+    border: 2px solid #90caf9;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    font-size: 1.1em;
+    text-align: left;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #222;
+  }
+  .option:hover:not(:disabled) { background: #bbdefb; }
+  .option.correct { background: #c8e6c9; border-color: #4caf50; }
+  .option.wrong { background: #ffcdd2; border-color: #f44336; }
+  .option:disabled { cursor: not-allowed; }
+  .feedback {
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+    letter-spacing: 1px;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #c8e6c9; color: #1b5e20; }
+  .feedback.wrong { background: #ffcdd2; color: #b71c1c; }
+  .nav { display: flex; gap: 10px; margin-top: 15px; }
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.05em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .btn-prev { background: #ffab91; }
+  .btn-next { background: #66bb6a; }
+  .btn-menu { background: #9c27b0; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .score {
+    background: linear-gradient(135deg, #66bb6a, #43a047);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px dashed #ffc107;
+    color: #666;
+    font-size: 0.95em;
+  }
+  .footer a {
+    color: #d63384;
+    font-weight: bold;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📚 LECTURI CLASA 1 📚</h1>
+  <div id="content"></div>
+  <div class="footer">
+    🌐 <a href="https://www.kiddy-msk.com" target="_blank">WWW.KIDDY-MSK.COM</a>
+    <p style="margin-top:8px;font-size:12px;">
+      <a href="/confidentialitate.html" style="color:#FF6B35;text-decoration:none;">Politică de Confidențialitate</a>
+      &nbsp;·&nbsp;
+      <a href="/termeni.html" style="color:#FF6B35;text-decoration:none;">Termeni și Condiții</a>
+      &nbsp;·&nbsp;
+      <a href="/contact.html" style="color:#FF6B35;text-decoration:none;">Contact</a>
+    </p>
+  </div>
+</div>
+
+<script>
+const L = [
+  {t:"PISICA MIA",e:"🐱",x:"MIA ESTE O PISICĂ MICĂ ȘI ALBĂ. EA ARE OCHII VERZI ȘI O COADĂ LUNGĂ. MIA STĂ PE PERNĂ ȘI DOARME. DIMINEAȚA, EA BEA LAPTE DIN CASTRON.",q:[
+    {q:"CUM SE NUMEȘTE PISICA?",o:["MIA","LUNA","TISA"],c:0},
+    {q:"CE CULOARE ARE PISICA?",o:["NEAGRĂ","ALBĂ","ROȘIE"],c:1},
+    {q:"CE BEA PISICA DIMINEAȚA?",o:["APĂ","SUC","LAPTE"],c:2}]},
+  {t:"MĂRUL DIN GRĂDINĂ",e:"🌳",x:"ÎN GRĂDINĂ ESTE UN MĂR MARE. PE EL CRESC MERE ROȘII. ANDREI CULEGE UN MĂR ȘI ÎL SPALĂ. MĂRUL ESTE DULCE ȘI GUSTOS.",q:[
+    {q:"CE ESTE ÎN GRĂDINĂ?",o:["UN MĂR","UN PIN","O FLOARE"],c:0},
+    {q:"CE CULOARE AU MERELE?",o:["VERZI","GALBENE","ROȘII"],c:2},
+    {q:"CINE CULEGE MĂRUL?",o:["MARIA","ANDREI","IONEL"],c:1}]},
+  {t:"CĂȚELUL REX",e:"🐶",x:"REX ESTE UN CĂȚEL JUCĂUȘ. EL ARE BLANA MARO ȘI URECHILE LUNGI. REX ALEARGĂ DUPĂ MINGE ÎN CURTE. SEARA, EL DOARME LÂNGĂ PATUL LUI MIHAI.",q:[
+    {q:"CUM SE NUMEȘTE CĂȚELUL?",o:["REX","MAX","BOBY"],c:0},
+    {q:"CE CULOARE ARE BLANA LUI?",o:["ALBĂ","MARO","NEAGRĂ"],c:1},
+    {q:"DUPĂ CE ALEARGĂ REX?",o:["O PISICĂ","O MAȘINĂ","O MINGE"],c:2}]},
+  {t:"FLOAREA ANEI",e:"🌸",x:"ANA ARE O FLOARE ROȘIE ÎN GLASTRĂ. EA O UDĂ ÎN FIECARE ZI CU APĂ. FLOAREA CREȘTE MARE ȘI FRUMOASĂ. ANA ESTE FOARTE FERICITĂ.",q:[
+    {q:"CE ARE ANA?",o:["O FLOARE","O CARTE","O PĂPUȘĂ"],c:0},
+    {q:"CE CULOARE ARE FLOAREA?",o:["GALBENĂ","ALBASTRĂ","ROȘIE"],c:2},
+    {q:"CUM O UDĂ ANA?",o:["CU SUC","CU APĂ","CU LAPTE"],c:1}]},
+  {t:"IEPURAȘUL DIN PĂDURE",e:"🐰",x:"ÎN PĂDURE TRĂIEȘTE UN IEPURAȘ ALB. EL ARE URECHI LUNGI ȘI O CODIȚĂ MICĂ. IEPURAȘUL MĂNÂNCĂ MORCOVI ȘI SALATĂ. EL SARE REPEDE PRINTRE COPACI.",q:[
+    {q:"UNDE TRĂIEȘTE IEPURAȘUL?",o:["ÎN ORAȘ","ÎN PĂDURE","LA FERMĂ"],c:1},
+    {q:"CE CULOARE ARE IEPURAȘUL?",o:["ALB","NEGRU","GRI"],c:0},
+    {q:"CE MĂNÂNCĂ IEPURAȘUL?",o:["PÂINE","CARNE","MORCOVI ȘI SALATĂ"],c:2}]},
+  {t:"O ZI FRUMOASĂ",e:"☀️",x:"ASTĂZI SOARELE STRĂLUCEȘTE PE CER. MARIA ȘI DAN MERG LA JOACĂ ÎN PARC. EI SE DAU ÎN LEAGĂN ȘI RÂD. MAMA LE ADUCE ÎNGHEȚATĂ.",q:[
+    {q:"CUM ESTE VREMEA?",o:["PLOUĂ","NINGE","E SOARE"],c:2},
+    {q:"UNDE MERG COPIII?",o:["LA ȘCOALĂ","ÎN PARC","ACASĂ"],c:1},
+    {q:"CE LE ADUCE MAMA?",o:["ÎNGHEȚATĂ","PRĂJITURI","SUC"],c:0}]},
+  {t:"VRĂBIUȚA",e:"🐦",x:"O VRĂBIUȚĂ MICĂ ZBOARĂ PE RAMURĂ. EA CÂNTĂ VESEL DIMINEAȚA. VRĂBIUȚA ARE UN CUIB ÎN COPAC. ACOLO ARE TREI PUI MICI.",q:[
+    {q:"UNDE ZBOARĂ VRĂBIUȚA?",o:["PE RAMURĂ","PE CASĂ","PE STÂNCĂ"],c:0},
+    {q:"CÂND CÂNTĂ EA?",o:["SEARA","DIMINEAȚA","NOAPTEA"],c:1},
+    {q:"CÂȚI PUI ARE?",o:["DOI","PATRU","TREI"],c:2}]},
+  {t:"BALONUL ROȘU",e:"🎈",x:"TUDOR ARE UN BALON ROȘU. EL SE JOACĂ CU BALONUL ÎN CURTE. DEODATĂ, BALONUL ZBOARĂ SUS PE CER. TUDOR ESTE TRIST, DAR BUNICA ÎI CUMPĂRĂ ALTUL.",q:[
+    {q:"CE ARE TUDOR?",o:["UN BALON","O MAȘINUȚĂ","O CARTE"],c:0},
+    {q:"UNDE ZBOARĂ BALONUL?",o:["ÎN CASĂ","PE CER","ÎN COPAC"],c:1},
+    {q:"CINE ÎI CUMPĂRĂ ALT BALON?",o:["MAMA","TATA","BUNICA"],c:2}]},
+  {t:"ALBINUȚA HARNICĂ",e:"🐝",x:"ALBINUȚA ZBOARĂ DIN FLOARE ÎN FLOARE. EA ADUNĂ POLEN TOATĂ ZIUA. ALBINUȚA FACE MIERE DULCE ÎN STUP. TOȚI COPIII IUBESC MIEREA.",q:[
+    {q:"CE ADUNĂ ALBINUȚA?",o:["POLEN","APĂ","FRUNZE"],c:0},
+    {q:"CE FACE ALBINUȚA ÎN STUP?",o:["DOARME","MIERE","CUIB"],c:1},
+    {q:"CUM ESTE MIEREA?",o:["SĂRATĂ","AMARĂ","DULCE"],c:2}]},
+  {t:"MAȘINUȚA LUI VLAD",e:"🚗",x:"VLAD ARE O MAȘINUȚĂ ALBASTRĂ. EL O ÎMPINGE PE COVOR. MAȘINUȚA MERGE REPEDE ȘI FACE ZGOMOT. VLAD SE JOACĂ CU PRIETENUL LUI, IONUȚ.",q:[
+    {q:"CE CULOARE ARE MAȘINUȚA?",o:["ROȘIE","ALBASTRĂ","VERDE"],c:1},
+    {q:"UNDE SE JOACĂ VLAD?",o:["PE COVOR","ÎN PAT","PE MASĂ"],c:0},
+    {q:"CUM SE NUMEȘTE PRIETENUL?",o:["ANDREI","MIHAI","IONUȚ"],c:2}]},
+  {t:"IARNA ALBĂ",e:"❄️",x:"AFARĂ NINGE ȘI E FRIG. COPIII PUN CĂCIULI ȘI FULARE. EI FAC UN OM DE ZĂPADĂ ÎN CURTE. APOI SE DAU CU SANIA PE DEAL.",q:[
+    {q:"CUM E VREMEA?",o:["CALDĂ","FRIG ȘI NINGE","PLOUĂ"],c:1},
+    {q:"CE FAC COPIII ÎN CURTE?",o:["UN OM DE ZĂPADĂ","UN CASTEL","O MINGE"],c:0},
+    {q:"CU CE SE DAU PE DEAL?",o:["CU BICICLETA","CU TROTINETA","CU SANIA"],c:2}]},
+  {t:"MĂRUL LUI PETRU",e:"🍎",x:"PETRU ARE UN MĂR MARE ÎN MÂNĂ. EL ÎL SPALĂ CU APĂ RECE. MĂRUL ESTE ROȘU ȘI DULCE. PETRU MUȘCĂ DIN EL CU POFTĂ.",q:[
+    {q:"CINE ARE MĂRUL?",o:["PETRU","PAUL","PAVEL"],c:0},
+    {q:"CU CE SPALĂ MĂRUL?",o:["CU SUC","CU APĂ","CU LAPTE"],c:1},
+    {q:"CUM ESTE MĂRUL?",o:["ACRU","VERDE","ROȘU ȘI DULCE"],c:2}]},
+  {t:"PEȘTIȘORUL DE AUR",e:"🐟",x:"ÎN ACVARIU ÎNOATĂ UN PEȘTIȘOR DE AUR. EL ARE SOLZI GALBENI STRĂLUCITORI. PEȘTIȘORUL MĂNÂNCĂ FIRMITURI MICI. LUI ÎI PLACE SĂ SE ASCUNDĂ PRINTRE PIETRE.",q:[
+    {q:"UNDE ÎNOATĂ PEȘTIȘORUL?",o:["ÎN LAC","ÎN ACVARIU","ÎN MARE"],c:1},
+    {q:"CE CULOARE AU SOLZII?",o:["GALBENI","ALBAȘTRI","NEGRI"],c:0},
+    {q:"UNDE SE ASCUNDE?",o:["ÎN NISIP","ÎN PLANTE","PRINTRE PIETRE"],c:2}]},
+  {t:"ZIUA DE NAȘTERE",e:"🎂",x:"ASTĂZI ESTE ZIUA ELENEI. EA ÎMPLINEȘTE ȘAPTE ANI. MAMA ÎI FACE UN TORT CU CIOCOLATĂ. PRIETENII VIN CU CADOURI ȘI BALOANE.",q:[
+    {q:"A CUI ESTE ZIUA?",o:["A ELENEI","A ANEI","A MARIEI"],c:0},
+    {q:"CÂȚI ANI ÎMPLINEȘTE?",o:["ȘASE","ȘAPTE","OPT"],c:1},
+    {q:"CU CE VIN PRIETENII?",o:["CU FLORI","CU JUCĂRII","CU CADOURI ȘI BALOANE"],c:2}]},
+  {t:"PLOAIA DE VARĂ",e:"🌧️",x:"PE CER APAR NORI NEGRI. ÎNCEPE SĂ PLOUĂ CU PICURI MARI. COPIII FUG ÎN CASĂ SĂ NU SE UDE. DUPĂ PLOAIE, APARE UN CURCUBEU FRUMOS.",q:[
+    {q:"CUM SUNT NORII?",o:["NEGRI","ALBI","ROZ"],c:0},
+    {q:"UNDE FUG COPIII?",o:["ÎN PARC","ÎN CASĂ","ÎN ȘCOALĂ"],c:1},
+    {q:"CE APARE DUPĂ PLOAIE?",o:["SOARELE","LUNA","UN CURCUBEU"],c:2}]},
+  {t:"CARTEA IOANEI",e:"📖",x:"IOANA ARE O CARTE NOUĂ CU POVEȘTI. PE COPERTĂ ESTE O PRINȚESĂ. EA CITEȘTE O PAGINĂ ÎN FIECARE SEARĂ. APOI VISEAZĂ LA PRINȚESE ȘI ZÂNE.",q:[
+    {q:"CE ARE IOANA?",o:["O CARTE","UN CAIET","O REVISTĂ"],c:0},
+    {q:"CINE ESTE PE COPERTĂ?",o:["UN BALAUR","O PRINȚESĂ","UN CAVALER"],c:1},
+    {q:"CÂND CITEȘTE IOANA?",o:["DIMINEAȚA","LA PRÂNZ","SEARA"],c:2}]},
+  {t:"FLUTURELE COLORAT",e:"🦋",x:"ÎN GRĂDINĂ ZBOARĂ UN FLUTURE MARE. EL ARE ARIPI GALBENE CU PUNCTE NEGRE. FLUTURELE SE AȘAZĂ PE O FLOARE ALBĂ. ANA ÎL PRIVEȘTE CU DRAG.",q:[
+    {q:"UNDE ZBOARĂ FLUTURELE?",o:["ÎN GRĂDINĂ","ÎN CASĂ","ÎN PĂDURE"],c:0},
+    {q:"CE CULOARE AU ARIPILE?",o:["ROȘII","GALBENE CU NEGRU","ALBASTRE"],c:1},
+    {q:"CINE PRIVEȘTE FLUTURELE?",o:["MARIA","ELENA","ANA"],c:2}]},
+  {t:"GRĂDINA BUNICII",e:"🥕",x:"BUNICA ARE O GRĂDINĂ MARE. ACOLO CRESC MORCOVI, ROȘII ȘI CASTRAVEȚI. EU O AJUT SĂ UDE FLORILE. APOI MÂNCĂM O SALATĂ GUSTOASĂ.",q:[
+    {q:"CINE ARE GRĂDINA?",o:["BUNICA","MAMA","MĂTUȘA"],c:0},
+    {q:"CE CRESC ÎN GRĂDINĂ?",o:["MERE ȘI PERE","MORCOVI, ROȘII ȘI CASTRAVEȚI","NUMAI FLORI"],c:1},
+    {q:"CE MÂNCĂM LA FINAL?",o:["PÂINE","SUPĂ","O SALATĂ"],c:2}]},
+  {t:"NOAPTEA LINIȘTITĂ",e:"🌙",x:"AFARĂ ESTE ÎNTUNERIC ȘI LINIȘTE. PE CER STRĂLUCEȘTE LUNA ȘI STELELE. TOȚI COPIII DORM ÎN PĂTUȚURI CALDE. MÂINE SE TREZESC VOIOȘI LA ȘCOALĂ.",q:[
+    {q:"CUM ESTE AFARĂ?",o:["ÎNTUNERIC ȘI LINIȘTE","GĂLĂGIE","LUMINĂ"],c:0},
+    {q:"CE STRĂLUCEȘTE PE CER?",o:["SOARELE","LUNA ȘI STELELE","NORII"],c:1},
+    {q:"UNDE MERG COPIII MÂINE?",o:["ÎN PARC","LA BUNICI","LA ȘCOALĂ"],c:2}]},
+  {t:"CADOUL SURPRIZĂ",e:"🎁",x:"BUNICUL VINE CU O CUTIE MARE. ÎNĂUNTRU ESTE UN PUI DE PISICĂ. PISICUȚA ESTE GRI ȘI PUFOASĂ. EU O ÎMBRĂȚIȘEZ FERICIT.",q:[
+    {q:"CU CE VINE BUNICUL?",o:["CU O CUTIE","CU UN COȘ","CU O SACOȘĂ"],c:0},
+    {q:"CE ESTE ÎN CUTIE?",o:["UN CĂȚEL","O PISICUȚĂ","UN IEPURAȘ"],c:1},
+    {q:"CE CULOARE ARE PISICUȚA?",o:["ALBĂ","NEAGRĂ","GRI ȘI PUFOASĂ"],c:2}]}
+];
+
+let cur = 0, sc = 0;
+let ans = {}; // {0: [true, false, true], 1: [...], ...}
+let completed = {}; // {0: true, ...}
+
+function showMenu(){
+  let totalScore = 0, totalQ = 0;
+  Object.keys(ans).forEach(k=>{
+    ans[k].forEach(v=>{ totalQ++; if(v) totalScore++; });
+  });
+  
+  let h = `<p class="subtitle">ALEGE O LECTURĂ PENTRU A ÎNCEPE</p>`;
+  h += `<div class="score">⭐ SCOR TOTAL: ${totalScore} / ${L.length*3}</div>`;
+  h += `<div class="menu-grid">`;
+  L.forEach((l,i)=>{
+    const isDone = completed[i];
+    h += `<button class="menu-item ${isDone?'completed':''}" onclick="startLesson(${i})">
+      <div class="menu-num">LECTURA ${i+1}</div>
+      <div class="menu-emoji">${l.e}</div>
+      <div class="menu-title">${l.t}</div>
+      ${isDone?'<div class="menu-check">✅ TERMINAT</div>':''}
+    </button>`;
+  });
+  h += `</div>`;
+  document.getElementById('content').innerHTML = h;
+}
+
+function startLesson(i){
+  cur = i;
+  if(!ans[cur]) ans[cur] = [];
+  render();
+}
+
+function render(){
+  const l = L[cur];
+  let h = `<button class="back-btn" onclick="showMenu()">🏠 MENIU PRINCIPAL</button>`;
+  h += `<div class="progress">LECTURA ${cur+1} DIN ${L.length}</div>`;
+  h += `<div class="text-card"><div class="text-title">${l.e} ${l.t}</div><div class="text-content">${l.x}</div></div>`;
+  
+  l.q.forEach((q,qi)=>{
+    const done = ans[cur] && ans[cur][qi] !== undefined;
+    h += `<div class="question"><div class="question-text">${qi+1}. ${q.q}</div><div class="options">`;
+    q.o.forEach((opt,oi)=>{
+      let cls = 'option';
+      if(done){
+        if(oi === q.c) cls += ' correct';
+        else if(ans[cur][qi] === false && oi === ans[cur][qi+'_choice']) cls += ' wrong';
+      }
+      h += `<button class="${cls}" id="o-${qi}-${oi}" onclick="check(${qi},${oi})" ${done?'disabled':''}>${opt}</button>`;
+    });
+    h += `</div><div class="feedback ${done?'show '+(ans[cur][qi]?'correct':'wrong'):''}" id="f-${qi}">${done?(ans[cur][qi]?'✅ BRAVO! RĂSPUNS CORECT!':'❌ RĂSPUNSUL CORECT ESTE CEL VERDE.'):''}</div></div>`;
+  });
+  
+  h += `<div class="nav">`;
+  h += `<button class="btn btn-prev" ${cur===0?'disabled':''} onclick="prev()">⬅ ÎNAPOI</button>`;
+  h += `<button class="btn btn-menu" onclick="showMenu()">🏠 MENIU</button>`;
+  h += `<button class="btn btn-next" ${cur===L.length-1?'disabled':''} onclick="next()">ÎNAINTE ➡</button>`;
+  h += `</div>`;
+  
+  document.getElementById('content').innerHTML = h;
+  window.scrollTo(0,0);
+}
+
+function check(qi,oi){
+  if(ans[cur][qi] !== undefined) return;
+  const c = L[cur].q[qi].c;
+  const correct = oi === c;
+  ans[cur][qi] = correct;
+  ans[cur][qi+'_choice'] = oi;
+  
+  // Check if all questions answered
+  let allDone = true;
+  for(let i=0;i<L[cur].q.length;i++){
+    if(ans[cur][i] === undefined) allDone = false;
+  }
+  if(allDone) completed[cur] = true;
+  
+  const fb = document.getElementById(`f-${qi}`);
+  for(let i=0;i<L[cur].q[qi].o.length;i++){
+    const b = document.getElementById(`o-${qi}-${i}`);
+    b.disabled = true;
+    if(i===c) b.classList.add('correct');
+    else if(i===oi) b.classList.add('wrong');
+  }
+  if(correct){ fb.textContent='✅ BRAVO! RĂSPUNS CORECT!'; fb.className='feedback show correct'; }
+  else { fb.textContent='❌ RĂSPUNSUL CORECT ESTE CEL VERDE.'; fb.className='feedback show wrong'; }
+}
+
+function next(){ if(cur<L.length-1){ cur++; if(!ans[cur]) ans[cur]=[]; render(); } }
+function prev(){ if(cur>0){ cur--; if(!ans[cur]) ans[cur]=[]; render(); } }
+
+showMenu();
+</script>
+</body>
+</html>
