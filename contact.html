@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact – Kiddy MSK</title>
+  <meta name="description" content="Contactează echipa Kiddy MSK — platformă educațională de materiale pentru copii preșcolari și școlari." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --accent: #FFE66D;
+      --blue: #45B7D1;
+      --purple: #A78BFA;
+      --green: #10B981;
+      --orange: #F97316;
+      --bg: #FFFDF5;
+      --surface: #FFFFFF;
+      --text: #2D3436;
+      --text-light: #636E72;
+      --border: #F0EDE4;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #A78BFA 0%, #EC4899 50%, #FF6B6B 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '✉️';
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 8rem;
+      opacity: 0.15;
+      line-height: 1;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -30px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .back-link svg { width: 16px; height: 16px; }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    header p.subtitle {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.88);
+      font-size: 1rem;
+      font-weight: 600;
+      max-width: 500px;
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    /* CONTACT CARDS */
+    .contact-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    }
+    .contact-card.email:hover { border-color: var(--primary); box-shadow: 0 12px 40px rgba(255,107,107,0.15); }
+    .contact-card.fb:hover { border-color: #1877F2; box-shadow: 0 12px 40px rgba(24,119,242,0.15); }
+    .contact-card.ig:hover { border-color: #E1306C; box-shadow: 0 12px 40px rgba(225,48,108,0.15); }
+    .contact-card.web:hover { border-color: var(--secondary); box-shadow: 0 12px 40px rgba(78,205,196,0.15); }
+
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .email .card-icon { background: #FFF0F0; }
+    .fb .card-icon { background: #EEF3FC; }
+    .ig .card-icon { background: #FEF0F5; }
+    .web .card-icon { background: #F0FDFB; }
+
+    .card-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+    .card-value {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .card-desc {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    /* FORM SECTION */
+    .form-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+    .form-section h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-section .form-desc {
+      font-size: 0.93rem;
+      color: var(--text-light);
+      margin-bottom: 28px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .form-group label span { color: var(--primary); }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(78,205,196,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 32px;
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255,107,107,0.4);
+    }
+    .submit-btn:active { transform: translateY(0); }
+
+    /* SUCCESS */
+    .success-msg {
+      display: none;
+      background: #F0FDF4;
+      border: 2px solid var(--green);
+      border-radius: 14px;
+      padding: 20px 24px;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 16px;
+      align-items: center;
+      gap: 12px;
+    }
+    .success-msg.show { display: flex; }
+    .success-msg .check { font-size: 1.4rem; }
+
+    /* FAQ */
+    .faq-section h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .faq-item {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-q {
+      padding: 18px 22px;
+      font-weight: 700;
+      font-size: 0.97rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .faq-q:hover { background: #FAF9F5; }
+    .faq-q .arrow { font-size: 0.85rem; transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .arrow { transform: rotate(180deg); }
+    .faq-a {
+      padding: 0 22px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.2s;
+      font-size: 0.93rem;
+      color: var(--text-light);
+    }
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding: 0 22px 18px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      border-top: 2px solid var(--border);
+    }
+    footer strong { color: var(--text); }
+    footer a { color: var(--primary); font-weight: 700; text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-section { padding: 24px 18px; }
+      .header-inner { padding: 36px 18px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Înapoi la Kiddy MSK
+    </a>
+    <div class="header-badge">Hai să vorbim!</div>
+    <h1>📬 Contact</h1>
+    <p class="subtitle">Avem un mesaj, o idee sau o întrebare? Ne bucurăm să auzim de la tine!</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- CONTACT INFO CARDS -->
+  <div class="contact-grid">
+    <a href="mailto:contact@kiddy-msk.com" class="contact-card email">
+      <div class="card-icon">📧</div>
+      <div class="card-label">Email</div>
+      <div class="card-value">marina_cio@yahoo.com</div>
+      <div class="card-desc">Răspundem în maxim 48 de ore lucrătoare</div>
+    </a>
+
+    <a href="https://www.facebook.com/kiddymsk" target="_blank" rel="noopener" class="contact-card fb">
+      <div class="card-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </div>
+      <div class="card-label">Facebook</div>
+      <div class="card-value">Kiddy MSK</div>
+      <div class="card-desc">Urmărește-ne pentru materiale noi în fiecare săptămână</div>
+    </a>
+
+    <a href="https://www.instagram.com/kiddymsk" target="_blank" rel="noopener" class="contact-card ig">
+      <div class="card-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><path fill="url(#ig)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </div>
+      <div class="card-label">Instagram</div>
+      <div class="card-value">@kiddymsk</div>
+      <div class="card-desc">Planșe, fișe și idei creative în fiecare zi</div>
+    </a>
+
+    <div class="contact-card web">
+      <div class="card-icon">🌐</div>
+      <div class="card-label">Website</div>
+      <div class="card-value">kiddy-msk.com</div>
+      <div class="card-desc">Materiale educaționale gratuite pentru preșcolari și școlari</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-section">
+    <h2>✏️ Trimite-ne un mesaj</h2>
+    <p class="form-desc">Completează formularul de mai jos și îți vom răspunde cât mai curând.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nume <span>*</span></label>
+        <input type="text" id="name" placeholder="ex: Maria Ionescu" />
+      </div>
+      <div class="form-group">
+        <label>Email <span>*</span></label>
+        <input type="email" id="email" placeholder="ex: maria@email.com" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Ești...</label>
+      <select id="role">
+        <option value="">— alege una —</option>
+        <option value="parinte">👨‍👩‍👧 Părinte</option>
+        <option value="educatoare">🏫 Educatoare / Educator</option>
+        <option value="invatator">✏️ Învățătoare / Învățător</option>
+        <option value="logoped">🗣️ Logoped / Psiholog</option>
+        <option value="altul">🙋 Altul</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Subiect <span>*</span></label>
+      <input type="text" id="subject" placeholder="ex: Sugestie material nou, Eroare pe site..." />
+    </div>
+
+    <div class="form-group">
+      <label>Mesaj <span>*</span></label>
+      <textarea id="message" placeholder="Scrie-ne ce ai în minte! Orice idee sau feedback este binevenit 🌟"></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="handleSubmit()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Trimite mesajul
+    </button>
+
+    <div class="success-msg" id="successMsg">
+      <span class="check">✅</span>
+      <span>Mulțumim pentru mesaj! Îți vom răspunde în curând la adresa de email indicată.</span>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>❓ Întrebări frecvente</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Materialele de pe Kiddy MSK sunt gratuite?</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Da! Toate materialele — fișe, jocuri, planșe, poezii — sunt complet gratuite. Poți descărca și printa orice material pentru uz personal și educațional.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Pot folosi materialele la clasă?</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Absolut! Materialele Kiddy MSK sunt concepute special pentru a fi folosite de educatoare și învățătoare. Le poți printa și folosi la grupă sau la clasă fără probleme.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Cum pot sugera un material nou?</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Folosește formularul de contact de mai sus sau scrie-ne direct pe Facebook sau Instagram. Apreciem enorm sugestiile comunității și ne inspirăm din ele!</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Pot redistribui materialele descărcate?</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Poți distribui linkul către site oricui. Nu este permisă redistribuirea comercială a materialelor sau publicarea lor pe alte platforme fără acordul nostru scris.</div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025 <strong>Kiddy MSK</strong> · kiddy-msk.com · Toate drepturile rezervate</p>
+  <p style="margin-top: 8px;">
+    <a href="/confidentialitate.html">Politică de Confidențialitate</a> &nbsp;·&nbsp;
+    <a href="/termeni.html">Termeni și Condiții</a>
+  </p>
+</footer>
+
+<script>
+  function handleSubmit() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !email || !subject || !message) {
+      alert('Te rugăm să completezi toate câmpurile obligatorii (marcate cu *).');
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Te rugăm să introduci o adresă de email validă.');
+      return;
+    }
+
+    // Deschide clientul de email cu datele prefilled
+    const body = encodeURIComponent(`Nume: ${name}\nEmail: ${email}\n\n${message}`);
+    const subjectEncoded = encodeURIComponent(subject);
+    window.location.href = `mailto:marina_cio@yahoo.com?subject=${subjectEncoded}&body=${body}`;
+
+    document.getElementById('successMsg').classList.add('show');
+  }
+
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

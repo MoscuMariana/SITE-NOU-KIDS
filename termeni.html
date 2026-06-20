@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termeni și Condiții – Kiddy MSK</title>
+  <meta name="description" content="Termenii și condițiile de utilizare ale platformei educaționale Kiddy MSK." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --accent: #FFE66D;
+      --blue: #45B7D1;
+      --purple: #A78BFA;
+      --green: #10B981;
+      --bg: #FFFDF5;
+      --surface: #FFFFFF;
+      --text: #2D3436;
+      --text-light: #636E72;
+      --border: #F0EDE4;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    header {
+      background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 50%, #A78BFA 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -40px;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -50px; left: 5%;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .back-link svg { width: 16px; height: 16px; }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .header-meta {
+      margin-top: 12px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .intro-card {
+      background: var(--surface);
+      border: 2px solid var(--secondary);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .intro-icon { font-size: 2.4rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .intro-card p { font-size: 0.97rem; color: var(--text); line-height: 1.7; }
+
+    .section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 32px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .section:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 20px rgba(69,183,209,0.1);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .section-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .n1{background:var(--secondary);} .n2{background:var(--blue);} .n3{background:var(--purple);}
+    .n4{background:var(--primary);} .n5{background:#F97316;} .n6{background:var(--green);}
+    .n7{background:#EC4899;} .n8{background:#6366F1;} .n9{background:#14B8A6;}
+
+    .section-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section p { color: var(--text); font-size: 0.95rem; margin-bottom: 12px; }
+    .section p:last-child { margin-bottom: 0; }
+    .section ul { list-style: none; padding: 0; margin: 10px 0; }
+    .section ul li {
+      padding: 5px 0 5px 24px;
+      position: relative;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .section ul li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--blue);
+      font-size: 0.7rem;
+      top: 9px;
+    }
+
+    .warn-box {
+      background: #FFF7ED;
+      border-left: 4px solid #F97316;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-size: 0.93rem;
+    }
+    .warn-box strong {
+      color: #F97316;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ok-box {
+      background: #F0FDF4;
+      border-left: 4px solid var(--green);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-size: 0.93rem;
+    }
+    .ok-box strong {
+      color: var(--green);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      border-top: 2px solid var(--border);
+    }
+    footer strong { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .section { padding: 22px 18px; }
+      .intro-card { padding: 20px; flex-direction: column; gap: 10px; }
+      .header-inner { padding: 36px 18px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Înapoi la Kiddy MSK
+    </a>
+    <div class="header-badge">Document Legal</div>
+    <h1>📋 Termeni și Condiții</h1>
+    <p class="header-meta">Ultima actualizare: Iunie 2025 · kiddy-msk.com</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro-card">
+    <div class="intro-icon">📚</div>
+    <p>Acești Termeni și Condiții reglementează utilizarea site-ului <strong>kiddy-msk.com</strong>. Prin accesarea și utilizarea site-ului, ești de acord cu termenii de mai jos. Te rugăm să îi citești cu atenție înainte de utilizare.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n1">1</div><div class="section-title">Descrierea serviciului</div></div>
+    <p><strong>Kiddy MSK</strong> (kiddy-msk.com) este o platformă educațională online care oferă:</p>
+    <ul>
+      <li>Fișe de lucru printabile pentru preșcolari și elevi de ciclu primar</li>
+      <li>Jocuri educaționale interactive (matematică, limbaj, cunoașterea mediului)</li>
+      <li>Planșe de colorat tematice</li>
+      <li>Poezii și conținut literar pentru copii</li>
+      <li>Generatoare de fișe și materiale didactice</li>
+    </ul>
+    <p>Serviciile sunt oferite <strong>gratuit</strong>, fără necesitatea creării unui cont de utilizator.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n2">2</div><div class="section-title">Proprietate intelectuală</div></div>
+    <p>Tot conținutul publicat pe Kiddy MSK — fișe, imagini, jocuri, texte, design — este proprietatea <strong>Kiddy MSK</strong> și este protejat de legislația română și europeană privind drepturile de autor.</p>
+    <div class="ok-box">
+      <strong>Ce este permis</strong>
+      Descărcarea și tipărirea materialelor pentru uz personal și educațional (acasă, la clasă). Distribuirea gratuită a linkului către site.
+    </div>
+    <div class="warn-box">
+      <strong>Ce este interzis</strong>
+      Reproducerea, vânzarea sau redistribuirea comercială a conținutului fără acordul scris al operatorului. Modificarea materialelor și redistribuirea lor ca proprie creație.
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n3">3</div><div class="section-title">Utilizare acceptabilă</div></div>
+    <p>Prin utilizarea site-ului, ești de acord să nu:</p>
+    <ul>
+      <li>Folosești site-ul în scopuri ilegale sau neautorizate</li>
+      <li>Încerci să accesezi sau să modifici codul sursei site-ului</li>
+      <li>Folosești roboți sau scripturi automate pentru a descărca în masă conținutul</li>
+      <li>Distribui materiale descărcate de pe site în scopuri comerciale</li>
+      <li>Reproduci conținutul pe alte platforme fără atribuire și acordul operatorului</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n4">4</div><div class="section-title">Publicitate</div></div>
+    <p>Site-ul Kiddy MSK afișează reclame prin intermediul <strong>Google AdSense</strong> pentru a susține financiar menținerea și dezvoltarea conținutului educațional gratuit.</p>
+    <p>Reclamele afișate sunt selectate automat de Google și nu reprezintă o endorsare din partea Kiddy MSK. Nu suntem responsabili pentru conținutul reclamelor terțe.</p>
+    <p>Deoarece site-ul este destinat copiilor, am activat setările corespunzătoare în AdSense pentru a asigura afișarea de conținut publicitar adecvat vârstei.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n5">5</div><div class="section-title">Limitarea răspunderii</div></div>
+    <p>Kiddy MSK depune toate eforturile pentru a oferi conținut educațional corect și actualizat. Cu toate acestea:</p>
+    <ul>
+      <li>Nu garantăm că site-ul va fi disponibil neîntrerupt</li>
+      <li>Nu ne asumăm răspunderea pentru eventuale erori sau omisiuni în conținut</li>
+      <li>Nu suntem responsabili pentru daunele directe sau indirecte rezultate din utilizarea site-ului</li>
+      <li>Conținutul nu înlocuiește sfatul unui specialist în educație sau psihopedagogie</li>
+    </ul>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n6">6</div><div class="section-title">Conținut pentru copii</div></div>
+    <p>Kiddy MSK este destinat copiilor cu vârste între <strong>3 și 12 ani</strong>, utilizat sub supravegherea părinților sau educatorilor. Recomandăm:</p>
+    <ul>
+      <li>Părinților să supervizeze activitatea online a copiilor</li>
+      <li>Educatorilor să verifice materialele înainte de utilizare la clasă</li>
+      <li>Utilizarea site-ului în scop exclusiv educațional</li>
+    </ul>
+    <div class="ok-box">
+      <strong>Angajamentul nostru</strong>
+      Ne angajăm să menținem un mediu sigur și adecvat pentru copii, fără conținut violent, inadecvat sau înfricoșător.
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n7">7</div><div class="section-title">Linkuri externe</div></div>
+    <p>Site-ul poate conține linkuri către resurse externe. Aceste linkuri sunt oferite ca referință și nu implică o asociere sau endorsare din partea Kiddy MSK. Nu ne asumăm responsabilitatea pentru conținutul site-urilor terțe.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n8">8</div><div class="section-title">Legea aplicabilă</div></div>
+    <p>Acești termeni sunt guvernați de legea română. Orice litigiu va fi soluționat de instanțele competente din România, în conformitate cu legislația în vigoare.</p>
+    <p>Aceștia respectă prevederile <strong>GDPR (Regulamentul UE 2016/679)</strong> și ale Legii nr. 506/2004 privind prelucrarea datelor cu caracter personal.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num n9">9</div><div class="section-title">Modificări ale termenilor</div></div>
+    <p>Ne rezervăm dreptul de a modifica acești Termeni și Condiții oricând, fără notificare prealabilă. Data ultimei actualizări este afișată în antetul acestei pagini. Continuarea utilizării site-ului după modificări constituie acceptul noilor termeni.</p>
+    <p>Dacă ai întrebări sau nelămuriri, ne poți contacta la: <a href="mailto:marina_cio@yahoo.com">marina_cio@yahoo.com</a></p>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025 <strong>Kiddy MSK</strong> · kiddy-msk.com · Toate drepturile rezervate</p>
+  <p style="margin-top: 8px;">
+    <a href="/confidentialitate.html">Politică de Confidențialitate</a> &nbsp;·&nbsp;
+    <a href="/contact.html">Contact</a>
+  </p>
+</footer>
+
+</body>
+</html>

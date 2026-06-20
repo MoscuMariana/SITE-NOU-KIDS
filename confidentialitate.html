@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politică de Confidențialitate – Kiddy MSK</title>
+  <meta name="description" content="Politica de confidențialitate a platformei Kiddy MSK – materiale educaționale pentru copii." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --accent: #FFE66D;
+      --blue: #45B7D1;
+      --purple: #A78BFA;
+      --bg: #FFFDF5;
+      --surface: #FFFFFF;
+      --text: #2D3436;
+      --text-light: #636E72;
+      --border: #F0EDE4;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFE66D 100%);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 10%;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #fff; }
+    .back-link svg { width: 16px; height: 16px; }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .header-meta {
+      margin-top: 12px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    /* MAIN */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* INTRO CARD */
+    .intro-card {
+      background: var(--surface);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .intro-icon {
+      font-size: 2.4rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .intro-card p {
+      font-size: 0.97rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* SECTIONS */
+    .section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 32px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .section:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 4px 20px rgba(78,205,196,0.12);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .section-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .num-1 { background: var(--primary); }
+    .num-2 { background: var(--secondary); }
+    .num-3 { background: var(--blue); }
+    .num-4 { background: var(--purple); }
+    .num-5 { background: #F97316; }
+    .num-6 { background: #10B981; }
+    .num-7 { background: #EC4899; }
+    .num-8 { background: #6366F1; }
+
+    .section-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .section p {
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .section ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+    .section ul li {
+      padding: 5px 0 5px 24px;
+      position: relative;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .section ul li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--secondary);
+      font-size: 0.7rem;
+      top: 9px;
+    }
+
+    .highlight-box {
+      background: #F0FDF9;
+      border-left: 4px solid var(--secondary);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-size: 0.93rem;
+    }
+    .highlight-box strong {
+      color: var(--secondary);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      border-top: 2px solid var(--border);
+    }
+    footer strong { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .section { padding: 22px 18px; }
+      .intro-card { padding: 20px; flex-direction: column; gap: 10px; }
+      .header-inner { padding: 36px 18px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Înapoi la Kiddy MSK
+    </a>
+    <div class="header-badge">Document Legal</div>
+    <h1>🔒 Politică de Confidențialitate</h1>
+    <p class="header-meta">Ultima actualizare: Iunie 2025 · kiddy-msk.com</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro-card">
+    <div class="intro-icon">👶</div>
+    <p>Bine ai venit pe <strong>Kiddy MSK</strong> — o platformă educațională dedicată copiilor preșcolari și școlari mici. Confidențialitatea utilizatorilor noștri este o prioritate. Această politică explică ce informații colectăm, cum le folosim și cum le protejăm.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-1">1</div>
+      <div class="section-title">Operatorul de date</div>
+    </div>
+    <p>Site-ul <strong>kiddy-msk.com</strong> este operat de o persoană fizică/juridică cu activitate în domeniul educației digitale, cu sediul în România.</p>
+    <p>Pentru orice întrebări legate de confidențialitate, ne puteți contacta la adresa: <a href="mailto:marina_cio@yahoo.com">marina_cio@yahoo.com</a></p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-2">2</div>
+      <div class="section-title">Ce date colectăm</div>
+    </div>
+    <p>Kiddy MSK este un site educațional <strong>gratuit, fără înregistrare</strong>. Nu colectăm date personale identificabile de la utilizatori în mod direct. Totuși, prin intermediul unor servicii terțe, pot fi colectate automat:</p>
+    <ul>
+      <li>Adresa IP a dispozitivului</li>
+      <li>Tipul de browser și sistem de operare</li>
+      <li>Paginile vizitate și durata sesiunii</li>
+      <li>Sursa accesului (motor de căutare, link direct etc.)</li>
+      <li>Informații despre dispozitiv (mobil/desktop, rezoluție)</li>
+    </ul>
+    <div class="highlight-box">
+      <strong>Important pentru părinți</strong>
+      Nu colectăm niciun fel de informații personale direct de la copii. Nicio funcționalitate a site-ului nu solicită date personale de la utilizatori minori.
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-3">3</div>
+      <div class="section-title">Cookie-uri</div>
+    </div>
+    <p>Kiddy MSK utilizează <strong>cookie-uri</strong> pentru a asigura funcționarea corectă a site-ului și pentru a analiza traficul. Prin continuarea navigării pe site, ești de acord cu utilizarea cookie-urilor conform acestei politici.</p>
+    <p>Tipuri de cookie-uri utilizate:</p>
+    <ul>
+      <li><strong>Cookie-uri esențiale</strong> — necesare pentru funcționarea de bază a site-ului</li>
+      <li><strong>Cookie-uri analitice</strong> — Google Analytics, pentru a înțelege cum este utilizat site-ul (date anonime)</li>
+      <li><strong>Cookie-uri publicitare</strong> — Google AdSense, pentru afișarea de reclame relevante și non-intruzive</li>
+    </ul>
+    <p>Poți gestiona sau dezactiva cookie-urile din setările browserului tău. Dezactivarea cookie-urilor poate afecta funcționalitatea unor secțiuni ale site-ului.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-4">4</div>
+      <div class="section-title">Google AdSense și publicitate</div>
+    </div>
+    <p>Kiddy MSK utilizează <strong>Google AdSense</strong>, un serviciu de publicitate oferit de Google LLC, pentru a afișa reclame pe site. Google poate utiliza cookie-uri pentru a personaliza reclamele afișate în funcție de vizitele anterioare ale utilizatorilor pe acest site sau pe alte site-uri.</p>
+    <p>Utilizatorii pot opta pentru dezactivarea personalizării reclamelor accesând <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Setările pentru reclame Google</a>.</p>
+    <div class="highlight-box">
+      <strong>Protecția copiilor (COPPA / GDPR-K)</strong>
+      Deoarece site-ul este destinat copiilor, am configurat AdSense pentru a afișa exclusiv reclame nepersonalizate (non-targeted ads) pentru utilizatorii minori, în conformitate cu politicile Google pentru conținut destinat copiilor.
+    </div>
+    <p>Mai multe detalii despre modul în care Google utilizează datele: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Politica de confidențialitate Google</a>.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-5">5</div>
+      <div class="section-title">Google Analytics</div>
+    </div>
+    <p>Utilizăm <strong>Google Analytics</strong> pentru a analiza traficul pe site și a îmbunătăți conținutul educațional oferit. Datele colectate sunt anonimizate și nu pot fi folosite pentru identificarea personală a utilizatorilor.</p>
+    <p>Poți opta pentru excluderea din Google Analytics folosind <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">extensia de browser Google Analytics Opt-out</a>.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-6">6</div>
+      <div class="section-title">Drepturile tale (GDPR)</div>
+    </div>
+    <p>În conformitate cu <strong>Regulamentul General privind Protecția Datelor (GDPR)</strong>, în calitate de utilizator din Uniunea Europeană ai următoarele drepturi:</p>
+    <ul>
+      <li>Dreptul de acces la datele tale personale</li>
+      <li>Dreptul la rectificarea datelor incorecte</li>
+      <li>Dreptul la ștergerea datelor („dreptul de a fi uitat")</li>
+      <li>Dreptul la restricționarea prelucrării</li>
+      <li>Dreptul la portabilitatea datelor</li>
+      <li>Dreptul de a te opune prelucrării datelor în scop publicitar</li>
+    </ul>
+    <p>Pentru exercitarea acestor drepturi, ne poți contacta la: <a href="mailto:contact@kiddy-msk.com">contact@kiddy-msk.com</a></p>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-7">7</div>
+      <div class="section-title">Linkuri externe</div>
+    </div>
+    <p>Site-ul Kiddy MSK poate conține linkuri către site-uri externe (resurse educaționale, platforme partenere). Nu suntem responsabili pentru politicile de confidențialitate sau conținutul acestor site-uri terțe. Recomandăm consultarea politicilor de confidențialitate ale oricărui site extern pe care îl vizitați.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num num-8">8</div>
+      <div class="section-title">Modificări ale politicii</div>
+    </div>
+    <p>Ne rezervăm dreptul de a actualiza această politică de confidențialitate oricând. Orice modificare semnificativă va fi anunțată pe site. Data ultimei actualizări este afișată în antetul acestei pagini.</p>
+    <p>Prin continuarea utilizării site-ului după modificarea politicii, ești de acord cu noile condiții.</p>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025 <strong>Kiddy MSK</strong> · kiddy-msk.com · Toate drepturile rezervate</p>
+  <p style="margin-top: 8px;">
+    <a href="/termeni.html">Termeni și Condiții</a> &nbsp;·&nbsp;
+    <a href="/contact.html">Contact</a>
+  </p>
+</footer>
+
+</body>
+</html>
