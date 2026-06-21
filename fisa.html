@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-adsense-account" content="ca-pub-3657163291978156">
+<title>Kiddy MSK — Vizualizare fișă</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff8ef; --ink:#3a2e2a; --ink-soft:#7a6c62;
+    --gradi:#ff8a3d; --scoala:#2f9bd6; --accent:#ffc62b;
+    --shadow:0 10px 26px -12px rgba(58,46,42,.28);
+    --shadow-hover:0 18px 40px -14px rgba(58,46,42,.4);
+    --radius:24px;
+    --accent-theme:#ff8a3d; /* setat din JS în funcție de temă */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
+    line-height:1.5;min-height:100vh;
+    background-image:
+      radial-gradient(circle at 15% 6%, rgba(255,198,43,.2), transparent 36%),
+      radial-gradient(circle at 85% 5%, rgba(47,155,214,.16), transparent 38%),
+      radial-gradient(circle at 50% 96%, rgba(255,138,61,.12), transparent 42%);
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+
+  /* HEADER */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,248,239,.9);backdrop-filter:blur(12px);border-bottom:2px solid #f3e3d0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo-mark{width:46px;height:46px;display:grid;place-items:center}
+  .logo-mark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(58,46,42,.22))}
+  .logo-text{font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:var(--ink)}
+  .logo-text span{color:var(--gradi)}
+  .back-link{font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;text-decoration:none;color:var(--ink-soft);background:#fff;padding:9px 18px;border-radius:999px;transition:.2s;border:2px solid #f3e7d9}
+  .back-link:hover{color:var(--ink);border-color:var(--accent-theme)}
+
+  /* HEAD INFO */
+  .fisa-head{text-align:center;padding:34px 0 8px;scroll-margin-top:90px}
+  .lvl-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;color:#fff;padding:6px 16px;border-radius:999px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+  .fisa-head h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,42px);line-height:1.08}
+  .fisa-cat{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--accent-theme);margin-top:8px;display:block}
+  .fisa-desc{color:var(--ink-soft);font-size:17px;margin:14px auto 0;max-width:600px}
+  .fisa-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .tag-pill{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+
+  /* SLIDER */
+  .slider-wrap{margin:26px auto 0;max-width:760px}
+  .stage{
+    position:relative;background:#fff;border-radius:var(--radius);
+    box-shadow:var(--shadow);border:2px solid var(--accent-theme);
+    overflow:hidden;
+  }
+  .stage-inner{
+    position:relative;width:100%;aspect-ratio:1/1.414; /* A4 portret */
+    display:grid;place-items:center;background:#faf3ea;
+  }
+  .stage-inner img{width:100%;height:100%;object-fit:contain;display:none}
+  .stage-inner img.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .loading{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column;gap:14px;color:var(--ink-soft);font-weight:700}
+  .spin{width:42px;height:42px;border:4px solid #f0e3d3;border-top-color:var(--accent-theme);border-radius:50%;animation:rot 1s linear infinite}
+  @keyframes rot{to{transform:rotate(360deg)}}
+
+  /* counter pe imagine */
+  .page-count{position:absolute;top:14px;right:14px;background:rgba(58,46,42,.82);color:#fff;font-size:13px;font-weight:800;padding:5px 13px;border-radius:999px;z-index:5}
+
+  /* săgeți */
+  .nav-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:6;
+    width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--accent-theme);color:#fff;font-size:24px;line-height:1;
+    display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(58,46,42,.5);
+    transition:.18s;
+  }
+  .nav-arrow:hover{filter:brightness(.92);transform:translateY(-50%) scale(1.08)}
+  .nav-arrow:disabled{opacity:.3;cursor:not-allowed;transform:translateY(-50%)}
+  .nav-arrow.prev{left:12px}
+  .nav-arrow.next{right:12px}
+
+  /* acțiuni sub slide */
+  .page-desc{text-align:left;margin:18px auto 0;max-width:620px;background:#fff;border-radius:16px;padding:18px 22px;box-shadow:0 4px 14px -10px rgba(58,46,42,.3);border:1px solid #f3e7d9;border-left:5px solid var(--accent-theme)}
+  .page-desc h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:var(--accent-theme);margin-bottom:6px}
+  .page-desc p{font-size:15.5px;color:var(--ink-soft);line-height:1.6;font-weight:500}
+  .slide-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0 0}
+  .btn{font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;border:none;border-radius:14px;padding:13px 22px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s;text-decoration:none}
+  .btn-dl-page{background:#f1e7db;color:var(--ink)}
+  .btn-dl-page:hover{background:#e8d9c6}
+  .btn-dl-pdf{background:var(--accent-theme);color:#fff;box-shadow:0 6px 16px -8px rgba(58,46,42,.5)}
+  .btn-dl-pdf:hover{filter:brightness(.93)}
+
+  /* thumbnails */
+  .thumbs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px 0 0}
+  .thumb{width:62px;height:88px;border-radius:10px;overflow:hidden;cursor:pointer;border:3px solid transparent;background:#faf3ea;transition:.15s;flex:0 0 auto}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb.active{border-color:var(--accent-theme)}
+  .thumb:hover{transform:translateY(-3px)}
+
+  /* descriere generală set */
+  .set-desc{margin:40px auto 0;max-width:680px;background:#fff;border-radius:var(--radius);padding:30px 34px;box-shadow:var(--shadow);border:1px solid #f3e7d9;border-top:5px solid var(--accent-theme)}
+  .set-desc h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;color:var(--accent-theme);margin-bottom:14px}
+  .set-desc h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin:20px 0 6px}
+  .set-desc p{font-size:16px;color:var(--ink-soft);line-height:1.65}
+  .set-desc p.lead{font-size:17px;color:var(--ink);font-weight:600;line-height:1.6}
+  .set-desc ul.skills{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .set-desc ul.skills li{position:relative;padding-left:30px;font-size:15.5px;color:var(--ink-soft);line-height:1.5}
+  .set-desc ul.skills li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;display:grid;place-items:center;background:var(--accent-theme);color:#fff;border-radius:50%;font-size:12px;font-weight:800}
+  .set-desc p.tip{margin-top:22px;background:#faf3ea;border-radius:14px;padding:14px 16px;font-size:15px;color:var(--ink);border:1px dashed #e7d6c2}
+
+  /* error */
+  .error-box{text-align:center;padding:70px 20px;color:var(--ink-soft)}
+  .error-box .big{font-size:64px;margin-bottom:14px}
+  .error-box a{color:var(--accent-theme);font-weight:700}
+
+  footer{background:var(--ink);color:#f6ece0;padding:30px 0;margin-top:50px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+  .foot-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .foot-logo .logo-text{color:#fff;font-size:21px}
+  .foot-logo .logo-text span{color:var(--accent)}
+  footer p{font-size:14px;opacity:.7}
+
+  @media(max-width:640px){
+    .logo-text{font-size:17px}
+    .nav-arrow{width:42px;height:42px;font-size:20px}
+    .btn{padding:12px 18px;font-size:14px}
+    .thumb{width:52px;height:74px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap topbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark"><img src="https://kiddy-msk.com/logo.png" alt="Kiddy MSK" onerror="this.style.display='none'"></span>
+      <span class="logo-text">Kiddy<span> MSK</span></span>
+    </a>
+    <a class="back-link" href="index.html">← Înapoi la materiale</a>
+  </div>
+</header>
+
+<main class="wrap" id="content">
+  <!-- populat din JS -->
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <a class="foot-logo" href="index.html">
+      <span class="logo-mark"><img src="https://kiddy-msk.com/logo.png" alt="Kiddy MSK" onerror="this.style.display='none'"></span>
+      <span class="logo-text">Kiddy<span> MSK</span></span>
+    </a>
+    <p>© Kiddy MSK — Materiale educaționale</p>
+  </div>
+</footer>
+
+<script>
+/* ===== Date partajate cu index.html ===== */
+const ICONS={primavara:"🌸",vara:"☀️",toamna:"🍂",iarna:"❄️",alfabet:"🔤",numere:"🔢",matematica:"➕",engleza:"🇬🇧",animale:"🐾",diplome:"🏆",sarbatori:"🎄"};
+const THEME_NAME={primavara:"Primăvara",vara:"Vara",toamna:"Toamna",iarna:"Iarna",alfabet:"Alfabet",numere:"Numere",matematica:"Matematică",engleza:"Engleză",animale:"Animale",diplome:"Diplome",sarbatori:"Sărbători"};
+const THEME_COLOR={primavara:"#ff6f91",vara:"#ffb02e",toamna:"#e07a3c",iarna:"#4cc4d6",alfabet:"#9b5de5",numere:"#3fa7d6",matematica:"#2fb38a",engleza:"#5468ff",animale:"#ff8a3d",diplome:"#e8b23a",sarbatori:"#e0556b"};
+const THEME_BG={primavara:"#fff0f3",vara:"#fff6e3",toamna:"#fdeede",iarna:"#e4f8fb",alfabet:"#f4ecff",numere:"#e6f4fb",matematica:"#e3f7f0",engleza:"#ecefff",animale:"#fff0e3",diplome:"#fdf4dd",sarbatori:"#fdebee"};
+const LVL_NAME={"grupa-mica":"Grupa mică","grupa-mijlocie":"Grupa mijlocie","grupa-mare":"Grupa mare","pregatitoare":"Pregătitoare","clasa-1":"Clasa 1","clasa-2":"Clasa 2","clasa-3":"Clasa 3","clasa-4":"Clasa 4"};
+function lvlGroup(l){return (l||"").startsWith("clasa")||l==="pregatitoare"?"scoala":"gradi";}
+
+/* ===== Citește parametrii din URL ===== */
+const q = new URLSearchParams(location.search);
+const data = {
+  title: q.get("title") || "Fișă",
+  cat:   q.get("cat")   || "",
+  desc:  q.get("desc")  || "",
+  pages: parseInt(q.get("pages")) || 0,
+  level: q.get("level") || "",
+  themes:(q.get("themes")||"").split(",").filter(Boolean),
+  img:   q.get("img")   || "",
+  pdf:   q.get("pdf")   || "",
+  pdf2:  q.get("pdf2")  || ""
+};
+
+/* ===== Descrieri pe pagini (opțional) =====
+   Cheia = numele PDF-ului (fără cale și fără extensie).
+   Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
+   Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
+const PAGE_DESCRIPTIONS = {
+  "grupa mica primavara pachet 1": [
+    "Privește imaginea, spune ce vezi și colorează elementele de primăvară.",
+    "Unește fiecare mulțime cu cifra corespunzătoare: 1, 2 sau 3.",
+    "Unește fiecare mulțime cu cifra corespunzătoare: 1, 2 sau 3.",
+    "Încercuiește doar grupele care au exact 3 elemente.",
+    "Încercuiește doar grupele de flori care au exact 3 elemente.",
+    "Încercuiește doar grupele care au exact 3 elemente.",
+    "Numără pe degețele și arată 3, colorează cifra 3 și numără petalele trifoiului.",
+    "Trasează cifra 3 după model, apoi colorează trei flori.",
+    "Trasează cu atenție liniile, de la o floare la cealaltă.",
+    "Ajută albina să găsească drumul prin labirint până la flori."
+  ],
+  "SEMNE GRAFICE PRIMAVARA": [
+    {
+      title: "Fluturele",
+      body: "Trasează cu grijă conturul punctat al fluturelui, apoi colorează-l. " +
+            "Aripile pline de cercuri și spirale cer mișcări curbe și rotunde — exact cele care " +
+            "antrenează mâna pentru literele rotunjite. Lasă copilul să urmărească punctele fără să grăbească, " +
+            "apoi alege împreună culori vesele pentru fiecare aripă."
+    },
+    {
+      title: "Omida",
+      body: "Trasează omida pe liniile punctate, apoi colorează-o. " +
+            "Inelele corpului se trasează unul câte unul, de la cap spre coadă, ceea ce exersează " +
+            "linii scurte și repetate și ajută copilul să țină ritmul. Numărați împreună inelele în timp ce le colorați."
+    },
+    {
+      title: "Ghioceii",
+      body: "Trasează ghioceii după conturul punctat, apoi colorează-i. " +
+            "Tulpinile lungi și petalele subțiri cer linii verticale controlate și mișcări fine — " +
+            "un exercițiu bun de răbdare. Ghioceii sunt primele flori de primăvară, așa că e un prilej " +
+            "să vorbiți despre ce se întâmplă în natură când se topește zăpada."
+    },
+    {
+      title: "Rândunica",
+      body: "Trasează rândunica pe liniile punctate, apoi colorează-o. " +
+            "Aripile întinse și coada lungă cer trasee lungi și sigure, dintr-o singură mișcare — " +
+            "antrenament excelent pentru controlul gestului amplu. Spune-i copilului că rândunica se întoarce " +
+            "primăvara din țările calde."
+    },
+    {
+      title: "Zambilele",
+      body: "Trasează zambilele după contur, apoi colorează-le. " +
+            "Este pagina cu cele mai multe detalii mici: floricelele dese cer atenție și o mână " +
+            "exersată. E potrivită ca exercițiu mai provocator, după ce copilul s-a încălzit cu fișele mai simple."
+    },
+    {
+      title: "Albinuța",
+      body: "Trasează albinuța pe liniile punctate, apoi colorează-o. " +
+            "Antenele cu bucle, aripile transparente și dungile de pe corp combină mai multe tipuri de linie " +
+            "într-o singură pagină. Vorbiți despre rolul albinei, care duce polenul de la o floare la alta."
+    },
+    {
+      title: "Narcisele",
+      body: "Trasează narcisele după conturul punctat, apoi colorează-le. " +
+            "Petalele ascuțite și mijlocul rotund al florii alternează linii drepte cu linii curbe, " +
+            "ceea ce dezvoltă flexibilitatea mâinii. Narcisele galbene sunt printre cele mai cunoscute flori de primăvară."
+    },
+    {
+      title: "Iepurașul",
+      body: "Trasează iepurașul pe liniile punctate, apoi colorează-l. " +
+            "Urechile lungi, blănița și iarba din jur cer linii variate, lungi și scurte deopotrivă — " +
+            "o încheiere veselă a setului. Lasă copilul să-i aleagă culoarea blăniței și să povestească ce face iepurașul."
+    }
+  ]
+};
+
+function pdfKey(pdfUrl){
+  // extrage numele fișierului fără cale și fără extensie
+  try{
+    const last = decodeURIComponent(pdfUrl).split("/").pop();
+    return last.replace(/\.[a-zA-Z0-9]+$/, "").trim();
+  }catch(e){ return ""; }
+}
+const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
+
+/* ===== Descrierea generală a setului (text sub slider) =====
+   Cheia = numele PDF-ului (la fel ca mai sus).
+   Valoarea poate fi:
+     - un text simplu (string), SAU
+     - un obiect structurat: { intro, sections:[{title, body}], skills:[...], tips }
+   Dacă o fișă nu e în listă, se generează automat un text scurt
+   din nivel + temă (vezi setDescription mai jos). */
+const SET_DESCRIPTIONS = {
+  "grupa mica primavara pachet 1": {
+    intro:
+      "Un pachet complet de 10 fișe tematice de primăvară, gândit special pentru copiii de grupă mică " +
+      "(3–4 ani). Activitățile pornesc de la lucruri pe care cei mici le văd afară în acest anotimp — flori, " +
+      "fluturi, buburuze, albinuțe — și le transformă în exerciții scurte, colorate și ușor de urmărit, " +
+      "potrivite pentru durata de atenție a vârstei.",
+    sections: [
+      {
+        title: "Ce conține pachetul",
+        body:
+          "Cele 10 pagini acoperă mai multe tipuri de activitate: recunoașterea și formarea grupelor de câte 3, " +
+          "asocierea mulțimii cu cifra corespunzătoare (1, 2, 3), trasarea cifrei 3 după model cu puncte de pornire, " +
+          "exerciții de grafomotricitate (linii frânte, ondulate și în zig-zag de la o floare la alta), un labirint " +
+          "în care albina caută drumul spre flori și pagini de colorat cu elemente de primăvară."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Fișele pot fi parcurse în ordine, ca un mic caiet de lucru, sau individual, alegând doar activitatea " +
+          "potrivită momentului. Poți descărca fiecare pagină separat (imagine JPG) sau întregul pachet ca PDF, " +
+          "gata de tipărit pe format A4. Recomandăm creioane colorate groase și sesiuni scurte de 10–15 minute, " +
+          "cu pauze, pentru a păstra plăcerea de a lucra."
+      }
+    ],
+    skills: [
+      "Primele noțiuni matematice: numărul 3, grupe și cantități",
+      "Motricitate fină și control al creionului (trasare, colorare)",
+      "Atenție, concentrare și rezolvare de probleme (labirintul)",
+      "Vocabular de primăvară și observarea naturii"
+    ],
+    tips:
+      "Sfat pentru părinți și educatori: lăsați copilul să numească cu voce tare ce vede în fiecare imagine " +
+      "înainte de a rezolva — denumirea elementelor întărește vocabularul și face legătura între cifră și cantitate."
+  },
+
+  "SEMNE GRAFICE PRIMAVARA": {
+    intro:
+      "Un set de 8 fișe de grafomotricitate cu temă de primăvară, în care fiecare pagină are un singur personaj " +
+      "sau o singură floare desenată cu linie punctată. Copilul trasează conturul peste puncte, apoi colorează — " +
+      "doi pași simpli care pregătesc mâna pentru scris și fac exercițiul plăcut, ca o joacă.",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 8 fișe acoperă personaje și flori specifice anotimpului: fluturele, omida, ghioceii, rândunica, " +
+          "zambilele, albinuța, narcisele și iepurașul. Conturul punctat este mare și clar, potrivit pentru mânuțe " +
+          "mici, iar formele variate (linii lungi, curbe, spirale, bucle) antrenează tipuri diferite de mișcare."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Fiecare fișă se rezolvă în doi pași: întâi se trasează conturul punctat cu un creion, apoi se colorează " +
+          "desenul. Poți descărca fiecare pagină separat (imagine JPG) sau întregul set ca PDF, gata de tipărit pe " +
+          "format A4. Recomandăm un creion gros sau o cariocă subțire și sesiuni scurte, ca să nu obosească mâna."
+      }
+    ],
+    skills: [
+      "Motricitate fină și coordonare ochi-mână",
+      "Pregătirea mâinii pentru scris (control al traseului)",
+      "Atenție la detalii și răbdare",
+      "Vocabular de primăvară: flori, insecte, animale"
+    ],
+    tips:
+      "Sfat pentru părinți și educatori: încurajați copilul să traseze fără să grăbească și să respecte direcția " +
+      "liniei. La final, întrebați-l ce culori a ales și de ce — așa exersează și exprimarea, nu doar mâna."
+  }
+};
+
+function setDescriptionData(){
+  const key = pdfKey(data.pdf);
+  if(SET_DESCRIPTIONS[key]) return SET_DESCRIPTIONS[key];
+  // text generat automat pentru fișele fără descriere proprie
+  const lvl = LVL_NAME[data.level] || data.level || "";
+  const teme = data.themes.map(t=>THEME_NAME[t]||t).join(", ");
+  let s = "Acest material";
+  if(lvl) s += " este creat pentru " + lvl.toLowerCase();
+  if(teme) s += " și are ca temă " + teme.toLowerCase();
+  s += ". Conține " + (data.pages || "mai multe") + " pagini de activități pe care le poți răsfoi în galeria de mai sus, descărca individual sau salva ca PDF complet.";
+  return s; // string simplu
+}
+
+/* construiește HTML-ul casetei "Despre acest set" */
+function setDescriptionHTML(){
+  const d = setDescriptionData();
+  if(typeof d === "string"){
+    return `<h2>Despre acest set</h2><p>${d}</p>`;
+  }
+  let html = `<h2>Despre acest set</h2>`;
+  if(d.intro) html += `<p class="lead">${d.intro}</p>`;
+  (d.sections||[]).forEach(sec=>{
+    html += `<h3>${sec.title}</h3><p>${sec.body}</p>`;
+  });
+  if(d.skills && d.skills.length){
+    html += `<h3>Ce dezvoltă</h3><ul class="skills">` +
+            d.skills.map(s=>`<li>${s}</li>`).join("") + `</ul>`;
+  }
+  if(d.tips) html += `<p class="tip">💡 ${d.tips}</p>`;
+  return html;
+}
+
+const mainTheme = data.themes[0] || "primavara";
+const accent = THEME_COLOR[mainTheme] || "#ff8a3d";
+document.documentElement.style.setProperty("--accent-theme", accent);
+document.title = data.title + " — Kiddy MSK";
+
+/* ===== Detectare automată a imaginilor numerotate =====
+   Pornim de la imaginea dată (ex. .../23.jpg) și încercăm
+   atât înainte cât și înapoi până nu mai găsim fișiere.
+   Funcționează indiferent dacă numerotarea începe de la 1 sau alt număr. */
+
+function parseImg(url){
+  // separă: bază + număr + extensie  (ex: ".../folder/" "23" ".jpg")
+  const m = url.match(/^(.*?)(\d+)(\.[a-zA-Z]+)(?:[?#].*)?$/);
+  if(!m) return null;
+  return { base:m[1], num:parseInt(m[2]), pad:m[2].length, ext:m[3] };
+}
+function buildUrl(p, n){
+  const numStr = String(n).padStart(p.pad, "0");
+  return p.base + numStr + p.ext;
+}
+function loadImage(url){
+  return new Promise(res=>{
+    const im = new Image();
+    im.onload = ()=>res(true);
+    im.onerror = ()=>res(false);
+    im.src = encodeURI(url);
+  });
+}
+
+async function detectImages(){
+  const parsed = parseImg(data.img);
+  // Dacă nu putem analiza URL-ul, afișăm doar imaginea dată
+  if(!parsed){ return [data.img]; }
+
+  const found = [];
+  const maxProbe = 300; // siguranță
+
+  // 1) confirmăm imaginea de start
+  if(await loadImage(buildUrl(parsed, parsed.num))){
+    found.push({n:parsed.num, url:buildUrl(parsed, parsed.num)});
+  } else {
+    // dacă nici imaginea dată nu există, întoarcem doar URL-ul brut
+    return [data.img];
+  }
+
+  // 2) căutăm înapoi (numere mai mici), max 2 lipsuri consecutive
+  let misses=0;
+  for(let n=parsed.num-1; n>=parsed.num-maxProbe && n>=0; n--){
+    const url=buildUrl(parsed,n);
+    if(await loadImage(url)){ found.unshift({n, url}); misses=0; }
+    else { misses++; if(misses>=2) break; }
+  }
+  // 3) căutăm înainte (numere mai mari), max 2 lipsuri consecutive
+  misses=0;
+  for(let n=parsed.num+1; n<=parsed.num+maxProbe; n++){
+    const url=buildUrl(parsed,n);
+    if(await loadImage(url)){ found.push({n, url}); misses=0; }
+    else { misses++; if(misses>=2) break; }
+  }
+  // ordonăm crescător după număr și întoarcem doar URL-urile
+  found.sort((a,b)=>a.n-b.n);
+  return found.map(f=>f.url);
+}
+
+/* ===== Construire HTML cap pagină ===== */
+function renderHead(){
+  const grp = lvlGroup(data.level);
+  const lvlColor = grp==="gradi" ? "var(--gradi)" : "var(--scoala)";
+  const lvlIcon  = grp==="gradi" ? "🎈" : "🎒";
+  const tags = data.themes.map(t=>
+    `<span class="tag-pill" style="background:${THEME_BG[t]||'#eee'};color:${THEME_COLOR[t]||'#333'}">${ICONS[t]||''} ${THEME_NAME[t]||t}</span>`
+  ).join("");
+
+  return `
+    <div class="fisa-head">
+      ${data.level?`<span class="lvl-badge" style="background:${lvlColor}">${lvlIcon} ${LVL_NAME[data.level]||data.level}</span>`:''}
+      <h1>${data.title}</h1>
+      ${data.cat?`<span class="fisa-cat">${data.cat}</span>`:''}
+      ${data.desc?`<p class="fisa-desc">${data.desc}</p>`:''}
+      ${tags?`<div class="fisa-tags">${tags}</div>`:''}
+    </div>`;
+}
+
+/* ===== Slider ===== */
+let images = [];
+let current = 0;
+
+function renderSlider(){
+  return `
+    <div class="slider-wrap">
+      <div class="stage">
+        <div class="stage-inner" id="stage-inner">
+          <span class="page-count" id="page-count"></span>
+          <div class="loading" id="loading">
+            <div class="spin"></div>
+            <span>Se încarcă paginile…</span>
+          </div>
+          <button class="nav-arrow prev" id="btn-prev" aria-label="Pagina anterioară">‹</button>
+          <button class="nav-arrow next" id="btn-next" aria-label="Pagina următoare">›</button>
+        </div>
+      </div>
+
+      <p class="page-desc" id="page-desc"></p>
+
+      <div class="slide-actions">
+        <a class="btn btn-dl-page" id="btn-dl-page" download target="_blank">⬇️ Descarcă pagina</a>
+        ${ data.pdf2
+            ? `<a class="btn btn-dl-pdf" href="${data.pdf}" target="_blank">📥 PDF Partea 1</a>
+               <a class="btn btn-dl-pdf" href="${data.pdf2}" target="_blank">📥 PDF Partea 2</a>`
+            : (data.pdf?`<a class="btn btn-dl-pdf" href="${data.pdf}" target="_blank">📥 Descarcă PDF complet</a>`:'')
+        }
+      </div>
+
+      <div class="thumbs" id="thumbs"></div>
+
+      <div class="set-desc">
+        ${setDescriptionHTML()}
+      </div>
+    </div>`;
+}
+
+function showSlide(i){
+  if(i<0||i>=images.length) return;
+  current = i;
+  document.querySelectorAll("#stage-inner img").forEach((el,idx)=>el.classList.toggle("on", idx===i));
+  document.getElementById("page-count").textContent = (i+1)+" / "+images.length;
+  // descriere pagină
+  const pd = document.getElementById("page-desc");
+  const entry = pageDescs && pageDescs[i] ? pageDescs[i] : null;
+  if(entry){
+    if(typeof entry === "string"){
+      pd.innerHTML = `<p>${entry}</p>`;
+    } else {
+      pd.innerHTML =
+        (entry.title ? `<h3>${entry.title}</h3>` : "") +
+        (entry.body  ? `<p>${entry.body}</p>` : "");
+    }
+    pd.style.display = "block";
+  } else {
+    pd.innerHTML = `<p>Pagina ${i+1} din ${images.length}</p>`;
+    pd.style.display = "block";
+  }
+  document.getElementById("btn-prev").disabled = (i===0);
+  document.getElementById("btn-next").disabled = (i===images.length-1);
+  // buton descarcă pagina curentă
+  const dl = document.getElementById("btn-dl-page");
+  dl.href = encodeURI(images[i]);
+  // thumbnails active
+  document.querySelectorAll(".thumb").forEach((t,idx)=>t.classList.toggle("active", idx===i));
+  // scroll thumbnail activ în vizor
+  const at = document.querySelector(".thumb.active");
+  if(at) at.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+}
+
+function buildGallery(){
+  const inner = document.getElementById("stage-inner");
+  const loading = document.getElementById("loading");
+
+  if(images.length===0){
+    document.getElementById("content").innerHTML = `
+      <div class="error-box">
+        <div class="big">🔍</div>
+        <h1 style="font-family:'Fredoka';font-size:26px;margin-bottom:8px">Nu am găsit imaginile</h1>
+        <p>Nu am putut încărca paginile acestei fișe.</p>
+        <p style="margin-top:14px"><a href="index.html">← Înapoi la materiale</a></p>
+      </div>`;
+    return;
+  }
+
+  // injectăm <img> pentru fiecare pagină
+  const imgsHtml = images.map((url,idx)=>
+    `<img src="${encodeURI(url)}" alt="${data.title} — pagina ${idx+1}" loading="${idx<2?'eager':'lazy'}">`
+  ).join("");
+  loading.insertAdjacentHTML("beforebegin", imgsHtml);
+  loading.remove();
+
+  // thumbnails
+  document.getElementById("thumbs").innerHTML = images.map((url,idx)=>
+    `<div class="thumb" data-i="${idx}"><img src="${encodeURI(url)}" alt="pagina ${idx+1}" loading="lazy"></div>`
+  ).join("");
+  document.querySelectorAll(".thumb").forEach(t=>
+    t.addEventListener("click",()=>showSlide(parseInt(t.dataset.i)))
+  );
+
+  // butoane navigare
+  document.getElementById("btn-prev").addEventListener("click",()=>showSlide(current-1));
+  document.getElementById("btn-next").addEventListener("click",()=>showSlide(current+1));
+  document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft") showSlide(current-1);
+    if(e.key==="ArrowRight") showSlide(current+1);
+  });
+
+  showSlide(0);
+}
+
+/* ===== Init ===== */
+async function init(){
+  if(!data.img){
+    document.getElementById("content").innerHTML = `
+      <div class="error-box">
+        <div class="big">📄</div>
+        <h1 style="font-family:'Fredoka';font-size:26px">Fișă inexistentă</h1>
+        <p style="margin-top:10px"><a href="index.html">← Înapoi la materiale</a></p>
+      </div>`;
+    return;
+  }
+  document.getElementById("content").innerHTML = renderHead() + renderSlider();
+  images = await detectImages();
+  buildGallery();
+}
+init();
+</script>
+</body>
+</html>

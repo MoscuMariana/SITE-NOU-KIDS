@@ -682,6 +682,21 @@ const JOCURI=[
 
 let activeLevels=new Set(), activeThemes=new Set();
 
+/* Construiește link-ul către pagina de slider (fisa.html) cu toate datele fișei */
+function fisaUrl(f){
+  const p = new URLSearchParams();
+  p.set("title", f.title||"");
+  p.set("cat",   f.cat||"");
+  p.set("desc",  f.desc||"");
+  p.set("pages", f.pages||"");
+  p.set("level", f.level||"");
+  p.set("themes",(f.themes||[]).join(","));
+  p.set("img",   f.img||"");
+  p.set("pdf",   f.pdf||"");
+  if(f.pdf2) p.set("pdf2", f.pdf2);
+  return "fisa.html?"+p.toString();
+}
+
 function renderFise(){
   const grid=document.getElementById("card-grid");
   const filtered=FISE.filter(f=>{
@@ -705,22 +720,23 @@ function renderFise(){
       ? `<a class="btn btn-dl" href="${f.pdf}" target="_blank" style="background:${accent}">📥 Partea 1</a>
          <a class="btn btn-dl" href="${f.pdf2}" target="_blank" style="background:${accent}">📥 Partea 2</a>`
       : `<a class="btn btn-dl" href="${f.pdf}" target="_blank" style="background:${accent}">📥 Descarcă</a>`;
+    const viewUrl = fisaUrl(f);
     return `
     <article class="card" style="animation-delay:${i*0.04}s;border-color:${accent}">
-      <div class="card-thumb">
+      <a class="card-thumb" href="${viewUrl}" style="text-decoration:none">
         <img src="${encodeURI(f.img)}" alt="${f.title}" loading="lazy"
              onerror="this.style.display='none';this.parentElement.style.background='${cssVar("--c-"+main+"-bg")}';this.parentElement.querySelector('.thumb-fallback').style.display='block'">
         <span class="thumb-fallback" style="display:none">${ICONS[main]||"📄"}</span>
         <span class="lvl-tag" style="background:${lvlColor}">${lvlIcon} ${LVL_NAME[f.level]}</span>
         <span class="pages">${f.pages} pag.</span>
-      </div>
+      </a>
       <div class="card-body">
         <span class="card-cat" style="color:${accent}">${f.cat}</span>
         <h3>${f.title}</h3>
         <p>${f.desc}</p>
         <div class="card-tags">${tags}</div>
         <div class="card-actions">
-          <a class="btn btn-prev" href="${encodeURI(f.img)}" target="_blank">👁️ Vezi</a>
+          <a class="btn btn-prev" href="${viewUrl}">👁️ Vezi paginile</a>
           ${dlBtns}
         </div>
       </div>
