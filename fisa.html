@@ -188,6 +188,15 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "adunare jucarii set 1": [
+    "Numără ursuleții de pluș, rezolvă adunarea și scrie rezultatul pe linie (sume până la 6).",
+    "Numără ursuleții de pluș și rezolvă adunări cu rezultate până la 8.",
+    "Numără păpușile, rezolvă adunarea și scrie răspunsul pe linie (sume până la 8).",
+    "Numără trenulețele colorate și rezolvă adunări cu rezultate până la 9.",
+    "Numără mingile de plajă și rezolvă adunări cu rezultate până la 10.",
+    "Numără roboțeii jucăuși și rezolvă adunări cu rezultate până la 10.",
+    "Numără mașinuțele roșii și rezolvă adunări simple cu rezultate până la 5."
+  ],
   "grupa mica primavara pachet 1": [
     "Privește imaginea, spune ce vezi și colorează elementele de primăvară.",
     "Unește fiecare mulțime cu cifra corespunzătoare: 1, 2 sau 3.",
@@ -272,6 +281,39 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "adunare jucarii set 1": {
+    intro:
+      "Un set de 7 fișe de adunare în limba engleză (Addition), în care fiecare exercițiu este ilustrat cu " +
+      "jucării dragi copiilor: ursuleți de pluș, păpuși, trenulețe, mingi de plajă, roboței și mașinuțe. " +
+      "Copilul numără obiectele din imagine, rezolvă adunarea și scrie rezultatul pe linie — o trecere " +
+      "naturală de la numărarea concretă la operația matematică. Potrivit pentru grupa mare și clasa " +
+      "pregătitoare (5–7 ani), acasă sau la clasă.",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 7 pagini lucrează adunarea în concentrul 0–10, cu suport vizual pe fiecare exercițiu: " +
+          "pagini cu sume mici (până la 5–6) pentru început, apoi adunări cu rezultate până la 8, 9 și 10. " +
+          "Fiecare fișă are câte 6 exerciții, o singură temă vizuală pe pagină (doar ursuleți, doar trenulețe " +
+          "etc.) și spațiu generos de scris, ca cei mici să nu fie distrași de la sarcină."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Recomandăm parcurgerea în ordine, de la sumele mici către 10: copilul numără mai întâi obiectele " +
+          "cu degetul, spune operația cu voce tare, apoi scrie rezultatul. Fișele fiind în limba engleză, " +
+          "pot fi folosite și pentru familiarizarea cu vocabularul matematic englezesc (addition, count, " +
+          "solve). Descarcă fiecare pagină separat (JPG) sau întregul set ca PDF, gata de tipărit pe A4."
+      }
+    ],
+    skills: [
+      "Adunarea în concentrul 0–10 cu suport vizual",
+      "Numărare și corespondența cantitate–cifră",
+      "Scrierea cifrelor și a rezultatului pe liniatură",
+      "Vocabular matematic în limba engleză (addition, count, solve)",
+      "Atenție, concentrare și lucru independent"
+    ]
+  },
   "grupa mica primavara pachet 1": {
     intro:
       "Un pachet complet de 10 fișe tematice de primăvară, gândit special pentru copiii de grupă mică " +
