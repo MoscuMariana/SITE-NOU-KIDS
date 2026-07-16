@@ -188,6 +188,18 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "scaderi set 1": [
+    "Numără inimioarele, merele și floricelele, apoi rezolvă scăderi simple cu 1–4 (ex. 5−2, 4−1).",
+    "Scăderi cu suport vizual: inimioare, mere și flori zâmbitoare (ex. 7−1, 8−2, 7−4).",
+    "Rezolvă scăderile cu mere, flori și steluțe, de la 2−1 până la 8−5.",
+    "Steluțe, mere, inimioare și flori: scăderi variate în concentrul 0–8 (6−3, 7−6, 8−3).",
+    "Portocale, flori și inimioare vesele: scăderi de la 3−1 la 8−2.",
+    "Floricele și portocale zâmbitoare: rezolvă scăderi până la 8−4 și scrie rezultatul."
+  ],
+  "numara baloane si gargarite": [
+    "Numără baloanele din fiecare buchet și încercuiește numărul corect (2–8 baloane).",
+    "Numără bulinele de pe fiecare gărgăriță și încercuiește numărul corect."
+  ],
   "adunare jucarii set 1": [
     "Numără ursuleții de pluș, rezolvă adunarea și scrie rezultatul pe linie (sume până la 6).",
     "Numără ursuleții de pluș și rezolvă adunări cu rezultate până la 8.",
@@ -281,6 +293,69 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "scaderi set 1": {
+    intro:
+      "Un set de 6 fișe de scădere în limba română, în care fiecare exercițiu este ilustrat cu obiecte " +
+      "prietenoase: mere și portocale zâmbitoare, floricele, inimioare și steluțe. Copilul numără obiectele, " +
+      "rezolvă scăderea și scrie rezultatul pe linie — pasul firesc după stăpânirea adunării. Setul lucrează " +
+      "scăderea în concentrul 0–8 și este potrivit pentru clasa pregătitoare și grupa mare (5–7 ani).",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 6 pagini conțin câte 6 exerciții fiecare, cu dificultate variată: scăderi cu 1 (2−1, 4−1), " +
+          "scăderi cu diferențe mici (5−4, 7−6) și scăderi mai solicitante (8−5, 8−3, 7−4). Fiecare exercițiu " +
+          "are alături mulțimea de obiecte desenată, astfel încât copilul să poată număra concret, tăia cu " +
+          "creionul obiectele scăzute și verifica singur rezultatul."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Strategia recomandată: copilul numără toate obiectele din rând, taie cu creionul atâtea obiecte " +
+          "câte se scad, apoi numără câte au rămas și scrie rezultatul. După câteva pagini, încurajează-l să " +
+          "rezolve întâi din minte și să verifice apoi cu imaginile. Descarcă paginile individual (JPG) sau " +
+          "întregul set ca PDF, gata de tipărit pe A4."
+      }
+    ],
+    skills: [
+      "Scăderea în concentrul 0–8 cu suport vizual",
+      "Strategia numără–taie–verifică pentru scădere",
+      "Scrierea cifrelor și a rezultatului pe liniatură",
+      "Trecerea de la calcul concret la calcul mintal",
+      "Atenție, răbdare și lucru independent"
+    ]
+  },
+  "numara baloane si gargarite": {
+    intro:
+      "Două fișe vesele de numărare și recunoaștere a cifrelor: copilul numără baloanele din fiecare buchet " +
+      "și bulinele de pe aripile gărgărițelor, apoi încercuiește numărul corect dintre cele trei variante. " +
+      "O activitate scurtă și atractivă pentru consolidarea numerației 1–9, potrivită pentru grupa mijlocie " +
+      "și grupa mare (4–6 ani).",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Prima fișă lucrează numărarea baloanelor (buchete de la 2 la 8 baloane), iar a doua numărarea " +
+          "bulinelor de pe gărgărițe — un exercițiu ceva mai fin, pentru că bulinele sunt așezate pe ambele " +
+          "aripi. La fiecare rând, copilul alege răspunsul corect din trei variante, exersând simultan " +
+          "numărarea și recunoașterea cifrelor scrise."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Încurajează copilul să atingă cu degetul fiecare obiect în timp ce numără (corespondența unu la " +
+          "unu), apoi să caute cifra potrivită și să o încercuiască cu o culoare veselă. Fișele pot fi " +
+          "refolosite: laminate sau puse într-o folie de plastic, se pot rezolva cu marker lavabil. Descarcă " +
+          "paginile individual sau setul complet ca PDF pentru tipărire A4."
+      }
+    ],
+    skills: [
+      "Numerația 1–9 și corespondența unu la unu",
+      "Recunoașterea cifrelor scrise",
+      "Asocierea cantitate–simbol numeric",
+      "Atenție la detalii și motricitate fină (încercuire)"
+    ]
+  },
   "adunare jucarii set 1": {
     intro:
       "Un set de 7 fișe de adunare în limba engleză (Addition), în care fiecare exercițiu este ilustrat cu " +
