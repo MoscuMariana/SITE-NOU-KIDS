@@ -2,9 +2,13 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
+<script src="/cookie-consent.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-adsense-account" content="ca-pub-3657163291978156">
-<title>Kiddy MSK — Materiale Educaționale</title>
+<title>Kiddy MSK — Fișe de lucru, jocuri educative și planșe de colorat pentru copii</title>
+<meta name="description" content="Materiale educaționale gratuite pentru grădiniță și ciclul primar: fișe de lucru aliniate programei românești, jocuri interactive, planșe de colorat, poezii și diplome. Printează acasă sau la clasă!">
+<link rel="canonical" href="https://kiddy-msk.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -60,6 +64,9 @@
   .top-nav button{font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;border:none;background:transparent;color:var(--ink-soft);padding:9px 18px;border-radius:999px;cursor:pointer;transition:.2s}
   .top-nav button:hover{background:#fff;color:var(--ink)}
   .top-nav button.active{background:var(--ink);color:#fff}
+  .top-nav a{font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;text-decoration:none;color:var(--ink-soft);padding:9px 18px;border-radius:999px;transition:.2s;display:inline-block}
+  .top-nav a:hover{background:#fff;color:var(--ink)}
+  .top-nav a:focus-visible,.top-nav button:focus-visible{outline:3px solid var(--scoala);outline-offset:2px}
 
   /* HERO — centrat */
   .hero{text-align:center;padding:46px 0 22px;display:flex;flex-direction:column;align-items:center}
@@ -186,10 +193,11 @@
       <button id="nav-fise" class="active" onclick="showTab('fise')">📚 Fișe</button>
       <button id="nav-jocuri" onclick="showTab('jocuri')">🎮 Jocuri</button>
       <button id="nav-colorat" onclick="showTab('colorat')">🎨 Colorat</button>
-      <button id="nav-poezii" onclick="window.location.href='poezii.html'">📖 Poezii</button>
-      <button id="nav-curriculum" onclick="window.location.href='curriculum.html'">🗺️ Curriculum</button>
+      <a id="nav-poezii" href="poezii.html">📖 Poezii</a>
+      <a id="nav-curriculum" href="curriculum.html">🗺️ Curriculum</a>
       <button id="nav-diplome" onclick="showTab('diplome')">🏆 Diplome</button>
-      <button id="nav-blog" onclick="window.location.href='kiddy-msk-blog.html'">Blog</button>
+      <a id="nav-blog" href="kiddy-msk-blog.html">Blog</a>
+      <a id="nav-despre" href="despre.html">🐝 Despre</a>
     </nav>
   </div>
 </header>
@@ -295,11 +303,15 @@
     <p>© 2026 Kiddy MSK · Materiale educaționale pentru pitici · www.kiddy-msk.com</p>
   </div>
     <p style="margin-top:10px;font-size:12px;">
+      <a href="/despre.html" style="color:#4ECDC4;text-decoration:none;">Despre Kiddy MSK</a>
+      &nbsp;·&nbsp;
       <a href="/confidentialitate.html" style="color:#4ECDC4;text-decoration:none;">Politică de Confidențialitate</a>
       &nbsp;·&nbsp;
       <a href="/termeni.html" style="color:#4ECDC4;text-decoration:none;">Termeni și Condiții</a>
       &nbsp;·&nbsp;
       <a href="/contact.html" style="color:#4ECDC4;text-decoration:none;">Contact</a>
+      &nbsp;·&nbsp;
+      <a href="#" onclick="kiddyOpenCookieSettings();return false" style="color:#4ECDC4;text-decoration:none;">Setări cookie-uri</a>
     </p>
   </footer>
 
