@@ -188,6 +188,26 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "numaratoare cu buburuze": [
+    "Cifrele 0\u20139 pe linii punctate \u2014 copilul traseaz\u0103 fiecare cifr\u0103 pornind din locul unde st\u0103 buburuza, exers\u00e2nd direc\u021bia corect\u0103 de scriere.",
+    "Dou\u0103sprezece buburuze de colorat, cu cifrele 1\u201312 punctate pe aripi: \u00eent\u00e2i se traseaz\u0103 num\u0103rul, apoi aripile se coloreaz\u0103 cu ro\u0219u \u0219i negru.",
+    "\u0218apte r\u00e2nduri de buburuze de num\u0103rat \u2014 copilul num\u0103r\u0103 g\u00e2zele din fiecare r\u00e2nd \u0219i scrie cifra \u00een c\u0103su\u021ba ro\u0219ie din dreapta.",
+    "Patru frunze cu buburuze \u0219i c\u00e2te trei numere al\u0103turi: se \u00eencercuie\u0219te num\u0103rul care arat\u0103 c\u00e2te buburuze stau pe fiecare frunz\u0103.",
+    "Asociere buburuz\u0103\u2013frunz\u0103: se num\u0103r\u0103 punctele de pe aripi (2\u20135) \u0219i se trage o linie spre frunza cu num\u0103rul potrivit.",
+    "A doua fi\u0219\u0103 de asociere buburuz\u0103\u2013frunz\u0103, cu valori mai variate: 1, 6, 7 \u0219i 8 puncte de num\u0103rat cu aten\u021bie.",
+    "Treisprezece buburuze \u00eempr\u0103\u0219tiate pe pagin\u0103 \u2014 copilul le une\u0219te pe cele care au acela\u0219i num\u0103r de puncte pe aripi.",
+    "Carduri de num\u0103rat: patru buburuze cu 0\u20137 puncte \u0219i c\u00e2te trei variante de r\u0103spuns; num\u0103rul corect se \u00eencercuie\u0219te sau se prinde cu cle\u0219ti\u0219orul de rufe.",
+    "A doua fi\u0219\u0103 de carduri, cu valori p\u00e2n\u0103 la 9 \u0219i variante de r\u0103spuns p\u00e2n\u0103 la 10.",
+    "Ultima fi\u0219\u0103 de carduri: 1, 3, 7 \u0219i chiar 10 puncte de num\u0103rat \u2014 pentru micii exper\u021bi \u00een buburuze."
+  ],
+  "casutele numerelor": [
+    "C\u0103su\u021bele lui 8 \u2014 nou\u0103 c\u0103su\u021be colorate cu adun\u0103ri cu termen lips\u0103 (5 + \u25a1 = 8, 1 + \u25a1 = 8...), cu axa numerelor 0\u20138 la baza paginii.",
+    "Gr\u0103dina lui 9 \u2014 perechi de flori \u00een ghiveci: prima floare poart\u0103 un num\u0103r, iar copilul scrie \u00een a doua c\u00e2t mai lipse\u0219te p\u00e2n\u0103 la 9.",
+    "C\u0103su\u021bele lui 10, prima variant\u0103 \u2014 nou\u0103 adun\u0103ri cu termen lips\u0103 p\u00e2n\u0103 la 10, fiecare c\u0103su\u021b\u0103 p\u0103zit\u0103 de o g\u00e2z\u0103 sau o p\u0103s\u0103ric\u0103.",
+    "C\u0103su\u021bele lui 10, a doua variant\u0103 \u2014 alte nou\u0103 combina\u021bii pentru consolidare, cu axa 0\u201310 drept sprijin vizual.",
+    "Prietenii lui 10 \u2014 anim\u0103lu\u021be curioase (brosc\u0103, pui\u0219or, iepura\u0219, veveri\u021b\u0103...) se i\u021besc de dup\u0103 t\u0103bli\u021be de lemn cu adun\u0103ri de completat p\u00e2n\u0103 la 10.",
+    "A doua fi\u0219\u0103 cu prietenii-anim\u0103lu\u021be \u0219i alte nou\u0103 exerci\u021bii \u2014 \u00eempreun\u0103, cele dou\u0103 pagini trec prin toate complementele lui 10."
+  ],
   "alfabet englez de trasat": [
     "Litera Aa — trasarea literei mari și mici cu numere de ordine și săgeți, apoi cuvintele ANT (furnică), ANGEL (înger) și APPLE (măr), cu imagini de colorat.",
     "Litera Bb — BEAR (urs), BREAD (pâine) și BEE (albină); litera mare se scrie din trei mișcări, cea mică din două.",
@@ -533,6 +553,61 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "numaratoare cu buburuze": {
+    intro:
+      "Zece fi\u0219e vesele \u00een care buburuzele fac toat\u0103 treaba: ajut\u0103 la trasarea cifrelor, se las\u0103 " +
+      "num\u0103rate pe frunze \u0219i \u00een r\u00e2nduri, apoi \u00ee\u0219i caut\u0103 perechea dup\u0103 num\u0103rul de puncte de pe aripi. " +
+      "Setul porne\u0219te de la scrierea cifrelor 0\u20139 pe linii punctate \u0219i ajunge, pas cu pas, la num\u0103rat " +
+      "p\u00e2n\u0103 la 12, la asocieri num\u0103r\u2013cantitate \u0219i la carduri cu variante de r\u0103spuns. Personajul " +
+      "unic \u2014 buburuza cu punctele ei u\u0219or de num\u0103rat \u2014 d\u0103 unitate \u00eentregului set \u0219i \u00eel face " +
+      "numai bun pentru o s\u0103pt\u0103m\u00e2n\u0103 tematic\u0103 despre insecte sau prim\u0103var\u0103.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "10 plan\u0219e A4 portret: dou\u0103 fi\u0219e de trasare a cifrelor (0\u20139 \u0219i 1\u201312, cu colorat), o fi\u0219\u0103 " +
+              "de num\u0103rat \u0219i scris cifra, una de \u00eencercuit num\u0103rul corect, dou\u0103 fi\u0219e de asociere " +
+              "buburuz\u0103\u2013frunz\u0103, o fi\u0219\u0103 de perechi cu acela\u0219i num\u0103r de puncte \u0219i trei fi\u0219e de carduri " +
+              "cu c\u00e2te trei variante de r\u0103spuns, tot mai dificile." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor, de la trasare spre num\u0103rat \u0219i asociere. Fi\u0219ele-card (paginile 8\u201310) " +
+              "pot fi decupate \u0219i plastifiate: copilul prinde cu un cle\u0219ti\u0219or de rufe num\u0103rul corect, iar " +
+              "fi\u0219a se refolose\u0219te la nesf\u00e2r\u0219it \u2014 \u0219i motricitatea fin\u0103 prime\u0219te un bonus. La fi\u0219ele de " +
+              "asociere, cere\u021bi copilului s\u0103 numere punctele cu voce tare \u00eenainte s\u0103 trag\u0103 linia. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Scrierea cifrelor 0\u20139 pe linii punctate",
+      "Num\u0103rat \u00een concentrul 0\u201312",
+      "Asocierea num\u0103rului cu cantitatea",
+      "Comparare \u0219i formare de perechi egale",
+      "Motricitate fin\u0103 \u0219i coordonare ochi\u2013m\u00e2n\u0103"
+    ]
+  },
+  "casutele numerelor": {
+    intro:
+      "\u0218ase fi\u0219e colorate despre \u201eprietenii\u201d numerelor \u2014 complementele lui 8, 9 \u0219i 10, adic\u0103 " +
+      "perechile de numere care, adunate, formeaz\u0103 \u021binta din c\u0103su\u021b\u0103. Copilul completeaz\u0103 termenul " +
+      "lips\u0103 \u00een c\u0103su\u021be cu acoperi\u0219uri colorate, \u00een flori-perechi din gr\u0103din\u0103 \u0219i pe t\u0103bli\u021be de lemn " +
+      "p\u0103zite de anim\u0103lu\u021be simpatice. Fiecare pagin\u0103 are jos o ax\u0103 a numerelor, pe care degetul " +
+      "poate num\u0103ra \u00eenainte p\u00e2n\u0103 la \u021bint\u0103 \u2014 sprijinul perfect p\u00e2n\u0103 c\u00e2nd perechile se re\u021bin pe de rost. " +
+      "Descompunerea lui 10 este temelia calculului rapid din clasa I, iar aici se construie\u0219te prin joc.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "6 plan\u0219e A4 portret, c\u00e2te 9 exerci\u021bii pe pagin\u0103: C\u0103su\u021bele lui 8, Gr\u0103dina lui 9, dou\u0103 " +
+              "variante ale C\u0103su\u021belor lui 10 \u0219i dou\u0103 fi\u0219e \u201ePrietenii lui 10\u201d cu anim\u0103lu\u021be. \u00cen total, " +
+              "54 de adun\u0103ri cu termen lips\u0103, fiecare cu ax\u0103 a numerelor 0\u2013\u021bint\u0103 ca suport." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cencepe\u021bi cu \u021binta 8, apoi 9 \u0219i abia la final 10 \u2014 exact ordinea paginilor. Ar\u0103ta\u021bi-i " +
+              "copilului cum s\u0103 porneasc\u0103 de la num\u0103rul dat \u0219i s\u0103 numere pe ax\u0103 c\u00e2\u021bi pa\u0219i mai sunt " +
+              "p\u00e2n\u0103 la \u021bint\u0103. Variantele-pereche ale fi\u0219elor de 10 sunt ideale pentru recapitulare " +
+              "dup\u0103 c\u00e2teva zile sau pentru doi copii care lucreaz\u0103 \u00een acela\u0219i timp. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Complementele numerelor 8, 9 \u0219i 10",
+      "Adun\u0103ri cu termen lips\u0103 (0\u201310)",
+      "Num\u0103rat cu sprijin pe axa numerelor",
+      "Preg\u0103tirea calculului mintal rapid",
+      "Scrierea cifrelor \u00een spa\u021bii date"
+    ]
+  },
   "alfabet englez de trasat": {
     intro:
       "Douăzeci și patru de fișe de alfabet englezesc, de la A la X, câte una pentru fiecare literă. Pe fiecare " +
