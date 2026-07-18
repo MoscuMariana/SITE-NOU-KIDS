@@ -188,6 +188,22 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "animale fise de descriere": [
+    "Plan\u0219a \u201eURS\u201d \u2014 Ursul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eGIRAFA\u201d \u2014 Girafa \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eC\u00c2INE\u201d \u2014 C\u00e2inele \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201ePISICA\u201d \u2014 Pisica \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVACA\u201d \u2014 Vaca \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201ePORC\u201d \u2014 Porcul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eMIEL\u201d \u2014 Mielul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eLEU\u201d \u2014 Leul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eMAIMU\u021aA\u201d \u2014 Maimu\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVULPE\u201d \u2014 Vulpea \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eIEPURE\u201d \u2014 Iepurele \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eARICI\u201d \u2014 Ariciul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVEVERI\u021aA\u201d \u2014 Veveri\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eRA\u021aA\u201d \u2014 Ra\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE."
+  ],
   "mai mare mai mic": [
     "Prima plan\u0219\u0103 de comparare \u2014 trei coloane de perechi de numere, cu c\u00e2te o c\u0103su\u021b\u0103 goal\u0103 \u00eentre ele pentru semnul potrivit.",
     "A doua plan\u0219\u0103 de comparare, cu alte perechi de numere \u0219i aceea\u0219i a\u0219ezare pe trei coloane.",
@@ -570,6 +586,37 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "animale fise de descriere": {
+    intro:
+      "Paisprezece plan\u0219e de descriere a animalelor, toate construite dup\u0103 aceea\u0219i schem\u0103 " +
+      "simpl\u0103 \u0219i u\u0219or de re\u021binut: animalul st\u0103 \u00een mijloc, iar \u00een jurul lui sunt \u0219ase " +
+      "c\u0103su\u021be albe \u2014 TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE. " +
+      "Copilul le completeaz\u0103 \u0219i, f\u0103r\u0103 s\u0103-\u0219i dea seama, construie\u0219te o descriere " +
+      "complet\u0103: mediu de via\u021b\u0103, hran\u0103, \u00eensu\u0219iri, p\u0103r\u021bi ale corpului \u0219i ce \u0219tie " +
+      "sau nu \u0219tie s\u0103 fac\u0103. Setul acoper\u0103 animale domestice, s\u0103lbatice de la noi " +
+      "\u0219i exotice \u2014 numai bun pentru compara\u021bii \u0219i clasific\u0103ri.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "14 plan\u0219e A4 PEISAJ, cu ilustra\u021bii realiste: urs, giraf\u0103, c\u00e2ine, pisic\u0103, vac\u0103, " +
+              "porc, miel, leu, maimu\u021b\u0103, vulpe, iepure, arici, veveri\u021b\u0103 \u0219i ra\u021b\u0103. " +
+              "Fiecare plan\u0219\u0103 are aceea\u0219i structur\u0103 de \u0219ase c\u0103su\u021be, ceea ce face trecerea " +
+              "de la un animal la altul foarte u\u0219oar\u0103." },
+      { title: "Cum se folose\u0219te",
+        body: "La grup\u0103 sau acas\u0103, oral \u00eenainte de a scrie: copilul spune ce \u0219tie, apoi " +
+              "completeaz\u0103 c\u0103su\u021bele. La cei care nu scriu \u00eenc\u0103, se poate desena \u00een c\u0103su\u021be " +
+              "sau se pot lipi imagini decupate. Plastifiate, plan\u0219ele se completeaz\u0103 cu marker " +
+              "\u0219i se \u0219terg. Foarte utile \u0219i pentru compara\u021bii: dou\u0103 plan\u0219e al\u0103turate " +
+              "(vulpe \u0219i c\u00e2ine, leu \u0219i pisic\u0103) arat\u0103 imediat asem\u0103n\u0103rile \u0219i deosebirile. " +
+              "JPG sau PDF A4 peisaj." }
+    ],
+    skills: [
+      "Descrierea animalelor dup\u0103 criterii date",
+      "\u00cembog\u0103\u021birea vocabularului",
+      "Clasificarea animalelor: domestice, s\u0103lbatice, exotice",
+      "Formularea de propozi\u021bii complete",
+      "Compararea a dou\u0103 vie\u021buitoare"
+    ]
+  },
   "mai mare mai mic": {
     intro:
       "\u0218ase plan\u0219e vesele pentru compararea numerelor, cu curcubeu, creioane z\u00e2mb\u0103re\u021be \u0219i " +
