@@ -188,6 +188,23 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "mai mare mai mic": [
+    "Prima plan\u0219\u0103 de comparare \u2014 trei coloane de perechi de numere, cu c\u00e2te o c\u0103su\u021b\u0103 goal\u0103 \u00eentre ele pentru semnul potrivit.",
+    "A doua plan\u0219\u0103 de comparare, cu alte perechi de numere \u0219i aceea\u0219i a\u0219ezare pe trei coloane.",
+    "A treia plan\u0219\u0103 \u2014 exerci\u021bii noi de comparare, pentru consolidare.",
+    "A patra plan\u0219\u0103 de comparare a numerelor, cu perechi diferite de cele anterioare.",
+    "A cincea plan\u0219\u0103 \u2014 \u00eenc\u0103 un set de perechi de comparat.",
+    "Ultima plan\u0219\u0103 din set, pentru recapitulare final\u0103."
+  ],
+  "omida mancacioasa": [
+    "Grafomotricitate cu omida: \u0219ase trasee punctate diferite \u2014 zigzag, unde, bucle \u0219i spirale \u2014 pe care copilul le parcurge cu creionul.",
+    "Plan\u0219\u0103 de colorat: omizi printre lalele, cu soare, fluturi \u0219i o c\u0103p\u0219un\u0103 ascuns\u0103 \u00een iarb\u0103.",
+    "Plan\u0219\u0103 de colorat bogat\u0103 \u00een detalii: omid\u0103, fluturi, o p\u0103s\u0103ric\u0103 pe creang\u0103, ciuperci \u0219i o p\u00e2nz\u0103 de p\u0103ianjen plin\u0103 de bun\u0103t\u0103\u021bi.",
+    "\u0218irul numerelor 1\u201325: omizile acoper\u0103 numerele lipsit, iar copilul le scrie \u00een spa\u021biile libere, urm\u0103rind s\u0103ge\u021bile \u00een ambele sensuri.",
+    "Adun\u0103ri cu suport vizual \u2014 \u0219apte exerci\u021bii \u00een care se num\u0103r\u0103 omizile din fiecare grup \u0219i se scrie totalul \u00een c\u0103su\u021b\u0103.",
+    "Asociere triple\u0103: num\u0103rul, grupul de obiecte \u0219i cuv\u00e2ntul scris \u2014 se trag linii \u00eentre cele trei coloane, de la 1 la 10.",
+    "Fi\u0219\u0103 de calcule: c\u00e2te c\u0103p\u0219uni, buc\u0103\u021bi de ca\u0219caval \u0219i dulciuri a m\u00e2ncat omida, cu spa\u021biu de desenat la final."
+  ],
   "numaratoare cu buburuze": [
     "Cifrele 0\u20139 pe linii punctate \u2014 copilul traseaz\u0103 fiecare cifr\u0103 pornind din locul unde st\u0103 buburuza, exers\u00e2nd direc\u021bia corect\u0103 de scriere.",
     "Dou\u0103sprezece buburuze de colorat, cu cifrele 1\u201312 punctate pe aripi: \u00eent\u00e2i se traseaz\u0103 num\u0103rul, apoi aripile se coloreaz\u0103 cu ro\u0219u \u0219i negru.",
@@ -553,6 +570,59 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "mai mare mai mic": {
+    intro:
+      "\u0218ase plan\u0219e vesele pentru compararea numerelor, cu curcubeu, creioane z\u00e2mb\u0103re\u021be \u0219i " +
+      "flori pe margini. Pe fiecare pagin\u0103, numerele sunt a\u0219ezate \u00een trei coloane, perechi-perechi, " +
+      "cu o c\u0103su\u021b\u0103 goal\u0103 la mijloc: acolo copilul deseneaz\u0103 semnul potrivit. Formatul repetitiv " +
+      "este inten\u021bionat \u2014 compararea devine automat\u0103 doar prin exerci\u021biu, iar cele \u0219ase fi\u0219e ofer\u0103 " +
+      "material pentru s\u0103pt\u0103m\u00e2ni \u00eentregi de antrenament scurt \u0219i zilnic.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "6 plan\u0219e A4 portret, fiecare cu zeci de perechi de numere de comparat, a\u0219ezate pe trei " +
+              "coloane. Design colorat, cu ram\u0103 ilustrat\u0103 \u2014 arat\u0103 bine \u0219i afi\u0219at pe perete." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor, c\u00e2te o fi\u0219\u0103 pe zi sau c\u00e2te o coloan\u0103 pe rep\u0103r\u021bire, dac\u0103 lucra\u021bi \u00een " +
+              "reprize scurte. \u00cenainte de a scrie, cere\u021bi-i copilului s\u0103 citeasc\u0103 perechea cu voce tare " +
+              "(\u201etreisprezece \u0219i nou\u0103sprezece\u201d) \u2014 verbalizarea ajut\u0103 enorm la fixare. Plastifiate, fi\u0219ele " +
+              "se pot rezolva cu marker \u0219i \u0219terge de nenum\u0103rate ori. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Compararea numerelor naturale",
+      "Folosirea semnelor de rela\u021bie",
+      "Pozi\u021bia numerelor \u00een \u0219ir",
+      "Aten\u021bie distributiv\u0103 \u0219i lucru sistematic",
+      "Automatizarea calculului mintal"
+    ]
+  },
+  "omida mancacioasa": {
+    intro:
+      "\u0218apte fi\u0219e cu o omid\u0103 foarte m\u00e2nc\u0103cioas\u0103, care trece prin toate zonele importante " +
+      "ale gr\u0103di\u021bei: grafomotricitate, colorat, num\u0103rat, adun\u0103ri \u0219i asocierea cifr\u0103\u2013cantitate\u2013cuv\u00e2nt. " +
+      "Setul \u00eencepe cu trasee punctate pentru \u00eenc\u0103lzirea m\u00e2inii, continu\u0103 cu dou\u0103 plan\u0219e mari de " +
+      "colorat \u0219i se \u00eencheie cu exerci\u021bii de matematic\u0103 tot mai consistente. Tema unitar\u0103 \u0219i " +
+      "personajul simpatic \u021bin copilul conectat de la o pagin\u0103 la alta \u2014 numai bun pentru un " +
+      "proiect tematic despre insecte, prim\u0103var\u0103 sau transform\u0103rile din natur\u0103.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "7 plan\u0219e A4 portret: o fi\u0219\u0103 de grafomotricitate cu \u0219ase trasee, dou\u0103 plan\u0219e de colorat " +
+              "cu multe detalii, \u0219irul numerelor 1\u201325 cu spa\u021bii de completat, o fi\u0219\u0103 de adun\u0103ri cu " +
+              "suport vizual, una de asociere num\u0103r\u2013obiecte\u2013cuv\u00e2nt (1\u201310) \u0219i o fi\u0219\u0103 final\u0103 de calcule " +
+              "cu spa\u021biu liber pentru desen." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor. Fi\u0219a de trasare merge perfect ca \u00eenc\u0103lzire \u00eenaintea celor de scris. " +
+              "Plan\u0219ele de colorat sunt bogate \u00een detalii \u2014 la cei mici, propune\u021bi-le s\u0103 coloreze doar " +
+              "o parte pe zi, ca s\u0103 nu oboseasc\u0103. La fi\u0219a de asociere, ar\u0103ta\u021bi-i copilului c\u0103 se " +
+              "porne\u0219te \u00eentotdeauna de la num\u0103rarea obiectelor, nu de la cifr\u0103. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Motricitate fin\u0103 \u0219i control al creionului",
+      "Num\u0103rat \u0219i completarea \u0219irului 1\u201325",
+      "Adun\u0103ri cu suport vizual",
+      "Asocierea cifr\u0103 \u2013 cantitate \u2013 cuv\u00e2nt scris",
+      "Coordonare ochi\u2013m\u00e2n\u0103 prin colorat"
+    ]
+  },
   "numaratoare cu buburuze": {
     intro:
       "Zece fi\u0219e vesele \u00een care buburuzele fac toat\u0103 treaba: ajut\u0103 la trasarea cifrelor, se las\u0103 " +
