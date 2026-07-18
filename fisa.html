@@ -188,6 +188,23 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "alfabet englez de trasat": [
+    "Litera Aa — trasarea literei mari și mici cu numere de ordine și săgeți, apoi cuvintele ANT (furnică), ANGEL (înger) și APPLE (măr), cu imagini de colorat.",
+    "Litera Bb — BEAR (urs), BREAD (pâine) și BEE (albină); litera mare se scrie din trei mișcări, cea mică din două.",
+    "Litera Cc — CAKE (tort), CAR (mașină) și CACTUS; ambele forme ale literei se trasează dintr-o singură mișcare curbată.",
+    "Litera Dd — DRUM (tobă), DOOR (ușă) și DUCK (rățușcă).",
+    "Litera Ee — EARTH (Pământ), EGG (ou) și EAGLE (vultur); E mare are patru mișcări, cea mai complexă de până acum.",
+    "Litera Ff — FISH (pește), FLAG (steag) și FROG (broască).",
+    "Litera Gg — GRAPES (struguri), GIFT (cadou) și GOAT (capră).",
+    "Litera Hh — HOUSE (casă), HORSE (cal) și HAT (pălărie).",
+    "Litera Ii — ICE (gheață), IGLOO și INSECT (insectă); atenție la punctul literei mici, marcat separat.",
+    "Litera Jj — JAM (gem), JUICE (suc) și JEANS (blugi).",
+    "Litera Kk — KING (rege), KEYS (chei) și KITTEN (pisicuță); trei mișcări pentru fiecare formă.",
+    "Litera Ll — LEAF (frunză), LION (leu) și LEMON (lămâie); cea mai simplă literă de trasat din set.",
+    "Litera Mm — MAP (hartă), MOUSE (șoarece) și MONEY (bani); M mare cere patru mișcări.",
+    "Litera Nn — NET (plasă), NEST (cuib) și NIGHT (noapte).",
+    "Litera Oo — OWL (bufniță), ONION (ceapă) și ORANGE (portocală); un singur cerc, trasat de la dreapta spre stânga."
+  ],
   "fisa de trasare": [
     "Trenulețul deschide setul cu linii drepte orizontale, apoi vin oblicele fluturașului și ale mașinuței și arcadele curcubeului — fiecare rând cu punct de Start și săgeată de direcție.",
     "Autobuzul școlar, rățușca, steluța, ciupercuța, balena și iepurașul: linii drepte, arcade, zigzaguri și bucle în jos, tot cu Start marcat.",
@@ -507,6 +524,34 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "alfabet englez de trasat": {
+    intro:
+      "Cincisprezece fișe de alfabet englezesc, de la A la O, câte una pentru fiecare literă. Pe fiecare " +
+      "pagină, copilul trasează întâi litera mare și cea mică — cu numere de ordine și săgeți care arată " +
+      "exact de unde pornește fiecare mișcare — apoi colorează trei obiecte care încep cu litera respectivă " +
+      "și le scrie numele pe liniile punctate: ANT, ANGEL, APPLE pentru Aa, BEAR, BREAD, BEE pentru Bb și " +
+      "așa mai departe. Formatul peisaj lasă loc generos pentru mânuțele care abia învață să scrie, iar " +
+      "desenele mari, cu contur gros, sunt numai bune de colorat.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "15 planșe A4 peisaj, alb-negru, pentru literele A, B, C, D, E, F, G, H, I, J, K, L, M, N și " +
+              "O. Fiecare fișă are: rând de nume punctat, modelul literei mari și mici cu ordinea " +
+              "mișcărilor, trei imagini de colorat în casete și cuvintele englezești de trasat dedesubt — " +
+              "45 de cuvinte în total." },
+      { title: "Cum se folosește",
+        body: "Câte o literă pe zi sau pe săptămână, în ordinea din set. Spuneți sunetul literei, nu doar " +
+              "numele ei, și cereți copilului să repete cuvintele cu voce tare în timp ce le trasează. " +
+              "Colorarea vine la final, ca recompensă. Plastifiate, fișele se pot refolosi cu marker. " +
+              "JPG sau PDF A4 peisaj." }
+    ],
+    skills: [
+      "Scrierea literelor mari și mici de tipar",
+      "Ordinea corectă a mișcărilor la scriere",
+      "Vocabular englezesc de bază (45 de cuvinte)",
+      "Conștientizare fonologică: sunetul inițial",
+      "Motricitate fină prin trasare și colorare"
+    ]
+  },
   "fisa de trasare": {
     intro:
       "Patru fișe de trasare cu rame albastre vesele, creionul-mascotă și câte șase benzi de exersat pe " +
