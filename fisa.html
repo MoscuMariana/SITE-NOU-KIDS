@@ -188,6 +188,39 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "sunetul si litera partea 1": [
+    "Cunosc vocalele \u2014 trasarea vocalelor A, E, I, O, U, \u0102, colorarea vocalei A dintr-un \u0219ir de litere, alegerea c\u0103su\u021belor cu vocale, unirea vocalei cu un cuv\u00e2nt care \u00eencepe cu ea \u0219i bifarea cuvintelor care \u00eencep cu A.",
+    "Sunetul \u0219i litera M \u2014 trasare, c\u0103utarea literei M printre vocale, silabele MA, ME, MI, MO, MU \u0219i cuvintele MA-MA, MA-S\u0102, NU-ME, ME-RE.",
+    "Sunetul \u0219i litera N \u2014 trasare, discriminarea N de M (litere u\u0219or de confundat), silabele NA, NE, NI, NO, NU \u0219i cuvintele NU-ME, NO-RI, NU-C\u0102, LU-NA.",
+    "Sunetul \u0219i litera R \u2014 trasare, c\u0103utarea literei R printre cele \u00eenv\u0103\u021bate, silabele RA, RE, RI, RO, RU \u0219i cuvintele MA-RE, SA-RE, CAR-TE, NO-RI.",
+    "Sunetul \u0219i litera C \u2014 trasare \u0219i doar silabele CA, CO, CU, C\u0102 (grupurile CE \u0219i CI se \u00eenva\u021b\u0103 separat), cu cuvintele CA-S\u0102, NU-C\u0102, CAR-TE, LAC.",
+    "Sunetul \u0219i litera L \u2014 trasare, silabele LA, LE, LI, LO, LU \u0219i cuvintele LU-NA \u0219i LAC.",
+    "Sunetul \u0219i litera T \u2014 trasare, silabele TA, TE, TI, TO, TU \u0219i cuvintele TA-TA, CAR-TE, PAT.",
+    "Sunetul \u0219i litera S \u2014 trasare, silabele SA, SE, SI, SO, SU \u0219i cuvintele SO-RA, SA-RE, PI-SI-C\u0102, MA-S\u0102.",
+    "Sunetul \u0219i litera P \u2014 trasare, discriminarea P de R, silabele PA, PE, PI, PO, PU \u0219i cuvintele PI-SI-C\u0102 \u0219i PAT.",
+    "Recapitulare \u2014 citirea cuvintelor \u00eenv\u0103\u021bate, desp\u0103r\u021birea \u00een silabe, citirea a trei propozi\u021bii, num\u0103rarea cuvintelor din propozi\u021bie \u0219i dou\u0103 exerci\u021bii de tip Adev\u0103rat / Fals.",
+    "Sunetul \u0219i litera V \u2014 trasare, silabele VA, VE, VI, VO, VU \u0219i cuvintele VA-C\u0102, VA-R\u0102, VUL-PE.",
+    "Sunetul \u0219i litera D \u2014 trasare, silabele DA, DE, DI, DO, DU \u0219i cuvintele DOI, DIN-TE, DU-LAP.",
+    "Sunetul \u0219i litera \u0218 \u2014 trasare, silabele \u0218A, \u0218E, \u0218I, \u0218O, \u0218U \u0219i cuvintele \u0218AR-PE, \u0218AP-C\u0102, \u0218O-SEA.",
+    "Sunetul \u0219i litera Z \u2014 trasare, silabele ZA, ZE, ZI, ZO, ZU \u0219i cuvintele ZMEU, A-ZI, ZI-LE."
+  ],
+  "sunetul si litera partea 2": [
+    "Sunetul \u0219i litera B \u2014 trasare, silabele BA, BE, BI, BO, BU \u0219i cuvintele BU-NIC, BAN-C\u0102, BRAD.",
+    "Sunetul \u0219i litera F \u2014 trasare, silabele FA, FE, FI, FO, FU \u0219i cuvintele FA-T\u0102, FRA-TE, FLOA-RE.",
+    "Sunetul \u0219i litera G \u2014 trasare \u0219i doar silabele GA, GO, GU, G\u0102 (grupurile GE \u0219i GI se \u00eenva\u021b\u0103 separat), cu cuvintele GARD, GAL-BEN, GOL.",
+    "Sunetul \u0219i litera H \u2014 trasare, silabele HA, HE, HI, HO, HU \u0219i cuvintele HAI-N\u0102, HAR-T\u0102, HA-LAT.",
+    "Sunetul \u0219i litera J \u2014 trasare, silabele JA, JE, JI, JO, JU \u0219i cuvintele JOC, JOI, JAR.",
+    "Sunetul \u0219i litera \u021a \u2014 trasare, silabele \u021aA, \u021aE, \u021aI, \u021aO, \u021aU \u0219i cuvintele A-\u021a\u0102, FA-\u021a\u0102, BRA\u021a.",
+    "Sunetul \u0219i litera X \u2014 liter\u0103 rar\u0103 \u00een limba rom\u00e2n\u0103, prezent\u0103 mai ales \u00een cuvinte \u00eemprumutate: silabele XA, XE, XI, XO, XU \u0219i cuvintele TA-XI, XI-LO-FON.",
+    "Sunetul \u0219i litera K \u2014 tot o liter\u0103 rar\u0103, din cuvinte \u00eemprumutate: silabele KA, KE, KI, KO, KU \u0219i cuvintele KA-RA-TE, KI-WI.",
+    "Sunetele \u00ce \u0219i \u00c2 \u2014 trasarea literei \u00c2 \u0219i regula de scriere: \u00c2 \u00een interiorul cuv\u00e2ntului (M\u00c2N\u0102, R\u00c2U, P\u00c2INE), \u00ce la \u00eenceput sau la sf\u00e2r\u0219it (\u00ceN, A COBOR\u00ce).",
+    "Recapitulare M\u2013P \u2014 cuvinte cu literele M, N, R, C, L, T, S, P: citire, desp\u0103r\u021bire \u00een silabe, num\u0103rarea silabelor, Adev\u0103rat / Fals \u0219i completarea a dou\u0103 propozi\u021bii dintr-o banc\u0103 de cuvinte.",
+    "Recapitulare V\u2013H \u2014 cuvinte cu literele V, D, \u0218, Z, B, F, G, H, cu acelea\u0219i cinci tipuri de exerci\u021bii \u0219i propozi\u021bii de completat.",
+    "Recapitulare J\u2013\u00c2 \u2014 cuvinte cu literele J, \u021a, X, K, \u00ce, \u00c2, inclusiv cele mai lungi din set (XILOFON, KARATE), cu num\u0103rarea silabelor \u0219i completarea propozi\u021biilor.",
+    "Citesc propozi\u021bii scurte \u2014 citirea a trei propozi\u021bii, num\u0103rarea cuvintelor, Adev\u0103rat / Fals, completarea din banca de cuvinte \u0219i a\u0219ezarea a trei propozi\u021bii \u00een ordinea fireasc\u0103 a ac\u021biunilor.",
+    "Propozi\u021bii cu punctua\u021bie \u2014 citirea cu intona\u021bie dup\u0103 semnul final, alegerea semnului potrivit (. ! ?), scrierea unei propozi\u021bii proprii, recunoa\u0219terea tipului de propozi\u021bie \u0219i formarea unei propozi\u021bii din cuvinte date.",
+    "Citesc \u0219i \u00een\u021beleg un text scurt \u2014 un text de patru propozi\u021bii despre Ana \u0219i familia ei, cu \u00eentreb\u0103ri de \u00een\u021belegere, Adev\u0103rat / Fals, g\u0103sirea unui cuv\u00e2nt cu trei silabe \u0219i ordonarea evenimentelor."
+  ],
   "animale fise de descriere": [
     "Plan\u0219a \u201eURS\u201d \u2014 Ursul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
     "Plan\u0219a \u201eGIRAFA\u201d \u2014 Girafa \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
@@ -586,6 +619,66 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "sunetul si litera partea 1": {
+    intro:
+      "Prima parte a abecedarului Kiddy MSK: paisprezece fi\u0219e care pornesc de la vocale \u0219i " +
+      "ajung la primele treisprezece consoane. Setul urmeaz\u0103 metoda fonetic\u0103 " +
+      "analitico-sintetic\u0103 \u2014 fiecare liter\u0103 nou\u0103 se sprijin\u0103 doar pe cele deja \u00eenv\u0103\u021bate, a\u0219a c\u0103 " +
+      "copilul poate citi cuvinte reale \u00eenc\u0103 de la a doua fi\u0219\u0103. Structura e mereu aceea\u0219i: " +
+      "trasarea literei, g\u0103sirea ei printre altele, citirea silabelor, bifarea cuvintelor care " +
+      "o con\u021bin \u0219i citirea cuvintelor noi, desp\u0103r\u021bite \u00een silabe.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "14 plan\u0219e A4 portret: o fi\u0219\u0103 pentru vocalele A, E, I, O, U, \u0102, dou\u0103sprezece fi\u0219e de " +
+      "consoane (M, N, R, C, L, T, S, P, V, D, \u0218, Z) \u0219i o fi\u0219\u0103 de recapitulare cu citire de " +
+      "propozi\u021bii. Ilustra\u021bii color pentru fiecare cuv\u00e2nt, spa\u021biu pentru nume \u0219i dat\u0103, cinci " +
+      "exerci\u021bii numerotate pe pagin\u0103." },
+      { title: "Cum se folose\u0219te",
+        body: "Strict \u00een ordinea paginilor \u2014 fiecare fi\u0219\u0103 folose\u0219te doar literele predate p\u00e2n\u0103 atunci. " +
+      "C\u00e2te o liter\u0103 pe s\u0103pt\u0103m\u00e2n\u0103 e un ritm potrivit la pregatitoare. \u00cencepe\u021bi \u00eentotdeauna cu " +
+      "rostirea sunetului, nu cu numele literei (\u201em\u201d, nu \u201eme\u201d) \u2014 e diferen\u021ba care face " +
+      "silabisirea posibil\u0103. La exerci\u021biul 5, cere\u021bi-i copilului s\u0103 citeasc\u0103 \u00eent\u00e2i silab\u0103 cu " +
+      "silab\u0103, apoi cuv\u00e2ntul \u00eentreg, dintr-o suflare. Continuarea fireasc\u0103 este partea a doua a " +
+      "setului. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Asocierea sunetului cu litera",
+      "Citirea silabelor \u0219i a cuvintelor scurte",
+      "Desp\u0103r\u021birea cuvintelor \u00een silabe",
+      "Scrierea literelor mari de tipar",
+      "Discriminarea literelor asem\u0103n\u0103toare (M/N, P/R)"
+    ]
+  },
+  "sunetul si litera partea 2": {
+    intro:
+      "Partea a doua a abecedarului Kiddy MSK, continuarea direct\u0103 a primelor paisprezece fi\u0219e: " +
+      "\u00eenc\u0103 opt consoane, regula \u00ce / \u00c2 \u0219i \u2014 partea cea mai valoroas\u0103 \u2014 \u0219ase fi\u0219e de consolidare " +
+      "care duc copilul de la cuv\u00e2nt la text. Trei recapitul\u0103ri de vocabular grupeaz\u0103 literele " +
+      "\u00eenv\u0103\u021bate, apoi urmeaz\u0103 propozi\u021biile scurte, punctua\u021bia cu intona\u021bie \u0219i, la final, un " +
+      "text de patru propozi\u021bii cu \u00eentreb\u0103ri de \u00een\u021belegere. Aici se vede dac\u0103 citirea a devenit " +
+      "cu adev\u0103rat \u00een\u021belegere.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "15 plan\u0219e A4 portret: opt fi\u0219e de consoane (B, F, G, H, J, \u021a, X, K), o fi\u0219\u0103 despre " +
+      "regula \u00ce / \u00c2, trei recapitul\u0103ri de vocabular (M\u2013P, V\u2013H, J\u2013\u00c2) \u0219i trei fi\u0219e finale: " +
+      "propozi\u021bii scurte, propozi\u021bii cu punctua\u021bie \u0219i un text de citit cu \u00eentreb\u0103ri, Adev\u0103rat / " +
+      "Fals \u0219i ordonarea evenimentelor." },
+      { title: "Cum se folose\u0219te",
+        body: "Se folose\u0219te dup\u0103 partea \u00eent\u00e2i, tot \u00een ordinea paginilor. Literele X \u0219i K sunt rare \u00een " +
+      "rom\u00e2n\u0103 \u2014 explica\u021bi-i copilului c\u0103 apar mai ales \u00een cuvinte venite din alte limbi. La " +
+      "fi\u0219a cu \u00ce \u0219i \u00c2, insista\u021bi pe regul\u0103, nu pe memorare: \u00c2 st\u0103 \u00een mijlocul cuv\u00e2ntului, \u00ce la " +
+      "capete. Ultimele trei fi\u0219e se pot relua de mai multe ori \u2014 la a doua citire, cere\u021bi " +
+      "fluen\u021b\u0103, nu doar corectitudine. Fi\u0219a final\u0103, cu text \u0219i \u00eentreb\u0103ri, e o bun\u0103 prob\u0103 de " +
+      "evaluare \u00eenainte de clasa preg\u0103titoare. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Consolidarea \u00eentregului alfabet",
+      "Regula de scriere \u00ce / \u00c2",
+      "Citirea \u0219i alc\u0103tuirea de propozi\u021bii",
+      "Semnele de punctua\u021bie \u0219i intona\u021bia",
+      "\u00cen\u021belegerea unui text citit"
+    ]
+  },
   "animale fise de descriere": {
     intro:
       "Paisprezece plan\u0219e de descriere a animalelor, toate construite dup\u0103 aceea\u0219i schem\u0103 " +
