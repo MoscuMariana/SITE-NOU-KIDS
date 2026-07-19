@@ -188,6 +188,18 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "cuvinte din silabe": [
+    "Animale domestice \u2014 C\u00c2I+NE, VA+C\u0102, OA+IE, CA+PR\u0102, RA+\u021a\u0102, PUR+CEL, cu \u0219ase imagini de asociat.",
+    "Fructe \u2014 PA+R\u0102, PRU+N\u0102, CI+RE+\u0218E, BA+NA+N\u0102, L\u0102+M\u00c2+IE, C\u0102P+\u0218U+N\u0102.",
+    "Legume \u2014 MOR+COV, CEA+P\u0102, RO+\u0218I+E, AR+DEI, VAR+Z\u0102, DO+VLEAC.",
+    "Animale s\u0103lbatice \u2014 VUL+PE, A+RICI, \u0218AR+PE, IE+PU+RE, VE+VE+RI+\u021a\u0102, BROAS+C\u0102.",
+    "Iarna \u2014 Z\u0102+PA+D\u0102, SA+NI+E, FU+LAR, M\u0102+NU\u0218I, BR\u0102+DU\u021a, PA+TI+NE.",
+    "\u0218coala \u2014 CAR+TE, CRE+ION, PE+NAR, CA+IET, TA+BL\u0102, GHIOZ+DAN.",
+    "Casa \u2014 MA+S\u0102, SCA+UN, U+\u0218\u0102, FE+REAS+TR\u0102, O+GLIN+D\u0102, CO+VOR.",
+    "Transport \u2014 MA+\u0218I+N\u0102, A+VI+ON, BI+CI+CLE+T\u0102, A+U+TO+BUZ, CO+RA+BI+E, E+LI+COP+TER.",
+    "Natura \u2014 P\u0102+DU+RE, CO+PAC, FLU+TU+RE, CUR+CU+BEU, PA+JI\u0218+TE, FLOA+RE.",
+    "Meserii \u2014 DOC+TOR, POM+PI+ER, BU+C\u0102+TAR, PO+LI+\u021aIST, PRO+FE+SOR, GR\u0102+DI+NAR."
+  ],
   "sunetul si litera partea 1": [
     "Cunosc vocalele \u2014 trasarea vocalelor A, E, I, O, U, \u0102, colorarea vocalei A dintr-un \u0219ir de litere, alegerea c\u0103su\u021belor cu vocale, unirea vocalei cu un cuv\u00e2nt care \u00eencepe cu ea \u0219i bifarea cuvintelor care \u00eencep cu A.",
     "Sunetul \u0219i litera M \u2014 trasare, c\u0103utarea literei M printre vocale, silabele MA, ME, MI, MO, MU \u0219i cuvintele MA-MA, MA-S\u0102, NU-ME, ME-RE.",
@@ -619,6 +631,36 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "cuvinte din silabe": {
+    intro:
+      "Zece fi\u0219e tematice \u00een care copilul cite\u0219te silabele, le une\u0219te \u00een minte, scrie cuv\u00e2ntul " +
+      "format \u0219i apoi trage o linie spre imaginea potrivit\u0103. Sinteza silabic\u0103 \u2014 adic\u0103 exact " +
+      "opera\u021bia invers\u0103 desp\u0103r\u021birii \u00een silabe \u2014 este pasul care transform\u0103 silabisirea \u00een " +
+      "citire adev\u0103rat\u0103. Fiecare fi\u0219\u0103 are o tem\u0103 proprie \u0219i \u0219ase cuvinte, de la cele mai " +
+      "simple, din dou\u0103 silabe, p\u00e2n\u0103 la cuvinte lungi de patru silabe (BI-CI-CLE-T\u0102, " +
+      "E-LI-COP-TER). Verificarea e imediat\u0103 \u0219i vizual\u0103: dac\u0103 imaginea se potrive\u0219te, cuv\u00e2ntul " +
+      "e corect.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "10 plan\u0219e A4 portret, c\u00e2te \u0219ase cuvinte pe pagin\u0103, grupate tematic: animale domestice, " +
+      "fructe, legume, animale s\u0103lbatice, iarna, \u0219coala, casa, transport, natura \u0219i meserii. " +
+      "Fiecare cuv\u00e2nt are caset\u0103 de scris \u0219i o imagine color de asociat, a\u0219ezat\u0103 \u00een partea de " +
+      "jos a paginii." },
+      { title: "Cum se folose\u0219te",
+        body: "Se poate lucra \u00een orice ordine \u2014 fi\u0219ele sunt independente, a\u0219a c\u0103 alege\u021bi tema care se " +
+      "potrive\u0219te cu ce \u00eenv\u0103\u021ba\u021bi \u00een s\u0103pt\u0103m\u00e2na respectiv\u0103. Cere\u021bi-i copilului s\u0103 rosteasc\u0103 " +
+      "silabele cu voce tare, apoi tot mai repede, p\u00e2n\u0103 c\u00e2nd cuv\u00e2ntul \u201ese aude\u201d singur. Dac\u0103 nu " +
+      "scrie \u00eenc\u0103 fluent, poate doar s\u0103 spun\u0103 cuv\u00e2ntul \u0219i s\u0103 trag\u0103 linia. Fi\u0219ele 8 \u0219i 9 sunt " +
+      "cele mai grele \u2014 con\u021bin cuvinte de patru silabe. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Sinteza silabic\u0103 \u2014 unirea silabelor \u00een cuv\u00e2nt",
+      "Citirea cuvintelor de 2\u20134 silabe",
+      "Asocierea cuv\u00e2nt\u2013imagine",
+      "\u00cembog\u0103\u021birea vocabularului pe teme",
+      "Scrierea cuvintelor cu litere de tipar"
+    ]
+  },
   "sunetul si litera partea 1": {
     intro:
       "Prima parte a abecedarului Kiddy MSK: paisprezece fi\u0219e care pornesc de la vocale \u0219i " +
