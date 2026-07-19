@@ -188,6 +188,22 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "gaseste litera partea 2": [
+    "Litera M — de la MĂR. Copilul trasează litera M punctată, apoi caută și colorează toate cercurile cu M dintre cele aproximativ 20 de buline cu litere amestecate.",
+    "Litera N — de la NOR. Norișorii zâmbitori cu curcubeu introduc litera N; urmează trasarea și colorarea celor șase cercuri cu N.",
+    "Litera O — de la OAIE. Oița pufoasă marchează litera O; forma rotundă e ușor de trasat, dar distractorii Q și D cer atenție.",
+    "Litera P — de la PURCEL. Purcelușul roz introduce litera P, cu trasare punctată și șase apariții de găsit printre D, B și R vizual apropiate.",
+    "Litera Q — de la pasărea QUAIL. Prepelița desenată însoțește litera Q — cea mai rară literă; șase cercuri cu Q de deosebit de O și K.",
+    "Litera R — de la RĂȚUȘCĂ. Rățușca galbenă introduce litera R, cu trasare și cinci cercuri cu R ascunse printre P, B și K.",
+    "Litera S — de la STELUȚE. Steluțele zâmbitoare marchează litera S; cinci apariții de colorat, cu Z drept capcană principală (forma în oglindă).",
+    "Litera T — de la TIGRU. Tigrul jucăuș introduce litera T; șase cercuri cu T de găsit printre I, Y și L cu forme înrudite.",
+    "Litera U — de la UMBRELĂ. Umbrela colorată însoțește litera U; cinci apariții de deosebit de V și O — diferența dintre fundul rotunjit și cel ascuțit.",
+    "Litera V — de la VEVERIȚĂ. Veverița cu ghindă introduce litera V, cu trasare și cinci cercuri cu V printre W, Y și U înșelătoare.",
+    "Litera W — de la WALKMAN. Walkman-ul retro cu căști marchează litera W; șase apariții de găsit, cu V-ul simplu drept distractor constant.",
+    "Litera X — de la radiografie (X-ray). Băiețelul cu radiografia introduce litera X; cinci cercuri cu X de deosebit de Y, K și V.",
+    "Litera Y — de la YO-YO. Yo-yo-ul verde introduce litera Y, cu trasare punctată și cinci apariții printre V, W și T cu brațe asemănătoare.",
+    "Litera Z — de la ZEBRĂ. Zebra în dungi încheie alfabetul: trasarea liniilor frânte ale literei Z și cinci cercuri de colorat, cu S în oglindă drept capcană.",
+  ],
   "gaseste litera": [
     "Litera A — de la ARICI. Copilul trasează litera A punctată, apoi caută și colorează toate cercurile cu A dintre cele aproximativ 20 de buline cu litere amestecate.",
     "Litera B — de la BROASCĂ. Trasare pe liniatură punctată și vânătoare de litere: toate cercurile cu B se colorează, celelalte rămân albe.",
@@ -645,6 +661,20 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "gaseste litera partea 2": {
+    intro: "Continuarea firească a setului „Găsește litera A–L”: paisprezece fișe pentru literele de la M la Z, pe același tipar-joc care le-a plăcut copiilor. Sus, litera de trasat pe liniatură punctată și o imagine-ancoră al cărei nume începe cu sunetul respectiv (M de la măr, T de la tigru, Z de la zebră), iar jos, aproximativ douăzeci de cercuri cu litere amestecate, dintre care se colorează doar cele cu litera căutată. Împreună cu prima parte, copilul parcurge tot alfabetul de bază în format de „vânătoare de litere”, cu distractori aleși special pentru confuziile tipice: V/W/Y, S/Z, O/Q.",
+    sections: [
+      { title: "Ce conține setul", body: "14 planșe A4 portret, câte una pentru fiecare literă de la M la Z, în ordine alfabetică. Fiecare fișă are caseta de trasare cu litera punctată pe liniatură, imaginea-ancoră cu formula „de la…” (măr, nor, oaie, purcel, prepeliță-quail, rățușcă, steluțe, tigru, umbrelă, veveriță, walkman, radiografie, yo-yo, zebră) și câmpul de căutare cu circa 20 de cercuri cu litere mari de tipar, dintre care 5–6 conțin litera-țintă. Literele rare Q, W, X și Y — greu de ilustrat în română — folosesc cuvinte împrumutate sau internaționale, o bună ocazie de conversație despre literele „musafir” din alfabetul nostru." },
+      { title: "Cum se folosește", body: "În continuarea primei părți, câte o literă pe zi, în ordinea paginilor. Copilul numește obiectul din imagine, pronunță apăsat primul sunet, trasează litera cu degetul de 2–3 ori, apoi cu creionul. La căutare, cereți-i să bifeze fiecare cerc verificat ca să nu sară rânduri, iar la final să numere câte litere a găsit. Perechile-capcană S/Z și V/W merită o discuție separată: așezați cele două fișe una lângă alta și comparați formele. Plastifiate, fișele se refolosesc cu marker ștergibil. Se descarcă individual ca JPG sau tot setul ca PDF A4." },
+    ],
+    skills: [
+      "Recunoașterea literelor mari de tipar M–Z",
+      "Asocierea literei cu sunetul inițial al cuvântului",
+      "Trasarea literelor pe liniatură punctată",
+      "Discriminarea vizuală a perechilor derutante (S/Z, V/W/Y, O/Q)",
+      "Atenția concentrată și scanarea sistematică a paginii",
+    ]
+  },
   "gaseste litera": {
     intro: "Douăsprezece fișe de recunoaștere a literelor, de la A la L, construite toate pe același tipar prietenos: sus, litera de trasat pe liniatură punctată și o imagine-ancoră al cărei nume începe cu sunetul respectiv (A de la arici, B de la broască, K de la kiwi), iar jos, aproximativ douăzeci de cercuri cu litere amestecate, dintre care copilul le colorează doar pe cele cu litera căutată. Formatul de „vânătoare de litere” transformă recunoașterea vizuală într-un joc, iar repetarea aceleiași structuri pe fiecare pagină îi dă copilului independență: după prima fișă, știe singur ce are de făcut.",
     sections: [
