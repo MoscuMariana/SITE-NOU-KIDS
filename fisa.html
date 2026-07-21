@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-adsense-account" content="ca-pub-3657163291978156">
+<meta name="google-adsense-account" content="ca-pub-1336256146659551">
+<meta name="google-adsense-account" content="ca-pub-7734923845574420">
 <title>Kiddy MSK — Vizualizare fișă</title>
 <meta name="description" content="Vizualizează și printează gratuit fișe de lucru educaționale pentru grădiniță și ciclul primar — matematică, citire, scriere, teme de sezon — de la Kiddy MSK.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -188,6 +190,18 @@ const data = {
    Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
    Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
 const PAGE_DESCRIPTIONS = {
+  "adunari si scaderi cu fructe": [
+    "Adunare cu mere — șase exerciții cu sume până la 10. Merele sunt grupate exact ca operația: primul grup, semnul plus, al doilea grup.",
+    "Adunare și scădere cu mere — exerciții alternate. La adunare grupele sunt separate de semnul plus, la scădere merele de scăzut sunt tăiate cu X.",
+    "Adunare cu căpșuni — șase exerciții cu sume până la 10, cu gruparea vizuală corespunzătoare fiecărei operații.",
+    "Adunare și scădere cu căpșuni — exerciții alternate, cu sume până la 10 și scăderi din numere de până la 10.",
+    "Adunare cu portocale — șase exerciții de adunare, cu cele două grupe clar despărțite de semnul plus.",
+    "Adunare și scădere cu portocale — exerciții alternate; la scădere, portocalele luate sunt barate ca să se vadă ce rămâne.",
+    "Scădere cu banane — șase exerciții. Bananele care se scad sunt tăiate cu X, iar copilul numără câte au rămas neatinse.",
+    "Adunare și scădere cu banane — exerciții alternate, cu numere până la 10.",
+    "Scădere cu mere — șase exerciții doar de scădere, cu merele de scăzut barate vizual.",
+    "Scădere cu căpșuni — șase exerciții de scădere, ultima fișă a setului, cu descăzuți de până la 10.",
+  ],
   "gaseste litera partea 2": [
     "Litera M — de la MĂR. Copilul trasează litera M punctată, apoi caută și colorează toate cercurile cu M dintre cele aproximativ 20 de buline cu litere amestecate.",
     "Litera N — de la NOR. Norișorii zâmbitori cu curcubeu introduc litera N; urmează trasarea și colorarea celor șase cercuri cu N.",
@@ -661,6 +675,20 @@ const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
    Dacă o fișă nu e în listă, se generează automat un text scurt
    din nivel + temă (vezi setDescription mai jos). */
 const SET_DESCRIPTIONS = {
+  "adunari si scaderi cu fructe": {
+    intro: "Zece fișe de adunare și scădere în concentrul 0–10, în care imaginea și operația spun exact același lucru. La adunare, fructele sunt așezate în două grupe despărțite de semnul plus, așa cum arată și exercițiul scris. La scădere, toate fructele sunt desenate, iar cele care se iau sunt tăiate cu un X — copilul vede concret ce dispare și numără ce rămâne. Patru fructe familiare (mere, căpșuni, portocale, banane) dau varietate fără să schimbe structura, iar toate rezultatele se încadrează între 1 și 10.",
+    sections: [
+      { title: "Ce conține setul", body: "10 planșe A4 portret, câte șase exerciții pe fișă. Trei fișe sunt numai de adunare, trei numai de scădere, iar patru combină cele două operații alternându-le, ca să antreneze trecerea de la o operație la alta. Fiecare fișă are antet cu spațiu pentru nume, instrucțiunea în română și o linie verde pentru răspuns. Toate sumele sunt mai mici sau egale cu 10 și nicio scădere nu dă zero sau rezultat negativ, așa că fișele se potrivesc exact peste programa de la grupa mare și clasa pregătitoare." },
+      { title: "Cum se folosește", body: "Prima dată, lăsați copilul să numere cu degetul pe imagine înainte de a se uita la cifre — așa leagă operația de cantitatea reală. La adunare, cereți-i să numere separat fiecare grup, apoi totalul. La scădere, întrebați-l „câte au fost la început?” și „câte am tăiat?”, abia apoi „câte au rămas?”. Fișele de adunare sunt cele mai ușoare, cele de scădere urmează, iar cele mixte se dau la final, când copilul recunoaște singur semnul. Plastifiate, se refolosesc cu marker ștergibil. Se descarcă individual ca JPG sau tot setul ca PDF A4." },
+    ],
+    skills: [
+      "Adunarea în concentrul 0–10 cu suport vizual",
+      "Scăderea prin eliminare, cu obiecte barate",
+      "Corespondența dintre imagine și operația scrisă",
+      "Recunoașterea și deosebirea semnelor + și −",
+      "Numărarea grupată și verificarea rezultatului",
+    ]
+  },
   "gaseste litera partea 2": {
     intro: "Continuarea firească a setului „Găsește litera A–L”: paisprezece fișe pentru literele de la M la Z, pe același tipar-joc care le-a plăcut copiilor. Sus, litera de trasat pe liniatură punctată și o imagine-ancoră al cărei nume începe cu sunetul respectiv (M de la măr, T de la tigru, Z de la zebră), iar jos, aproximativ douăzeci de cercuri cu litere amestecate, dintre care se colorează doar cele cu litera căutată. Împreună cu prima parte, copilul parcurge tot alfabetul de bază în format de „vânătoare de litere”, cu distractori aleși special pentru confuziile tipice: V/W/Y, S/Z, O/Q.",
     sections: [
