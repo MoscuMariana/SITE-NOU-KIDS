@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<script src="/cookie-consent.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-adsense-account" content="ca-pub-3657163291978156">
+<meta name="google-adsense-account" content="ca-pub-1336256146659551">
+<meta name="google-adsense-account" content="ca-pub-7734923845574420">
+<title>Kiddy MSK — Vizualizare fișă</title>
+<meta name="description" content="Vizualizează și printează gratuit fișe de lucru educaționale pentru grădiniță și ciclul primar — matematică, citire, scriere, teme de sezon — de la Kiddy MSK.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff8ef; --ink:#3a2e2a; --ink-soft:#7a6c62;
+    --gradi:#ff8a3d; --scoala:#2f9bd6; --accent:#ffc62b;
+    --shadow:0 10px 26px -12px rgba(58,46,42,.28);
+    --shadow-hover:0 18px 40px -14px rgba(58,46,42,.4);
+    --radius:24px;
+    --accent-theme:#ff8a3d; /* setat din JS în funcție de temă */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
+    line-height:1.5;min-height:100vh;
+    background-image:
+      radial-gradient(circle at 15% 6%, rgba(255,198,43,.2), transparent 36%),
+      radial-gradient(circle at 85% 5%, rgba(47,155,214,.16), transparent 38%),
+      radial-gradient(circle at 50% 96%, rgba(255,138,61,.12), transparent 42%);
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+
+  /* HEADER */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,248,239,.9);backdrop-filter:blur(12px);border-bottom:2px solid #f3e3d0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo-mark{width:46px;height:46px;display:grid;place-items:center}
+  .logo-mark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(58,46,42,.22))}
+  .logo-text{font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:var(--ink)}
+  .logo-text span{color:var(--gradi)}
+  .back-link{font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;text-decoration:none;color:var(--ink-soft);background:#fff;padding:9px 18px;border-radius:999px;transition:.2s;border:2px solid #f3e7d9}
+  .back-link:hover{color:var(--ink);border-color:var(--accent-theme)}
+
+  /* HEAD INFO */
+  .fisa-head{text-align:center;padding:34px 0 8px;scroll-margin-top:90px}
+  .lvl-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;color:#fff;padding:6px 16px;border-radius:999px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+  .fisa-head h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,42px);line-height:1.08}
+  .fisa-cat{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--accent-theme);margin-top:8px;display:block}
+  .fisa-desc{color:var(--ink-soft);font-size:17px;margin:14px auto 0;max-width:600px}
+  .fisa-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .tag-pill{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+
+  /* SLIDER */
+  .slider-wrap{margin:26px auto 0;max-width:760px}
+  .stage{
+    position:relative;background:#fff;border-radius:var(--radius);
+    box-shadow:var(--shadow);border:2px solid var(--accent-theme);
+    overflow:hidden;
+  }
+  .stage-inner{
+    position:relative;width:100%;aspect-ratio:1/1.414; /* A4 portret */
+    display:grid;place-items:center;background:#faf3ea;
+  }
+  .stage-inner img{width:100%;height:100%;object-fit:contain;display:none}
+  .stage-inner img.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .loading{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column;gap:14px;color:var(--ink-soft);font-weight:700}
+  .spin{width:42px;height:42px;border:4px solid #f0e3d3;border-top-color:var(--accent-theme);border-radius:50%;animation:rot 1s linear infinite}
+  @keyframes rot{to{transform:rotate(360deg)}}
+
+  /* counter pe imagine */
+  .page-count{position:absolute;top:14px;right:14px;background:rgba(58,46,42,.82);color:#fff;font-size:13px;font-weight:800;padding:5px 13px;border-radius:999px;z-index:5}
+
+  /* săgeți */
+  .nav-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:6;
+    width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--accent-theme);color:#fff;font-size:24px;line-height:1;
+    display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(58,46,42,.5);
+    transition:.18s;
+  }
+  .nav-arrow:hover{filter:brightness(.92);transform:translateY(-50%) scale(1.08)}
+  .nav-arrow:disabled{opacity:.3;cursor:not-allowed;transform:translateY(-50%)}
+  .nav-arrow.prev{left:12px}
+  .nav-arrow.next{right:12px}
+
+  /* acțiuni sub slide */
+  .page-desc{text-align:left;margin:18px auto 0;max-width:620px;background:#fff;border-radius:16px;padding:18px 22px;box-shadow:0 4px 14px -10px rgba(58,46,42,.3);border:1px solid #f3e7d9;border-left:5px solid var(--accent-theme)}
+  .page-desc h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:var(--accent-theme);margin-bottom:6px}
+  .page-desc p{font-size:15.5px;color:var(--ink-soft);line-height:1.6;font-weight:500}
+  .slide-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0 0}
+  .btn{font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;border:none;border-radius:14px;padding:13px 22px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s;text-decoration:none}
+  .btn-dl-page{background:#f1e7db;color:var(--ink)}
+  .btn-dl-page:hover{background:#e8d9c6}
+  .btn-dl-pdf{background:var(--accent-theme);color:#fff;box-shadow:0 6px 16px -8px rgba(58,46,42,.5)}
+  .btn-dl-pdf:hover{filter:brightness(.93)}
+
+  /* thumbnails */
+  .thumbs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px 0 0}
+  .thumb{width:62px;height:88px;border-radius:10px;overflow:hidden;cursor:pointer;border:3px solid transparent;background:#faf3ea;transition:.15s;flex:0 0 auto}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb.active{border-color:var(--accent-theme)}
+  .thumb:hover{transform:translateY(-3px)}
+
+  /* descriere generală set */
+  .set-desc{margin:40px auto 0;max-width:680px;background:#fff;border-radius:var(--radius);padding:30px 34px;box-shadow:var(--shadow);border:1px solid #f3e7d9;border-top:5px solid var(--accent-theme)}
+  .set-desc h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;color:var(--accent-theme);margin-bottom:14px}
+  .set-desc h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin:20px 0 6px}
+  .set-desc p{font-size:16px;color:var(--ink-soft);line-height:1.65}
+  .set-desc p.lead{font-size:17px;color:var(--ink);font-weight:600;line-height:1.6}
+  .set-desc ul.skills{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .set-desc ul.skills li{position:relative;padding-left:30px;font-size:15.5px;color:var(--ink-soft);line-height:1.5}
+  .set-desc ul.skills li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;display:grid;place-items:center;background:var(--accent-theme);color:#fff;border-radius:50%;font-size:12px;font-weight:800}
+  .set-desc p.tip{margin-top:22px;background:#faf3ea;border-radius:14px;padding:14px 16px;font-size:15px;color:var(--ink);border:1px dashed #e7d6c2}
+
+  /* error */
+  .error-box{text-align:center;padding:70px 20px;color:var(--ink-soft)}
+  .error-box .big{font-size:64px;margin-bottom:14px}
+  .error-box a{color:var(--accent-theme);font-weight:700}
+
+  footer{background:var(--ink);color:#f6ece0;padding:30px 0;margin-top:50px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+  .foot-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .foot-logo .logo-text{color:#fff;font-size:21px}
+  .foot-logo .logo-text span{color:var(--accent)}
+  footer p{font-size:14px;opacity:.7}
+
+  @media(max-width:640px){
+    .logo-text{font-size:17px}
+    .nav-arrow{width:42px;height:42px;font-size:20px}
+    .btn{padding:12px 18px;font-size:14px}
+    .thumb{width:52px;height:74px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap topbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark"><img src="https://kiddy-msk.com/logo.png" alt="Kiddy MSK" onerror="this.style.display='none'"></span>
+      <span class="logo-text">Kiddy<span> MSK</span></span>
+    </a>
+    <a class="back-link" href="index.html">← Înapoi la materiale</a>
+  </div>
+</header>
+
+<main class="wrap" id="content">
+  <!-- populat din JS -->
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <a class="foot-logo" href="index.html">
+      <span class="logo-mark"><img src="https://kiddy-msk.com/logo.png" alt="Kiddy MSK" onerror="this.style.display='none'"></span>
+      <span class="logo-text">Kiddy<span> MSK</span></span>
+    </a>
+    <p>© Kiddy MSK — Materiale educaționale</p>
+  </div>
+</footer>
+
+<script>
+/* ===== Date partajate cu index.html ===== */
+const ICONS={primavara:"🌸",vara:"☀️",toamna:"🍂",iarna:"❄️",alfabet:"🔤",numere:"🔢",matematica:"➕",engleza:"🇬🇧",animale:"🐾",diplome:"🏆",sarbatori:"🎄"};
+const THEME_NAME={primavara:"Primăvara",vara:"Vara",toamna:"Toamna",iarna:"Iarna",alfabet:"Alfabet",numere:"Numere",matematica:"Matematică",engleza:"Engleză",animale:"Animale",diplome:"Diplome",sarbatori:"Sărbători"};
+const THEME_COLOR={primavara:"#ff6f91",vara:"#ffb02e",toamna:"#e07a3c",iarna:"#4cc4d6",alfabet:"#9b5de5",numere:"#3fa7d6",matematica:"#2fb38a",engleza:"#5468ff",animale:"#ff8a3d",diplome:"#e8b23a",sarbatori:"#e0556b"};
+const THEME_BG={primavara:"#fff0f3",vara:"#fff6e3",toamna:"#fdeede",iarna:"#e4f8fb",alfabet:"#f4ecff",numere:"#e6f4fb",matematica:"#e3f7f0",engleza:"#ecefff",animale:"#fff0e3",diplome:"#fdf4dd",sarbatori:"#fdebee"};
+const LVL_NAME={"grupa-mica":"Grupa mică","grupa-mijlocie":"Grupa mijlocie","grupa-mare":"Grupa mare","pregatitoare":"Pregătitoare","clasa-1":"Clasa 1","clasa-2":"Clasa 2","clasa-3":"Clasa 3","clasa-4":"Clasa 4"};
+function lvlGroup(l){return (l||"").startsWith("clasa")||l==="pregatitoare"?"scoala":"gradi";}
+
+/* ===== Citește parametrii din URL ===== */
+const q = new URLSearchParams(location.search);
+const data = {
+  title: q.get("title") || "Fișă",
+  cat:   q.get("cat")   || "",
+  desc:  q.get("desc")  || "",
+  pages: parseInt(q.get("pages")) || 0,
+  level: q.get("level") || "",
+  themes:(q.get("themes")||"").split(",").filter(Boolean),
+  img:   q.get("img")   || "",
+  pdf:   q.get("pdf")   || "",
+  pdf2:  q.get("pdf2")  || ""
+};
+
+/* ===== Descrieri pe pagini (opțional) =====
+   Cheia = numele PDF-ului (fără cale și fără extensie).
+   Dacă fișa curentă se regăsește aici, fiecare pagină va primi descrierea ei.
+   Pentru restul fișelor, sub slider apare doar "Pagina X din Y". */
+const PAGE_DESCRIPTIONS = {
+  "adunari si scaderi cu fructe": [
+    "Adunare cu mere — șase exerciții cu sume până la 10. Merele sunt grupate exact ca operația: primul grup, semnul plus, al doilea grup.",
+    "Adunare și scădere cu mere — exerciții alternate. La adunare grupele sunt separate de semnul plus, la scădere merele de scăzut sunt tăiate cu X.",
+    "Adunare cu căpșuni — șase exerciții cu sume până la 10, cu gruparea vizuală corespunzătoare fiecărei operații.",
+    "Adunare și scădere cu căpșuni — exerciții alternate, cu sume până la 10 și scăderi din numere de până la 10.",
+    "Adunare cu portocale — șase exerciții de adunare, cu cele două grupe clar despărțite de semnul plus.",
+    "Adunare și scădere cu portocale — exerciții alternate; la scădere, portocalele luate sunt barate ca să se vadă ce rămâne.",
+    "Scădere cu banane — șase exerciții. Bananele care se scad sunt tăiate cu X, iar copilul numără câte au rămas neatinse.",
+    "Adunare și scădere cu banane — exerciții alternate, cu numere până la 10.",
+    "Scădere cu mere — șase exerciții doar de scădere, cu merele de scăzut barate vizual.",
+    "Scădere cu căpșuni — șase exerciții de scădere, ultima fișă a setului, cu descăzuți de până la 10.",
+  ],
+  "gaseste litera partea 2": [
+    "Litera M — de la MĂR. Copilul trasează litera M punctată, apoi caută și colorează toate cercurile cu M dintre cele aproximativ 20 de buline cu litere amestecate.",
+    "Litera N — de la NOR. Norișorii zâmbitori cu curcubeu introduc litera N; urmează trasarea și colorarea celor șase cercuri cu N.",
+    "Litera O — de la OAIE. Oița pufoasă marchează litera O; forma rotundă e ușor de trasat, dar distractorii Q și D cer atenție.",
+    "Litera P — de la PURCEL. Purcelușul roz introduce litera P, cu trasare punctată și șase apariții de găsit printre D, B și R vizual apropiate.",
+    "Litera Q — de la pasărea QUAIL. Prepelița desenată însoțește litera Q — cea mai rară literă; șase cercuri cu Q de deosebit de O și K.",
+    "Litera R — de la RĂȚUȘCĂ. Rățușca galbenă introduce litera R, cu trasare și cinci cercuri cu R ascunse printre P, B și K.",
+    "Litera S — de la STELUȚE. Steluțele zâmbitoare marchează litera S; cinci apariții de colorat, cu Z drept capcană principală (forma în oglindă).",
+    "Litera T — de la TIGRU. Tigrul jucăuș introduce litera T; șase cercuri cu T de găsit printre I, Y și L cu forme înrudite.",
+    "Litera U — de la UMBRELĂ. Umbrela colorată însoțește litera U; cinci apariții de deosebit de V și O — diferența dintre fundul rotunjit și cel ascuțit.",
+    "Litera V — de la VEVERIȚĂ. Veverița cu ghindă introduce litera V, cu trasare și cinci cercuri cu V printre W, Y și U înșelătoare.",
+    "Litera W — de la WALKMAN. Walkman-ul retro cu căști marchează litera W; șase apariții de găsit, cu V-ul simplu drept distractor constant.",
+    "Litera X — de la radiografie (X-ray). Băiețelul cu radiografia introduce litera X; cinci cercuri cu X de deosebit de Y, K și V.",
+    "Litera Y — de la YO-YO. Yo-yo-ul verde introduce litera Y, cu trasare punctată și cinci apariții printre V, W și T cu brațe asemănătoare.",
+    "Litera Z — de la ZEBRĂ. Zebra în dungi încheie alfabetul: trasarea liniilor frânte ale literei Z și cinci cercuri de colorat, cu S în oglindă drept capcană.",
+  ],
+  "gaseste litera": [
+    "Litera A — de la ARICI. Copilul trasează litera A punctată, apoi caută și colorează toate cercurile cu A dintre cele aproximativ 20 de buline cu litere amestecate.",
+    "Litera B — de la BROASCĂ. Trasare pe liniatură punctată și vânătoare de litere: toate cercurile cu B se colorează, celelalte rămân albe.",
+    "Litera C — de la CĂPȘUNĂ. Fișă cu fotografie reală de căpșuni; copilul trasează C-ul și identifică aparițiile literei printre distractori rotunzi ca O și Q.",
+    "Litera D — de la DOVLEAC. Dovleacul zâmbitor introduce litera D; urmează trasarea și colorarea cercurilor cu D, presărate printre B, O și alte forme asemănătoare.",
+    "Litera E — de la ELEFANT. Elefănțelul acuarelat însoțește trasarea literei E și căutarea celor cinci cercuri cu E din pagină.",
+    "Litera F — de la FLOARE. Floarea roz marchează litera F; fișa conține șase apariții ale literei F de găsit și colorat, cu E și T drept capcane.",
+    "Litera G — de la GĂRGĂRIȚĂ. Gărgărița simpatică introduce litera G, cu trasare punctată și șase cercuri cu G ascunse printre C, Q și O.",
+    "Litera H — de la HIPOPOTAM. Hipopotamul gri prezintă litera H; copilul o trasează și colorează cercurile cu H, deosebindu-le de N și R.",
+    "Litera I — de la INIMĂ. Inima roșie desenată cu creionul însoțește litera I — cea mai simplă formă de trasat, dar cu distractori vicleni: J, L, T și Y.",
+    "Litera J — de la JAGUAR. Puiul de jaguar pătat introduce litera J, cu trasare și cinci cercuri cu J de descoperit.",
+    "Litera K — de la KIWI. Fotografia cu kiwi tăiat în formă de inimă marchează litera K; cinci apariții de găsit, cu Y, V și X vizual apropiate drept capcane.",
+    "Litera L — de la LAMPĂ. Veioza albastră încheie setul cu litera L: trasare pe liniatură și cercuri cu L de colorat printre I, J și T.",
+  ],
+  "cuvinte din silabe": [
+    "Cuvinte cu 2 silabe \u2014 C\u00c2I+NE, PA+R\u0102, MOR+COV, VUL+PE, CAR+TE, MA+S\u0102, cu \u0219ase imagini de asociat.",
+    "Cuvinte cu 2 silabe \u2014 VA+C\u0102, PRU+N\u0102, CEA+P\u0102, A+RICI, CRE+ION, SCA+UN.",
+    "Cuvinte cu 2 silabe \u2014 OA+IE, AR+DEI, \u0218AR+PE, FU+LAR, PE+NAR, U+\u0218\u0102.",
+    "Cuvinte cu 2 silabe \u2014 CA+PR\u0102, VAR+Z\u0102, BROAS+C\u0102, M\u0102+NU\u0218I, CA+IET, CO+VOR.",
+    "Cuvinte cu 2 silabe \u2014 RA+\u021a\u0102, DO+VLEAC, BR\u0102+DU\u021a, TA+BL\u0102, CO+PAC, FLOA+RE.",
+    "Cuvinte cu 3 silabe \u2014 CI+RE+\u0218E, RO+\u0218I+E, Z\u0102+PA+D\u0102, FE+REAS+TR\u0102, MA+\u0218I+N\u0102, POM+PI+ER.",
+    "Cuvinte cu 3 silabe \u2014 BA+NA+N\u0102, IE+PU+RE, SA+NI+E, O+GLIN+D\u0102, A+VI+ON, BU+C\u0102+TAR.",
+    "Cuvinte cu 3 silabe \u2014 L\u0102+M\u00c2+IE, PA+TI+NE, P\u0102+DU+RE, FLU+TU+RE, PO+LI+\u021aIST, PRO+FE+SOR.",
+    "Recapitulare 2 \u0219i 3 silabe \u2014 PUR+CEL, GHIOZ+DAN, DOC+TOR, C\u0102P+\u0218U+N\u0102, CUR+CU+BEU, GR\u0102+DI+NAR.",
+    "Cuvinte cu 3 \u0219i 4 silabe \u2014 cele mai lungi din set: PA+JI\u0218+TE, VE+VE+RI+\u021a\u0102, BI+CI+CLE+T\u0102, A+U+TO+BUZ, CO+RA+BI+E, E+LI+COP+TER."
+  ],
+  "sunetul si litera partea 1": [
+    "Cunosc vocalele \u2014 trasarea vocalelor A, E, I, O, U, \u0102, colorarea vocalei A dintr-un \u0219ir de litere, alegerea c\u0103su\u021belor cu vocale, unirea vocalei cu un cuv\u00e2nt care \u00eencepe cu ea \u0219i bifarea cuvintelor care \u00eencep cu A.",
+    "Sunetul \u0219i litera M \u2014 trasare, c\u0103utarea literei M printre vocale, silabele MA, ME, MI, MO, MU \u0219i cuvintele MA-MA, MA-S\u0102, NU-ME, ME-RE.",
+    "Sunetul \u0219i litera N \u2014 trasare, discriminarea N de M (litere u\u0219or de confundat), silabele NA, NE, NI, NO, NU \u0219i cuvintele NU-ME, NO-RI, NU-C\u0102, LU-NA.",
+    "Sunetul \u0219i litera R \u2014 trasare, c\u0103utarea literei R printre cele \u00eenv\u0103\u021bate, silabele RA, RE, RI, RO, RU \u0219i cuvintele MA-RE, SA-RE, CAR-TE, NO-RI.",
+    "Sunetul \u0219i litera C \u2014 trasare \u0219i doar silabele CA, CO, CU, C\u0102 (grupurile CE \u0219i CI se \u00eenva\u021b\u0103 separat), cu cuvintele CA-S\u0102, NU-C\u0102, CAR-TE, LAC.",
+    "Sunetul \u0219i litera L \u2014 trasare, silabele LA, LE, LI, LO, LU \u0219i cuvintele LU-NA \u0219i LAC.",
+    "Sunetul \u0219i litera T \u2014 trasare, silabele TA, TE, TI, TO, TU \u0219i cuvintele TA-TA, CAR-TE, PAT.",
+    "Sunetul \u0219i litera S \u2014 trasare, silabele SA, SE, SI, SO, SU \u0219i cuvintele SO-RA, SA-RE, PI-SI-C\u0102, MA-S\u0102.",
+    "Sunetul \u0219i litera P \u2014 trasare, discriminarea P de R, silabele PA, PE, PI, PO, PU \u0219i cuvintele PI-SI-C\u0102 \u0219i PAT.",
+    "Recapitulare \u2014 citirea cuvintelor \u00eenv\u0103\u021bate, desp\u0103r\u021birea \u00een silabe, citirea a trei propozi\u021bii, num\u0103rarea cuvintelor din propozi\u021bie \u0219i dou\u0103 exerci\u021bii de tip Adev\u0103rat / Fals.",
+    "Sunetul \u0219i litera V \u2014 trasare, silabele VA, VE, VI, VO, VU \u0219i cuvintele VA-C\u0102, VA-R\u0102, VUL-PE.",
+    "Sunetul \u0219i litera D \u2014 trasare, silabele DA, DE, DI, DO, DU \u0219i cuvintele DOI, DIN-TE, DU-LAP.",
+    "Sunetul \u0219i litera \u0218 \u2014 trasare, silabele \u0218A, \u0218E, \u0218I, \u0218O, \u0218U \u0219i cuvintele \u0218AR-PE, \u0218AP-C\u0102, \u0218O-SEA.",
+    "Sunetul \u0219i litera Z \u2014 trasare, silabele ZA, ZE, ZI, ZO, ZU \u0219i cuvintele ZMEU, A-ZI, ZI-LE."
+  ],
+  "sunetul si litera partea 2": [
+    "Sunetul \u0219i litera B \u2014 trasare, silabele BA, BE, BI, BO, BU \u0219i cuvintele BU-NIC, BAN-C\u0102, BRAD.",
+    "Sunetul \u0219i litera F \u2014 trasare, silabele FA, FE, FI, FO, FU \u0219i cuvintele FA-T\u0102, FRA-TE, FLOA-RE.",
+    "Sunetul \u0219i litera G \u2014 trasare \u0219i doar silabele GA, GO, GU, G\u0102 (grupurile GE \u0219i GI se \u00eenva\u021b\u0103 separat), cu cuvintele GARD, GAL-BEN, GOL.",
+    "Sunetul \u0219i litera H \u2014 trasare, silabele HA, HE, HI, HO, HU \u0219i cuvintele HAI-N\u0102, HAR-T\u0102, HA-LAT.",
+    "Sunetul \u0219i litera J \u2014 trasare, silabele JA, JE, JI, JO, JU \u0219i cuvintele JOC, JOI, JAR.",
+    "Sunetul \u0219i litera \u021a \u2014 trasare, silabele \u021aA, \u021aE, \u021aI, \u021aO, \u021aU \u0219i cuvintele A-\u021a\u0102, FA-\u021a\u0102, BRA\u021a.",
+    "Sunetul \u0219i litera X \u2014 liter\u0103 rar\u0103 \u00een limba rom\u00e2n\u0103, prezent\u0103 mai ales \u00een cuvinte \u00eemprumutate: silabele XA, XE, XI, XO, XU \u0219i cuvintele TA-XI, XI-LO-FON.",
+    "Sunetul \u0219i litera K \u2014 tot o liter\u0103 rar\u0103, din cuvinte \u00eemprumutate: silabele KA, KE, KI, KO, KU \u0219i cuvintele KA-RA-TE, KI-WI.",
+    "Sunetele \u00ce \u0219i \u00c2 \u2014 trasarea literei \u00c2 \u0219i regula de scriere: \u00c2 \u00een interiorul cuv\u00e2ntului (M\u00c2N\u0102, R\u00c2U, P\u00c2INE), \u00ce la \u00eenceput sau la sf\u00e2r\u0219it (\u00ceN, A COBOR\u00ce).",
+    "Recapitulare M\u2013P \u2014 cuvinte cu literele M, N, R, C, L, T, S, P: citire, desp\u0103r\u021bire \u00een silabe, num\u0103rarea silabelor, Adev\u0103rat / Fals \u0219i completarea a dou\u0103 propozi\u021bii dintr-o banc\u0103 de cuvinte.",
+    "Recapitulare V\u2013H \u2014 cuvinte cu literele V, D, \u0218, Z, B, F, G, H, cu acelea\u0219i cinci tipuri de exerci\u021bii \u0219i propozi\u021bii de completat.",
+    "Recapitulare J\u2013\u00c2 \u2014 cuvinte cu literele J, \u021a, X, K, \u00ce, \u00c2, inclusiv cele mai lungi din set (XILOFON, KARATE), cu num\u0103rarea silabelor \u0219i completarea propozi\u021biilor.",
+    "Citesc propozi\u021bii scurte \u2014 citirea a trei propozi\u021bii, num\u0103rarea cuvintelor, Adev\u0103rat / Fals, completarea din banca de cuvinte \u0219i a\u0219ezarea a trei propozi\u021bii \u00een ordinea fireasc\u0103 a ac\u021biunilor.",
+    "Propozi\u021bii cu punctua\u021bie \u2014 citirea cu intona\u021bie dup\u0103 semnul final, alegerea semnului potrivit (. ! ?), scrierea unei propozi\u021bii proprii, recunoa\u0219terea tipului de propozi\u021bie \u0219i formarea unei propozi\u021bii din cuvinte date.",
+    "Citesc \u0219i \u00een\u021beleg un text scurt \u2014 un text de patru propozi\u021bii despre Ana \u0219i familia ei, cu \u00eentreb\u0103ri de \u00een\u021belegere, Adev\u0103rat / Fals, g\u0103sirea unui cuv\u00e2nt cu trei silabe \u0219i ordonarea evenimentelor."
+  ],
+  "animale fise de descriere": [
+    "Plan\u0219a \u201eURS\u201d \u2014 Ursul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eGIRAFA\u201d \u2014 Girafa \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eC\u00c2INE\u201d \u2014 C\u00e2inele \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201ePISICA\u201d \u2014 Pisica \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVACA\u201d \u2014 Vaca \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201ePORC\u201d \u2014 Porcul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eMIEL\u201d \u2014 Mielul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eLEU\u201d \u2014 Leul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eMAIMU\u021aA\u201d \u2014 Maimu\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVULPE\u201d \u2014 Vulpea \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eIEPURE\u201d \u2014 Iepurele \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eARICI\u201d \u2014 Ariciul \u00een mijlocul paginii, \u00eenconjurat de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eVEVERI\u021aA\u201d \u2014 Veveri\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE.",
+    "Plan\u0219a \u201eRA\u021aA\u201d \u2014 Ra\u021ba \u00een mijlocul paginii, \u00eenconjurat\u0103 de \u0219ase c\u0103su\u021be de completat: TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE."
+  ],
+  "mai mare mai mic": [
+    "Prima plan\u0219\u0103 de comparare \u2014 trei coloane de perechi de numere, cu c\u00e2te o c\u0103su\u021b\u0103 goal\u0103 \u00eentre ele pentru semnul potrivit.",
+    "A doua plan\u0219\u0103 de comparare, cu alte perechi de numere \u0219i aceea\u0219i a\u0219ezare pe trei coloane.",
+    "A treia plan\u0219\u0103 \u2014 exerci\u021bii noi de comparare, pentru consolidare.",
+    "A patra plan\u0219\u0103 de comparare a numerelor, cu perechi diferite de cele anterioare.",
+    "A cincea plan\u0219\u0103 \u2014 \u00eenc\u0103 un set de perechi de comparat.",
+    "Ultima plan\u0219\u0103 din set, pentru recapitulare final\u0103."
+  ],
+  "omida mancacioasa": [
+    "Grafomotricitate cu omida: \u0219ase trasee punctate diferite \u2014 zigzag, unde, bucle \u0219i spirale \u2014 pe care copilul le parcurge cu creionul.",
+    "Plan\u0219\u0103 de colorat: omizi printre lalele, cu soare, fluturi \u0219i o c\u0103p\u0219un\u0103 ascuns\u0103 \u00een iarb\u0103.",
+    "Plan\u0219\u0103 de colorat bogat\u0103 \u00een detalii: omid\u0103, fluturi, o p\u0103s\u0103ric\u0103 pe creang\u0103, ciuperci \u0219i o p\u00e2nz\u0103 de p\u0103ianjen plin\u0103 de bun\u0103t\u0103\u021bi.",
+    "\u0218irul numerelor 1\u201325: omizile acoper\u0103 numerele lipsit, iar copilul le scrie \u00een spa\u021biile libere, urm\u0103rind s\u0103ge\u021bile \u00een ambele sensuri.",
+    "Adun\u0103ri cu suport vizual \u2014 \u0219apte exerci\u021bii \u00een care se num\u0103r\u0103 omizile din fiecare grup \u0219i se scrie totalul \u00een c\u0103su\u021b\u0103.",
+    "Asociere triple\u0103: num\u0103rul, grupul de obiecte \u0219i cuv\u00e2ntul scris \u2014 se trag linii \u00eentre cele trei coloane, de la 1 la 10.",
+    "Fi\u0219\u0103 de calcule: c\u00e2te c\u0103p\u0219uni, buc\u0103\u021bi de ca\u0219caval \u0219i dulciuri a m\u00e2ncat omida, cu spa\u021biu de desenat la final."
+  ],
+  "numaratoare cu buburuze": [
+    "Cifrele 0\u20139 pe linii punctate \u2014 copilul traseaz\u0103 fiecare cifr\u0103 pornind din locul unde st\u0103 buburuza, exers\u00e2nd direc\u021bia corect\u0103 de scriere.",
+    "Dou\u0103sprezece buburuze de colorat, cu cifrele 1\u201312 punctate pe aripi: \u00eent\u00e2i se traseaz\u0103 num\u0103rul, apoi aripile se coloreaz\u0103 cu ro\u0219u \u0219i negru.",
+    "\u0218apte r\u00e2nduri de buburuze de num\u0103rat \u2014 copilul num\u0103r\u0103 g\u00e2zele din fiecare r\u00e2nd \u0219i scrie cifra \u00een c\u0103su\u021ba ro\u0219ie din dreapta.",
+    "Patru frunze cu buburuze \u0219i c\u00e2te trei numere al\u0103turi: se \u00eencercuie\u0219te num\u0103rul care arat\u0103 c\u00e2te buburuze stau pe fiecare frunz\u0103.",
+    "Asociere buburuz\u0103\u2013frunz\u0103: se num\u0103r\u0103 punctele de pe aripi (2\u20135) \u0219i se trage o linie spre frunza cu num\u0103rul potrivit.",
+    "A doua fi\u0219\u0103 de asociere buburuz\u0103\u2013frunz\u0103, cu valori mai variate: 1, 6, 7 \u0219i 8 puncte de num\u0103rat cu aten\u021bie.",
+    "Treisprezece buburuze \u00eempr\u0103\u0219tiate pe pagin\u0103 \u2014 copilul le une\u0219te pe cele care au acela\u0219i num\u0103r de puncte pe aripi.",
+    "Carduri de num\u0103rat: patru buburuze cu 0\u20137 puncte \u0219i c\u00e2te trei variante de r\u0103spuns; num\u0103rul corect se \u00eencercuie\u0219te sau se prinde cu cle\u0219ti\u0219orul de rufe.",
+    "A doua fi\u0219\u0103 de carduri, cu valori p\u00e2n\u0103 la 9 \u0219i variante de r\u0103spuns p\u00e2n\u0103 la 10.",
+    "Ultima fi\u0219\u0103 de carduri: 1, 3, 7 \u0219i chiar 10 puncte de num\u0103rat \u2014 pentru micii exper\u021bi \u00een buburuze."
+  ],
+  "casutele numerelor": [
+    "C\u0103su\u021bele lui 8 \u2014 nou\u0103 c\u0103su\u021be colorate cu adun\u0103ri cu termen lips\u0103 (5 + \u25a1 = 8, 1 + \u25a1 = 8...), cu axa numerelor 0\u20138 la baza paginii.",
+    "Gr\u0103dina lui 9 \u2014 perechi de flori \u00een ghiveci: prima floare poart\u0103 un num\u0103r, iar copilul scrie \u00een a doua c\u00e2t mai lipse\u0219te p\u00e2n\u0103 la 9.",
+    "C\u0103su\u021bele lui 10, prima variant\u0103 \u2014 nou\u0103 adun\u0103ri cu termen lips\u0103 p\u00e2n\u0103 la 10, fiecare c\u0103su\u021b\u0103 p\u0103zit\u0103 de o g\u00e2z\u0103 sau o p\u0103s\u0103ric\u0103.",
+    "C\u0103su\u021bele lui 10, a doua variant\u0103 \u2014 alte nou\u0103 combina\u021bii pentru consolidare, cu axa 0\u201310 drept sprijin vizual.",
+    "Prietenii lui 10 \u2014 anim\u0103lu\u021be curioase (brosc\u0103, pui\u0219or, iepura\u0219, veveri\u021b\u0103...) se i\u021besc de dup\u0103 t\u0103bli\u021be de lemn cu adun\u0103ri de completat p\u00e2n\u0103 la 10.",
+    "A doua fi\u0219\u0103 cu prietenii-anim\u0103lu\u021be \u0219i alte nou\u0103 exerci\u021bii \u2014 \u00eempreun\u0103, cele dou\u0103 pagini trec prin toate complementele lui 10."
+  ],
+  "alfabet englez de trasat": [
+    "Litera Aa — trasarea literei mari și mici cu numere de ordine și săgeți, apoi cuvintele ANT (furnică), ANGEL (înger) și APPLE (măr), cu imagini de colorat.",
+    "Litera Bb — BEAR (urs), BREAD (pâine) și BEE (albină); litera mare se scrie din trei mișcări, cea mică din două.",
+    "Litera Cc — CAKE (tort), CAR (mașină) și CACTUS; ambele forme ale literei se trasează dintr-o singură mișcare curbată.",
+    "Litera Dd — DRUM (tobă), DOOR (ușă) și DUCK (rățușcă).",
+    "Litera Ee — EARTH (Pământ), EGG (ou) și EAGLE (vultur); E mare are patru mișcări, cea mai complexă de până acum.",
+    "Litera Ff — FISH (pește), FLAG (steag) și FROG (broască).",
+    "Litera Gg — GRAPES (struguri), GIFT (cadou) și GOAT (capră).",
+    "Litera Hh — HOUSE (casă), HORSE (cal) și HAT (pălărie).",
+    "Litera Ii — ICE (gheață), IGLOO și INSECT (insectă); atenție la punctul literei mici, marcat separat.",
+    "Litera Jj — JAM (gem), JUICE (suc) și JEANS (blugi).",
+    "Litera Kk — KING (rege), KEYS (chei) și KITTEN (pisicuță); trei mișcări pentru fiecare formă.",
+    "Litera Ll — LEAF (frunză), LION (leu) și LEMON (lămâie); cea mai simplă literă de trasat din set.",
+    "Litera Mm — MAP (hartă), MOUSE (șoarece) și MONEY (bani); M mare cere patru mișcări.",
+    "Litera Nn — NET (plasă), NEST (cuib) și NIGHT (noapte).",
+    "Litera Oo — OWL (bufniță), ONION (ceapă) și ORANGE (portocală); un singur cerc, trasat de la dreapta spre stânga.",
+    "Litera Pp — pig (porc), pizza și pencil (creion); de aici, cuvintele sunt scrise cu litere mici.",
+    "Litera Qq — queen (regină), quail (prepeliță) și quilt (cuvertură).",
+    "Litera Rr — rose (trandafir), rabbit (iepure) și radio.",
+    "Litera Ss — sun (soare), shoes (pantofi) și snake (șarpe); ambele forme se trasează dintr-o singură mișcare șerpuită.",
+    "Litera Tt — tree (copac), tent (cort) și tiger (tigru).",
+    "Litera Uu — under (sub), umbrella (umbrelă) și ukulele.",
+    "Litera Vv — vines (viță), violin (vioară) și volcano (vulcan); două mișcări simple, în V.",
+    "Litera Ww — wolf (lup), watch (ceas) și whale (balenă); patru mișcări, cea mai laborioasă literă din set.",
+    "Litera Xx — x-ray (radiografie), xylophone (xilofon) și xerus (veveriță de pământ); două linii încrucișate."
+  ],
+  "fisa de trasare": [
+    "Trenulețul deschide setul cu linii drepte orizontale, apoi vin oblicele fluturașului și ale mașinuței și arcadele curcubeului — fiecare rând cu punct de Start și săgeată de direcție.",
+    "Autobuzul școlar, rățușca, steluța, ciupercuța, balena și iepurașul: linii drepte, arcade, zigzaguri și bucle în jos, tot cu Start marcat.",
+    "Racheta, norișorul, peștișorul, dinozaurul, înghețata și soarele: oblice, valuri mari, zigzaguri și forme de U — mișcări tot mai ample.",
+    "Pagina de finețe: spiralele melcului, arcadele buburuzei, valurile mici ale păsării, liniuțele țestoasei, zigzagul zmeului și buclele florii."
+  ],
+  "trasare de vara": [
+    "Rățușca cu pălărie pe plajă: copilul trasează contururile punctate din scenă, apoi cele cinci rânduri de modele — valuri, arcade, zigzag, creneluri și bucle.",
+    "Căluțul de mare cu ochelari în formă de inimioare: bucle, valuri mici, arcade, zigzag și creneluri sub scena de plajă.",
+    "Crabul vesel cu umbreluța de soare: aceleași cinci tipuri de linii, cu bucle mai strânse la primul rând.",
+    "Țestoasa cu placa de surf: rândurile de trasare încheie setul, cu bucle, valuri, arcade, zigzag și creneluri."
+  ],
+  "rainbow friends": [
+    "Rainbow Friends of 6: curcubeul cu numerele 0–3 și 3–6 pe cele două maluri; copilul completează perechile care fac împreună 6.",
+    "Rainbow Friends of 7: perechile lui 7, cu numerele 0–3 și 4–7 sub curcubeu.",
+    "Rainbow Friends of 8: zece propoziții numerice de completat cu perechile lui 8.",
+    "Rainbow Friends of 9: perechile lui 9, câte cinci pe fiecare coloană.",
+    "Rainbow Friends of 10: finalul seriei — perechile clasice ale lui 10, cu numerele 0–5 și 5–10 pe maluri."
+  ],
+  "scaderi cu fructe si legume": [
+    "Scăderi cu suport vizual în concentrul 2–5: pepeni (2−1), porumb (3−1), mere (4−3), lămâi (5−1) și căpșuni (4−2).",
+    "Scăderi până la 5, inclusiv cu rezultat zero: banane (3−2), mangostan (5−2), portocale (5−3), pere (4−4) și nuci de cocos (5−5).",
+    "Concentrul 7–9 cu legume: castraveți (7−2), cartofi (9−4), ardei galbeni (8−3), ardei iuți (8−5) și dovleci (7−3).",
+    "Tot 7–9, combinații noi: vinete (8−4), ciuperci (9−5), cepe (9−6), gogoșari (7−5) și cartofi mov (8−6).",
+    "Pagina-vârf, cu scăderi peste 10 și viețuitoare marine: meduze (11−7), crabi (15−6), peștișori (12−6) și caracatițe (11−5)."
+  ],
+  "number coloring": [
+    "Number Coloring cu cifra 5: scenă de plajă cu ursulețul în colac și iepurașul cu pepene; 4 culori după cod (1 yellow, 2 green, 3 blue, 4 brown).",
+    "Ananasul cu ochelari de soare: scenă de vară mai bogată, cu 5 culori după cod — se adaugă 5 pink."
+  ],
+  "hai sa numaram": [
+    "Numerele 0 și 1: puișorul cu cuibul gol (zero ouă!) și găinușa cu un singur ou — introducerea blândă a lui zero.",
+    "Numerele 2 și 3: doi puișori veseli în cuiburi, cu două, respectiv trei ouă de numărat.",
+    "Numerele 4 și 5: puișorul cu papion și cel cu floricică, cu patru și cinci ouă în cuiburi."
+  ],
+  "two digit subtraction": [
+    "20 de scăderi cu numere de două cifre, cu și fără împrumut: de la 24−12 și 47−10 până la 92−53, 81−49 și 80−46.",
+    "15 scăderi notate cu litere (a–o), plus secțiunea specială: rezultatul se scrie și în cuvinte, în engleză — cu exemplul rezolvat thirty-six."
+  ],
+  "prietenii lui 10 fructe": [
+    "Prietenii Mărului: 9 coșulețe cu mere — completează mărul gol ca suma să fie 10; axa numerelor 0–10 jos, ca sprijin.",
+    "Căpșuni Vesele: aceleași perechi până la 10, cu căpșuni zâmbitoare în coșulețe.",
+    "Pere Pereche: complementele lui 10 cu pere verzi prietenoase.",
+    "Portocale Istețe: ultima rundă de perechi până la 10, cu portocale rotunde și vesele."
+  ],
+  "prietenii lui 10 flori": [
+    "Ghivecele numerelor: 9 ghivece cu câte două flori — scrie în floarea goală numărul care completează suma până la 10.",
+    "Flori vesele până la 10: combinații noi de perechi, aceeași regulă, cu axa numerelor jos.",
+    "Prietenele lui 10: alte 9 perechi de completat, cu flori colorate.",
+    "Floricele până la 10: continuă antrenamentul complementelor cu flori roz, mov și galbene.",
+    "Grădina lui 10: ultima pagină de perechi până la 10 — grădina e completă!"
+  ],
+  "the skeletal system": [
+    "Fișa 1: oase ale membrelor — tibia, fibula, patella, carpals, metacarpals, phalanges, scapula, radius, clavicle, ulna; copilul încercuiește denumirea corectă pentru osul indicat de săgeată.",
+    "Fișa 2: oase ale trunchiului și capului — pelvis, ribs, femur, skull, spine, humerus, mandible, plus tarsals, metatarsals și phalanges la picior.",
+    "Cheia de răspunsuri pentru Fișa 1, cu variantele corecte evidențiate cu galben — pentru autoverificare sau pentru părinte.",
+    "Cheia de răspunsuri pentru Fișa 2, în același format, cu răspunsurile corecte marcate."
+  ],
+  "cercuri elemente grafice": [
+    "Cercuri ghidate cu punct de start și săgeți de direcție: capul ursulețului, gogoașa, mijlocul florii și ochii broscuței — cercuri mari și mici, cu linie întreruptă groasă.",
+    "Cercuri punctate de completat pe obiecte familiare: roțile mașinuței și ale bicicletei, cochilia melcului, soarele, mingea de fotbal, buburuza și ochelarii.",
+    "Cercuri de toate mărimile: hublourile submarinului, globul pământesc, globul de brad, aripile fluturașului, pălăria ciupercii și inima florii.",
+    "Aripile fluturașilor: bucle mari, curbate, trasate dintr-o singură mișcare amplă — trecerea de la cerc la ovalul lat, pregătire pentru literele rotunde."
+  ],
+  "matematica vesela cu inghetata": [
+    "Adunări cu înghețată fără trecere peste ordin: 2+1, 4+2, 5+3, 1+4 și altele — rezultatul se scrie în cercul de pe cornet.",
+    "Fișa 5 — adunări până la 10: 7+1, 2+6, 5+2, 0+4, 6+3, 1+5, 4+1, 3+4, tot pe cornete de înghețată.",
+    "Fișa 6 — adunări până la 10, inclusiv cu 0: 8+0, 3+5, 6+1, 2+7, 4+2, 1+8, 5+4, 0+6.",
+    "Fișa 7 — scăderi în concentrul 0–10: 9−2, 8−5, 7−3, 6−1, 5−4, 10−6, 4−2, 3−1."
+  ],
+  "adunari cu stelute": [
+    "Patru steluțe cu numărul-țintă în mijloc (12, 11, 13, 15): copilul completează cercurile goale astfel încât fiecare adunare de pe brațe să dea rezultatul din centru.",
+    "Alte patru steluțe, cu țintele 10, 12, 14 și 16 — aceeași regulă, combinații noi de termeni lipsă."
+  ],
+  "wild animals coloring": [
+    "Elephant — elefănțelul cu urechi uriașe și trompă răsucită, forme mari și clare, perfecte pentru primele colorări.",
+    "Lion — puiul de leu cu coamă bogată și ochi mari; cuvântul LION scris cu litere de contur, de colorat și el.",
+    "Monkey — maimuțica veselă pe leagăn, printre frunze de junglă; multe detalii mici pentru mânuțe pricepute.",
+    "Koala Bear — koala adormită pe creanga de eucalipt, cu frunze de colorat de jur împrejur.",
+    "Polar Bear — ursul polar în peisajul arctic, cu gheață și plante polare pe fundal.",
+    "Gorilla — gorila care ronțăie o gustare între brazi; blană cu multe linii, o provocare plăcută.",
+    "Snake — șarpele încolăcit, cu zeci de solzi de colorat individual — pagina cea mai migăloasă din set."
+  ],
+  "matematica distractiva clasa 3": [
+    "Fișa 1: înmulțiri din tabla lui 2, 3, 7, 9 și 10, împărțiri (30÷6, 72÷9, 81÷9) și adunări/scăderi cu numere de 3 cifre, cu trecere peste ordin.",
+    "Fișa 2: înmulțiri cu 4, 6, 8, 9 și 10, împărțiri simple, plus adunări de tip 264+254 și scăderea-capcană 881−772.",
+    "Fișa 3: accent pe împărțiri (15÷5, 24÷6, 32÷4, 54÷6, 63÷9), completate cu înmulțiri mici și calcule cu numere de 3 cifre.",
+    "Fișa 4: împărțiri și înmulțiri de bază, apoi scăderi cu numere de 3 cifre (534−116, 541−203, 566−471) pentru consolidare."
+  ],
+  "trenuletul cititorilor": [
+    "Trenulețul cu cinci vagoane și cuvintele unt, trei, tun, tir și tartă; copilul decupează imaginile de jos și le lipește pe vagonul potrivit."
+  ],
+  "masurare in centimetri": [
+    "Opt morcovi de măsurat cu rigla desenată alături (0–10 cm); răspunsul se scrie în căsuța de sub fiecare morcov.",
+    "Opt știuleți de porumb de diferite înălțimi, fiecare cu rigla lui; aceeași sarcină, cu un strop de dificultate în plus la citirea gradațiilor."
+  ],
+  "adunari si scaderi de vara": [
+    "Mega-fișă cu copiii la plajă: adunări și scăderi rapide, coloane până la 20, exerciții mixte și o problemă cu scoici.",
+    "Mega-fișă cu pisicuțele la plajă: adunări și scăderi până la 20, plus problema pisicilor Mia și Tom.",
+    "Mega-fișă cu cățelușii la plajă: calcule până la 20 și problema cățeilor Max și Luna cu mingile."
+  ],
+  "planse de citire animale": [
+    "Purcelul roz: cinci propoziții scurte cu litere mari de tipar, numerotate, cu purceluși jucăuși în noroi.",
+    "Cățelul: cinci propoziții simple despre prietenul patruped, cu ilustrație de colorat privirea.",
+    "Pisica: cinci propoziții cu cuvântul-cheie evidențiat color, despre pisica blândă care prinde șoareci."
+  ],
+  "scoici vesele complemente": [
+    "Scrie numărul lipsă pentru a obține 6 — perechi de scoici cu axa numerelor 0–6 ca sprijin.",
+    "Complemente până la 7: scrie în scoica goală cât mai lipsește până la 7.",
+    "Complemente până la 8, cu axa numerelor 0–8 la baza paginii.",
+    "Complemente până la 9: de la 1+? până la 0+?, cu verificare pe axă.",
+    "Complemente până la 10 — perechile care formează zecea, temelia calculului rapid."
+  ],
+  "emotii in engleza": [
+    "HAPPY: poster cu copiii bucuroși și fraza-starter We feel happy when… pentru discuții.",
+    "SAD: poster cu norișorii triști și ploaia de lacrimi, cu fraza We feel sad when…",
+    "ANGRY: poster cu norii de furtună și fulgere, cu fraza We feel angry when…",
+    "SCARED: poster cu fantomițe prietenoase și lanterna de curaj, cu fraza We feel scared when…",
+    "SHY: poster cu inimioare rușinoase și obraji îmbujorați, cu fraza We feel shy when…",
+    "PROUD: poster cu trofee, medalii și zâmbete mândre, cu fraza We feel proud when…"
+  ],
+  "oitele dupa numar": [
+    "Cinci țarcuri cu numerele 1–5: copilul lipește în fiecare țarc atâtea oițe cât arată numărul.",
+    "Pagina cu oițe de decupat — trei grupe a câte 18 oițe pufoase, gata de foarfecă și lipici."
+  ],
+  "matematica in vacanta": [
+    "Operații în cadrul 30: adunări și scăderi (7+15, 28−13) pe cartonașe cu peștișori, steluțe de mare și scoici.",
+    "Operații în cadrul 30, varianta a doua: 12+15, 26−11 și alte 18 calcule cu decor de plajă.",
+    "Operații în cadrul 40: adunări și scăderi (23+14, 38−16) cu balene, delfini și castele de nisip.",
+    "Operații în cadrul 40, varianta a doua: 18+14, 35−8 și alte calcule în format compact de vacanță."
+  ],
+  "coloreaza si descopera": [
+    "Planșă caută-și-găsește cu piticii grădinari: colorează scena și găsește cele 12 obiecte din listă.",
+    "Planșă caută-și-găsește cu copiii la plajă: castel de nisip, zmeu, barcă și 12 obiecte de descoperit.",
+    "Planșă caută-și-găsește cu pisicuțele la plajă: colorează și găsește mingea, umbrela, scoica și celelalte obiecte."
+  ],
+  "numara de vara": [
+    "Numără elementele de vară din fiecare rând — înghețate, mingi, papuci, ochelari, gălețuse — și încercuiește numărul corect.",
+    "Numără scoicile din fiecare gălețușă și încercuiește cifra potrivită (2–9).",
+    "Numără sâmburii din jumătățile de măr și încercuiește numărul corect.",
+    "Numără sâmburii din feliile de pepene și încercuiește cifra potrivită."
+  ],
+  "provocare la scadere": [
+    "Scăderi în concentrul 0–10 (9−3, 10−5), pe trei coloane cu bufnițe și cerc de scor.",
+    "Scăderi în concentrul 0–12 (12−7, 11−6) — primul pas peste 10.",
+    "Scăderi cu numere din două cifre (81−22, 76−24), inclusiv cu împrumut.",
+    "Provocarea finală: scăderi ca 96−48, 94−45 și 99−37, pentru micii campioni la calcul."
+  ],
+  "sa numaram": [
+    "Numără merele, steluțele, fluturii, creioanele, baloanele și autobuzul, apoi încercuiește cifra corectă (1–7).",
+    "Numără căpșunile, soarele, floricelele, gărgărițele, peștișorii și trenulețul, apoi alege numărul potrivit.",
+    "Numără curcubeiele, cireșele, albinuțele, zmeiele, briosele și racheta, apoi încercuiește cifra corectă."
+  ],
+  "adunari pana la 5": [
+    "10 adunări ilustrate cu mere, steluțe, baloane, flori, peștișori și inimioare — numără și completează rezultatul.",
+    "10 adunări cu gărgărițe, zmeie, briose, curcubeie și albinuțe — toate cu rezultate până la 5.",
+    "10 adunări cu mere, baloane, rățuște, ciupercuțe și melcișori — numără, scrie și apoi colorează desenele."
+  ],
+  "numere lipsa set 2": [
+    "Completează numerele lipsă de la 1 la 20, scrise pe mere roșii zâmbitoare, plus provocarea bonus cu tot șirul.",
+    "Missing Numbers (engleză): completează șirul 1–50 pe rânduri colorate, apoi găsește și încercuiește în grilă cele 15 numere bonus."
+  ],
+  "adunare cu bufnite": [
+    "Adunare ușoară: zeci întregi plus unități (30+8, 70+6) — 30 de exerciții de încălzire, contra cronometru.",
+    "Adunare cu zeci: numere ca 45+7, 35+20, 25+12 — 30 de exerciții cu treceri simple peste ordin.",
+    "Adunare până la 100: sume cu numere din două cifre (19+20, 37+19, 56+17) — 30 de exerciții pe coloane.",
+    "Antrenament la adunare: calcule mai solicitante (65+19, 64+28, 46+28), cu cerc de scor la finalul fiecărei coloane.",
+    "Provocare la adunare: cele mai grele sume ale setului (76+24, 90+49, 52+49) — folosește strategia ta preferată!"
+  ],
+  "antrenament de vara la calcul": [
+    "Adunări în concentrul 0–19, pe trei coloane cu decor de plajă: castel de nisip, ananas cu ochelari, umbreluță.",
+    "Adunări până la 19, în trei coloane tematice de vară: pepene, ananas și șezlong cu umbrelă.",
+    "Scăderi în concentrul 0–10, pe trei coloane vesele cu crab, înghețată și minge de plajă. (Notă: antetul paginii menționează adunarea, dar exercițiile sunt de scădere.)",
+    "Scăderi pentru clasa pregătitoare, în concentrul 0–20: de la 5−1 până la 20−10."
+  ],
+  "numere lipsa de vara": [
+    "Completează numerele lipsă de la 1 la 20 pe mingi, scoici, felii de pepene, steluțe de mare și gălețușe, apoi scrie tot șirul în provocarea bonus.",
+    "Completează numerele lipsă de la 1 la 30 și rezolvă provocarea bonus: scrierea întregului șir în ordine."
+  ],
+  "traseaza si coloreaza vara": [
+    "Trasează liniile punctate și colorează peisajul de plajă: soare, zmeu, palmier, barcă, castel de nisip și pepene zâmbitor.",
+    "Trasează și colorează peisajul de vară cu băiețel la plajă: barcă cu pânze, cufăr cu comori, bicicletă și skateboard.",
+    "Trasează liniile punctate și colorează peisajul magic de vară cu unicorni, curcubeu și castel.",
+    "Trasează și colorează pisicuțele la picnic: fântână arteziană, coș de picnic, pepene și pisica relaxată pe șezlong."
+  ],
+  "flori cu numere si albinuta": [
+    "Flori roz cu numerele 1–10, cu contur punctat pentru decupare — perfecte pentru jocuri de numerație și decor.",
+    "Albinuța Kiddy, mascota noastră, în format mare de decupat — pentru decorarea clasei sau a colțului de învățare."
+  ],
+  "count and choose set 1": [
+    "Summer: numără palmierii, floarea-soarelui, surferii, scoicile și înghețatele, apoi încercuiește cifra corectă.",
+    "Summer: numără cocktailurile, umbreluțele, bărcuțele, lămâile și fluturii, apoi alege numărul potrivit.",
+    "Toys and Games: numără jucăriile — yo-yo, căluți de carusel, rachete, zaruri, unicorni și roboței.",
+    "Cute Animals: numără animăluțele — șoriceii, tigrișorii, rățuștele, koala, păsărelele și bufnițele."
+  ],
+  "fisa de vara ordonare numere": [
+    "Ordonează cele 5 numere din fiecare rând crescător sau descrescător, după săgeată, și scrie-le în căsuțe.",
+    "Privește săgeata (crescător/descrescător) și scrie numerele în căsuțe, în ordinea cerută."
+  ],
+  "greater less equal": [
+    "Compară perechile de numere și alege semnul corect: >, < sau = (numere până la 13).",
+    "Compară numerele până la 15 și încercuiește semnul potrivit dintre >, = și <.",
+    "Exersează compararea numerelor până la 14, inclusiv perechi egale (11 și 11, 13 și 13).",
+    "Compară numere până la 15: perechi egale și inegale, cu semnele >, < și =.",
+    "Alege semnul corect pentru fiecare pereche: de la 1 și 1 până la 11 și 12.",
+    "Ultima pagină de antrenament: compară perechi până la 15 și încercuiește semnul potrivit."
+  ],
+  "antonyms for kids": [
+    "Worksheet 1: hot/cold, big/small, up/down, happy/sad, open/closed, fast/slow, in/out, day/night, wet/dry, full/empty, tall/short, clean/dirty.",
+    "Worksheet 2: left/right, soft/hard, young/old, near/far, come/go, sit/stand, light/dark, high/low, long/short, many/few, thick/thin, heavy/light.",
+    "Worksheet 3: push/pull, give/take, laugh/cry, wake/sleep, start/finish, enter/exit, throw/catch, turn on/turn off, arrive/leave, build/break, win/lose, hide/find.",
+    "Worksheet 4: above/below, over/under, inside/outside, front/back, before/after, first/last, more/less, same/different, strong/weak, loud/quiet, rough/smooth, deep/shallow.",
+    "Worksheet 5: straight/curly, wide/narrow, sweet/sour, brave/scared, safe/dangerous, bright/dim, warm/cool, sharp/blunt, smile/frown, healthy/sick, rich/poor, easy/hard."
+  ],
+  "scaderi set 1": [
+    "Numără inimioarele, merele și floricelele, apoi rezolvă scăderi simple cu 1–4 (ex. 5−2, 4−1).",
+    "Scăderi cu suport vizual: inimioare, mere și flori zâmbitoare (ex. 7−1, 8−2, 7−4).",
+    "Rezolvă scăderile cu mere, flori și steluțe, de la 2−1 până la 8−5.",
+    "Steluțe, mere, inimioare și flori: scăderi variate în concentrul 0–8 (6−3, 7−6, 8−3).",
+    "Portocale, flori și inimioare vesele: scăderi de la 3−1 la 8−2.",
+    "Floricele și portocale zâmbitoare: rezolvă scăderi până la 8−4 și scrie rezultatul."
+  ],
+  "numara baloane si gargarite": [
+    "Numără baloanele din fiecare buchet și încercuiește numărul corect (2–8 baloane).",
+    "Numără bulinele de pe fiecare gărgăriță și încercuiește numărul corect."
+  ],
+  "adunare jucarii set 1": [
+    "Numără ursuleții de pluș, rezolvă adunarea și scrie rezultatul pe linie (sume până la 6).",
+    "Numără ursuleții de pluș și rezolvă adunări cu rezultate până la 8.",
+    "Numără păpușile, rezolvă adunarea și scrie răspunsul pe linie (sume până la 8).",
+    "Numără trenulețele colorate și rezolvă adunări cu rezultate până la 9.",
+    "Numără mingile de plajă și rezolvă adunări cu rezultate până la 10.",
+    "Numără roboțeii jucăuși și rezolvă adunări cu rezultate până la 10.",
+    "Numără mașinuțele roșii și rezolvă adunări simple cu rezultate până la 5."
+  ],
+  "grupa mica primavara pachet 1": [
+    "Privește imaginea, spune ce vezi și colorează elementele de primăvară.",
+    "Unește fiecare mulțime cu cifra corespunzătoare: 1, 2 sau 3.",
+    "Unește fiecare mulțime cu cifra corespunzătoare: 1, 2 sau 3.",
+    "Încercuiește doar grupele care au exact 3 elemente.",
+    "Încercuiește doar grupele de flori care au exact 3 elemente.",
+    "Încercuiește doar grupele care au exact 3 elemente.",
+    "Numără pe degețele și arată 3, colorează cifra 3 și numără petalele trifoiului.",
+    "Trasează cifra 3 după model, apoi colorează trei flori.",
+    "Trasează cu atenție liniile, de la o floare la cealaltă.",
+    "Ajută albina să găsească drumul prin labirint până la flori."
+  ],
+  "SEMNE GRAFICE PRIMAVARA": [
+    {
+      title: "Fluturele",
+      body: "Trasează cu grijă conturul punctat al fluturelui, apoi colorează-l. " +
+            "Aripile pline de cercuri și spirale cer mișcări curbe și rotunde — exact cele care " +
+            "antrenează mâna pentru literele rotunjite. Lasă copilul să urmărească punctele fără să grăbească, " +
+            "apoi alege împreună culori vesele pentru fiecare aripă."
+    },
+    {
+      title: "Omida",
+      body: "Trasează omida pe liniile punctate, apoi colorează-o. " +
+            "Inelele corpului se trasează unul câte unul, de la cap spre coadă, ceea ce exersează " +
+            "linii scurte și repetate și ajută copilul să țină ritmul. Numărați împreună inelele în timp ce le colorați."
+    },
+    {
+      title: "Ghioceii",
+      body: "Trasează ghioceii după conturul punctat, apoi colorează-i. " +
+            "Tulpinile lungi și petalele subțiri cer linii verticale controlate și mișcări fine — " +
+            "un exercițiu bun de răbdare. Ghioceii sunt primele flori de primăvară, așa că e un prilej " +
+            "să vorbiți despre ce se întâmplă în natură când se topește zăpada."
+    },
+    {
+      title: "Rândunica",
+      body: "Trasează rândunica pe liniile punctate, apoi colorează-o. " +
+            "Aripile întinse și coada lungă cer trasee lungi și sigure, dintr-o singură mișcare — " +
+            "antrenament excelent pentru controlul gestului amplu. Spune-i copilului că rândunica se întoarce " +
+            "primăvara din țările calde."
+    },
+    {
+      title: "Zambilele",
+      body: "Trasează zambilele după contur, apoi colorează-le. " +
+            "Este pagina cu cele mai multe detalii mici: floricelele dese cer atenție și o mână " +
+            "exersată. E potrivită ca exercițiu mai provocator, după ce copilul s-a încălzit cu fișele mai simple."
+    },
+    {
+      title: "Albinuța",
+      body: "Trasează albinuța pe liniile punctate, apoi colorează-o. " +
+            "Antenele cu bucle, aripile transparente și dungile de pe corp combină mai multe tipuri de linie " +
+            "într-o singură pagină. Vorbiți despre rolul albinei, care duce polenul de la o floare la alta."
+    },
+    {
+      title: "Narcisele",
+      body: "Trasează narcisele după conturul punctat, apoi colorează-le. " +
+            "Petalele ascuțite și mijlocul rotund al florii alternează linii drepte cu linii curbe, " +
+            "ceea ce dezvoltă flexibilitatea mâinii. Narcisele galbene sunt printre cele mai cunoscute flori de primăvară."
+    },
+    {
+      title: "Iepurașul",
+      body: "Trasează iepurașul pe liniile punctate, apoi colorează-l. " +
+            "Urechile lungi, blănița și iarba din jur cer linii variate, lungi și scurte deopotrivă — " +
+            "o încheiere veselă a setului. Lasă copilul să-i aleagă culoarea blăniței și să povestească ce face iepurașul."
+    }
+  ]
+};
+
+function pdfKey(pdfUrl){
+  // extrage numele fișierului fără cale și fără extensie
+  try{
+    const last = decodeURIComponent(pdfUrl).split("/").pop();
+    return last.replace(/\.[a-zA-Z0-9]+$/, "").trim();
+  }catch(e){ return ""; }
+}
+const pageDescs = PAGE_DESCRIPTIONS[pdfKey(data.pdf)] || null;
+
+/* ===== Descrierea generală a setului (text sub slider) =====
+   Cheia = numele PDF-ului (la fel ca mai sus).
+   Valoarea poate fi:
+     - un text simplu (string), SAU
+     - un obiect structurat: { intro, sections:[{title, body}], skills:[...], tips }
+   Dacă o fișă nu e în listă, se generează automat un text scurt
+   din nivel + temă (vezi setDescription mai jos). */
+const SET_DESCRIPTIONS = {
+  "adunari si scaderi cu fructe": {
+    intro: "Zece fișe de adunare și scădere în concentrul 0–10, în care imaginea și operația spun exact același lucru. La adunare, fructele sunt așezate în două grupe despărțite de semnul plus, așa cum arată și exercițiul scris. La scădere, toate fructele sunt desenate, iar cele care se iau sunt tăiate cu un X — copilul vede concret ce dispare și numără ce rămâne. Patru fructe familiare (mere, căpșuni, portocale, banane) dau varietate fără să schimbe structura, iar toate rezultatele se încadrează între 1 și 10.",
+    sections: [
+      { title: "Ce conține setul", body: "10 planșe A4 portret, câte șase exerciții pe fișă. Trei fișe sunt numai de adunare, trei numai de scădere, iar patru combină cele două operații alternându-le, ca să antreneze trecerea de la o operație la alta. Fiecare fișă are antet cu spațiu pentru nume, instrucțiunea în română și o linie verde pentru răspuns. Toate sumele sunt mai mici sau egale cu 10 și nicio scădere nu dă zero sau rezultat negativ, așa că fișele se potrivesc exact peste programa de la grupa mare și clasa pregătitoare." },
+      { title: "Cum se folosește", body: "Prima dată, lăsați copilul să numere cu degetul pe imagine înainte de a se uita la cifre — așa leagă operația de cantitatea reală. La adunare, cereți-i să numere separat fiecare grup, apoi totalul. La scădere, întrebați-l „câte au fost la început?” și „câte am tăiat?”, abia apoi „câte au rămas?”. Fișele de adunare sunt cele mai ușoare, cele de scădere urmează, iar cele mixte se dau la final, când copilul recunoaște singur semnul. Plastifiate, se refolosesc cu marker ștergibil. Se descarcă individual ca JPG sau tot setul ca PDF A4." },
+    ],
+    skills: [
+      "Adunarea în concentrul 0–10 cu suport vizual",
+      "Scăderea prin eliminare, cu obiecte barate",
+      "Corespondența dintre imagine și operația scrisă",
+      "Recunoașterea și deosebirea semnelor + și −",
+      "Numărarea grupată și verificarea rezultatului",
+    ]
+  },
+  "gaseste litera partea 2": {
+    intro: "Continuarea firească a setului „Găsește litera A–L”: paisprezece fișe pentru literele de la M la Z, pe același tipar-joc care le-a plăcut copiilor. Sus, litera de trasat pe liniatură punctată și o imagine-ancoră al cărei nume începe cu sunetul respectiv (M de la măr, T de la tigru, Z de la zebră), iar jos, aproximativ douăzeci de cercuri cu litere amestecate, dintre care se colorează doar cele cu litera căutată. Împreună cu prima parte, copilul parcurge tot alfabetul de bază în format de „vânătoare de litere”, cu distractori aleși special pentru confuziile tipice: V/W/Y, S/Z, O/Q.",
+    sections: [
+      { title: "Ce conține setul", body: "14 planșe A4 portret, câte una pentru fiecare literă de la M la Z, în ordine alfabetică. Fiecare fișă are caseta de trasare cu litera punctată pe liniatură, imaginea-ancoră cu formula „de la…” (măr, nor, oaie, purcel, prepeliță-quail, rățușcă, steluțe, tigru, umbrelă, veveriță, walkman, radiografie, yo-yo, zebră) și câmpul de căutare cu circa 20 de cercuri cu litere mari de tipar, dintre care 5–6 conțin litera-țintă. Literele rare Q, W, X și Y — greu de ilustrat în română — folosesc cuvinte împrumutate sau internaționale, o bună ocazie de conversație despre literele „musafir” din alfabetul nostru." },
+      { title: "Cum se folosește", body: "În continuarea primei părți, câte o literă pe zi, în ordinea paginilor. Copilul numește obiectul din imagine, pronunță apăsat primul sunet, trasează litera cu degetul de 2–3 ori, apoi cu creionul. La căutare, cereți-i să bifeze fiecare cerc verificat ca să nu sară rânduri, iar la final să numere câte litere a găsit. Perechile-capcană S/Z și V/W merită o discuție separată: așezați cele două fișe una lângă alta și comparați formele. Plastifiate, fișele se refolosesc cu marker ștergibil. Se descarcă individual ca JPG sau tot setul ca PDF A4." },
+    ],
+    skills: [
+      "Recunoașterea literelor mari de tipar M–Z",
+      "Asocierea literei cu sunetul inițial al cuvântului",
+      "Trasarea literelor pe liniatură punctată",
+      "Discriminarea vizuală a perechilor derutante (S/Z, V/W/Y, O/Q)",
+      "Atenția concentrată și scanarea sistematică a paginii",
+    ]
+  },
+  "gaseste litera": {
+    intro: "Douăsprezece fișe de recunoaștere a literelor, de la A la L, construite toate pe același tipar prietenos: sus, litera de trasat pe liniatură punctată și o imagine-ancoră al cărei nume începe cu sunetul respectiv (A de la arici, B de la broască, K de la kiwi), iar jos, aproximativ douăzeci de cercuri cu litere amestecate, dintre care copilul le colorează doar pe cele cu litera căutată. Formatul de „vânătoare de litere” transformă recunoașterea vizuală într-un joc, iar repetarea aceleiași structuri pe fiecare pagină îi dă copilului independență: după prima fișă, știe singur ce are de făcut.",
+    sections: [
+      { title: "Ce conține setul", body: "12 planșe A4 portret, câte una pentru fiecare literă de la A la L, în ordine alfabetică. Fiecare fișă are trei zone: caseta de trasare cu litera punctată pe liniatură, imaginea-ancoră cu formula „de la…” (arici, broască, căpșună, dovleac, elefant, floare, gărgăriță, hipopotam, inimă, jaguar, kiwi, lampă) și câmpul de căutare cu circa 20 de cercuri cu litere mari de tipar, dintre care 4–6 conțin litera-țintă. Distractorii sunt aleși inteligent — forme asemănătoare precum O, Q și C sau I, J, L și T apar des, ca exercițiul să antreneze cu adevărat discriminarea vizuală." },
+      { title: "Cum se folosește", body: "Câte o literă pe zi sau la două zile, în ordinea paginilor. Începeți cu imaginea: copilul numește obiectul, pronunță apăsat primul sunet, apoi trasează litera de 2–3 ori cu degetul înainte de creion. La căutare, cereți-i să bifeze fiecare cerc verificat — așa nu sare rânduri. Colorarea cercurilor găsite e recompensa. Plastifiate, fișele se refolosesc cu marker ștergibil. Se descarcă individual ca JPG sau tot setul ca PDF A4." },
+    ],
+    skills: [
+      "Recunoașterea literelor mari de tipar A–L",
+      "Asocierea literei cu sunetul inițial al cuvântului",
+      "Trasarea literelor pe liniatură punctată",
+      "Discriminarea vizuală a formelor asemănătoare (O/Q, I/J/L)",
+      "Atenția concentrată și scanarea sistematică a paginii",
+    ]
+  },
+  "cuvinte din silabe": {
+    intro:
+      "Zece fi\u0219e \u00een care copilul cite\u0219te silabele, le une\u0219te \u00een minte, scrie cuv\u00e2ntul format \u0219i " +
+      "apoi trage o linie spre imaginea potrivit\u0103. Sinteza silabic\u0103 \u2014 opera\u021bia invers\u0103 " +
+      "desp\u0103r\u021birii \u00een silabe \u2014 este pasul care transform\u0103 silabisirea \u00een citire adev\u0103rat\u0103. " +
+      "Setul e ordonat strict dup\u0103 dificultate: cinci fi\u0219e cu cuvinte de dou\u0103 silabe, trei cu " +
+      "trei silabe, o recapitulare mixt\u0103 \u0219i o fi\u0219\u0103 final\u0103 cu cele mai lungi cuvinte, de patru " +
+      "silabe. Verificarea e imediat\u0103 \u0219i vizual\u0103: dac\u0103 imaginea se potrive\u0219te, cuv\u00e2ntul e " +
+      "corect.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "10 plan\u0219e A4 portret, c\u00e2te \u0219ase cuvinte pe pagin\u0103 \u2014 60 de cuvinte \u00een total. Fi\u0219ele 1\u20135: " +
+      "cuvinte cu dou\u0103 silabe. Fi\u0219ele 6\u20138: cuvinte cu trei silabe. Fi\u0219a 9: recapitulare cu dou\u0103 " +
+      "\u0219i trei silabe. Fi\u0219a 10: cuvinte cu trei \u0219i patru silabe. Fiecare cuv\u00e2nt are caset\u0103 de " +
+      "scris \u0219i o imagine color de asociat, a\u0219ezat\u0103 \u00een partea de jos a paginii." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor \u2014 dificultatea cre\u0219te constant, de la dou\u0103 la patru silabe. " +
+      "Cere\u021bi-i copilului s\u0103 rosteasc\u0103 silabele cu voce tare, apoi tot mai repede, p\u00e2n\u0103 c\u00e2nd " +
+      "cuv\u00e2ntul \u201ese aude\u201d singur. Dac\u0103 nu scrie \u00eenc\u0103 fluent, poate doar s\u0103 spun\u0103 cuv\u00e2ntul \u0219i s\u0103 " +
+      "trag\u0103 linia. Fi\u0219a 9 e bun\u0103 ca evaluare intermediar\u0103, iar fi\u0219a 10 \u2014 cu AUTOBUZ \u0219i " +
+      "ELICOPTER \u2014 e cea mai grea din set. Plastifiate, fi\u0219ele se rezolv\u0103 cu marker \u0219i se " +
+      "\u0219terg. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Sinteza silabic\u0103 \u2014 unirea silabelor \u00een cuv\u00e2nt",
+      "Citirea cuvintelor de 2, 3 \u0219i 4 silabe",
+      "Asocierea cuv\u00e2nt\u2013imagine",
+      "Con\u0219tientizarea structurii silabice",
+      "Scrierea cuvintelor cu litere de tipar"
+    ]
+  },
+  "sunetul si litera partea 1": {
+    intro:
+      "Prima parte a abecedarului Kiddy MSK: paisprezece fi\u0219e care pornesc de la vocale \u0219i " +
+      "ajung la primele treisprezece consoane. Setul urmeaz\u0103 metoda fonetic\u0103 " +
+      "analitico-sintetic\u0103 \u2014 fiecare liter\u0103 nou\u0103 se sprijin\u0103 doar pe cele deja \u00eenv\u0103\u021bate, a\u0219a c\u0103 " +
+      "copilul poate citi cuvinte reale \u00eenc\u0103 de la a doua fi\u0219\u0103. Structura e mereu aceea\u0219i: " +
+      "trasarea literei, g\u0103sirea ei printre altele, citirea silabelor, bifarea cuvintelor care " +
+      "o con\u021bin \u0219i citirea cuvintelor noi, desp\u0103r\u021bite \u00een silabe.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "14 plan\u0219e A4 portret: o fi\u0219\u0103 pentru vocalele A, E, I, O, U, \u0102, dou\u0103sprezece fi\u0219e de " +
+      "consoane (M, N, R, C, L, T, S, P, V, D, \u0218, Z) \u0219i o fi\u0219\u0103 de recapitulare cu citire de " +
+      "propozi\u021bii. Ilustra\u021bii color pentru fiecare cuv\u00e2nt, spa\u021biu pentru nume \u0219i dat\u0103, cinci " +
+      "exerci\u021bii numerotate pe pagin\u0103." },
+      { title: "Cum se folose\u0219te",
+        body: "Strict \u00een ordinea paginilor \u2014 fiecare fi\u0219\u0103 folose\u0219te doar literele predate p\u00e2n\u0103 atunci. " +
+      "C\u00e2te o liter\u0103 pe s\u0103pt\u0103m\u00e2n\u0103 e un ritm potrivit la pregatitoare. \u00cencepe\u021bi \u00eentotdeauna cu " +
+      "rostirea sunetului, nu cu numele literei (\u201em\u201d, nu \u201eme\u201d) \u2014 e diferen\u021ba care face " +
+      "silabisirea posibil\u0103. La exerci\u021biul 5, cere\u021bi-i copilului s\u0103 citeasc\u0103 \u00eent\u00e2i silab\u0103 cu " +
+      "silab\u0103, apoi cuv\u00e2ntul \u00eentreg, dintr-o suflare. Continuarea fireasc\u0103 este partea a doua a " +
+      "setului. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Asocierea sunetului cu litera",
+      "Citirea silabelor \u0219i a cuvintelor scurte",
+      "Desp\u0103r\u021birea cuvintelor \u00een silabe",
+      "Scrierea literelor mari de tipar",
+      "Discriminarea literelor asem\u0103n\u0103toare (M/N, P/R)"
+    ]
+  },
+  "sunetul si litera partea 2": {
+    intro:
+      "Partea a doua a abecedarului Kiddy MSK, continuarea direct\u0103 a primelor paisprezece fi\u0219e: " +
+      "\u00eenc\u0103 opt consoane, regula \u00ce / \u00c2 \u0219i \u2014 partea cea mai valoroas\u0103 \u2014 \u0219ase fi\u0219e de consolidare " +
+      "care duc copilul de la cuv\u00e2nt la text. Trei recapitul\u0103ri de vocabular grupeaz\u0103 literele " +
+      "\u00eenv\u0103\u021bate, apoi urmeaz\u0103 propozi\u021biile scurte, punctua\u021bia cu intona\u021bie \u0219i, la final, un " +
+      "text de patru propozi\u021bii cu \u00eentreb\u0103ri de \u00een\u021belegere. Aici se vede dac\u0103 citirea a devenit " +
+      "cu adev\u0103rat \u00een\u021belegere.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "15 plan\u0219e A4 portret: opt fi\u0219e de consoane (B, F, G, H, J, \u021a, X, K), o fi\u0219\u0103 despre " +
+      "regula \u00ce / \u00c2, trei recapitul\u0103ri de vocabular (M\u2013P, V\u2013H, J\u2013\u00c2) \u0219i trei fi\u0219e finale: " +
+      "propozi\u021bii scurte, propozi\u021bii cu punctua\u021bie \u0219i un text de citit cu \u00eentreb\u0103ri, Adev\u0103rat / " +
+      "Fals \u0219i ordonarea evenimentelor." },
+      { title: "Cum se folose\u0219te",
+        body: "Se folose\u0219te dup\u0103 partea \u00eent\u00e2i, tot \u00een ordinea paginilor. Literele X \u0219i K sunt rare \u00een " +
+      "rom\u00e2n\u0103 \u2014 explica\u021bi-i copilului c\u0103 apar mai ales \u00een cuvinte venite din alte limbi. La " +
+      "fi\u0219a cu \u00ce \u0219i \u00c2, insista\u021bi pe regul\u0103, nu pe memorare: \u00c2 st\u0103 \u00een mijlocul cuv\u00e2ntului, \u00ce la " +
+      "capete. Ultimele trei fi\u0219e se pot relua de mai multe ori \u2014 la a doua citire, cere\u021bi " +
+      "fluen\u021b\u0103, nu doar corectitudine. Fi\u0219a final\u0103, cu text \u0219i \u00eentreb\u0103ri, e o bun\u0103 prob\u0103 de " +
+      "evaluare \u00eenainte de clasa preg\u0103titoare. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Consolidarea \u00eentregului alfabet",
+      "Regula de scriere \u00ce / \u00c2",
+      "Citirea \u0219i alc\u0103tuirea de propozi\u021bii",
+      "Semnele de punctua\u021bie \u0219i intona\u021bia",
+      "\u00cen\u021belegerea unui text citit"
+    ]
+  },
+  "animale fise de descriere": {
+    intro:
+      "Paisprezece plan\u0219e de descriere a animalelor, toate construite dup\u0103 aceea\u0219i schem\u0103 " +
+      "simpl\u0103 \u0219i u\u0219or de re\u021binut: animalul st\u0103 \u00een mijloc, iar \u00een jurul lui sunt \u0219ase " +
+      "c\u0103su\u021be albe \u2014 TR\u0102IE\u0218TE, M\u0102N\u00c2NC\u0102, ESTE, ARE, POATE \u0219i NU POATE. " +
+      "Copilul le completeaz\u0103 \u0219i, f\u0103r\u0103 s\u0103-\u0219i dea seama, construie\u0219te o descriere " +
+      "complet\u0103: mediu de via\u021b\u0103, hran\u0103, \u00eensu\u0219iri, p\u0103r\u021bi ale corpului \u0219i ce \u0219tie " +
+      "sau nu \u0219tie s\u0103 fac\u0103. Setul acoper\u0103 animale domestice, s\u0103lbatice de la noi " +
+      "\u0219i exotice \u2014 numai bun pentru compara\u021bii \u0219i clasific\u0103ri.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "14 plan\u0219e A4 PEISAJ, cu ilustra\u021bii realiste: urs, giraf\u0103, c\u00e2ine, pisic\u0103, vac\u0103, " +
+              "porc, miel, leu, maimu\u021b\u0103, vulpe, iepure, arici, veveri\u021b\u0103 \u0219i ra\u021b\u0103. " +
+              "Fiecare plan\u0219\u0103 are aceea\u0219i structur\u0103 de \u0219ase c\u0103su\u021be, ceea ce face trecerea " +
+              "de la un animal la altul foarte u\u0219oar\u0103." },
+      { title: "Cum se folose\u0219te",
+        body: "La grup\u0103 sau acas\u0103, oral \u00eenainte de a scrie: copilul spune ce \u0219tie, apoi " +
+              "completeaz\u0103 c\u0103su\u021bele. La cei care nu scriu \u00eenc\u0103, se poate desena \u00een c\u0103su\u021be " +
+              "sau se pot lipi imagini decupate. Plastifiate, plan\u0219ele se completeaz\u0103 cu marker " +
+              "\u0219i se \u0219terg. Foarte utile \u0219i pentru compara\u021bii: dou\u0103 plan\u0219e al\u0103turate " +
+              "(vulpe \u0219i c\u00e2ine, leu \u0219i pisic\u0103) arat\u0103 imediat asem\u0103n\u0103rile \u0219i deosebirile. " +
+              "JPG sau PDF A4 peisaj." }
+    ],
+    skills: [
+      "Descrierea animalelor dup\u0103 criterii date",
+      "\u00cembog\u0103\u021birea vocabularului",
+      "Clasificarea animalelor: domestice, s\u0103lbatice, exotice",
+      "Formularea de propozi\u021bii complete",
+      "Compararea a dou\u0103 vie\u021buitoare"
+    ]
+  },
+  "mai mare mai mic": {
+    intro:
+      "\u0218ase plan\u0219e vesele pentru compararea numerelor, cu curcubeu, creioane z\u00e2mb\u0103re\u021be \u0219i " +
+      "flori pe margini. Pe fiecare pagin\u0103, numerele sunt a\u0219ezate \u00een trei coloane, perechi-perechi, " +
+      "cu o c\u0103su\u021b\u0103 goal\u0103 la mijloc: acolo copilul deseneaz\u0103 semnul potrivit. Formatul repetitiv " +
+      "este inten\u021bionat \u2014 compararea devine automat\u0103 doar prin exerci\u021biu, iar cele \u0219ase fi\u0219e ofer\u0103 " +
+      "material pentru s\u0103pt\u0103m\u00e2ni \u00eentregi de antrenament scurt \u0219i zilnic.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "6 plan\u0219e A4 portret, fiecare cu zeci de perechi de numere de comparat, a\u0219ezate pe trei " +
+              "coloane. Design colorat, cu ram\u0103 ilustrat\u0103 \u2014 arat\u0103 bine \u0219i afi\u0219at pe perete." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor, c\u00e2te o fi\u0219\u0103 pe zi sau c\u00e2te o coloan\u0103 pe rep\u0103r\u021bire, dac\u0103 lucra\u021bi \u00een " +
+              "reprize scurte. \u00cenainte de a scrie, cere\u021bi-i copilului s\u0103 citeasc\u0103 perechea cu voce tare " +
+              "(\u201etreisprezece \u0219i nou\u0103sprezece\u201d) \u2014 verbalizarea ajut\u0103 enorm la fixare. Plastifiate, fi\u0219ele " +
+              "se pot rezolva cu marker \u0219i \u0219terge de nenum\u0103rate ori. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Compararea numerelor naturale",
+      "Folosirea semnelor de rela\u021bie",
+      "Pozi\u021bia numerelor \u00een \u0219ir",
+      "Aten\u021bie distributiv\u0103 \u0219i lucru sistematic",
+      "Automatizarea calculului mintal"
+    ]
+  },
+  "omida mancacioasa": {
+    intro:
+      "\u0218apte fi\u0219e cu o omid\u0103 foarte m\u00e2nc\u0103cioas\u0103, care trece prin toate zonele importante " +
+      "ale gr\u0103di\u021bei: grafomotricitate, colorat, num\u0103rat, adun\u0103ri \u0219i asocierea cifr\u0103\u2013cantitate\u2013cuv\u00e2nt. " +
+      "Setul \u00eencepe cu trasee punctate pentru \u00eenc\u0103lzirea m\u00e2inii, continu\u0103 cu dou\u0103 plan\u0219e mari de " +
+      "colorat \u0219i se \u00eencheie cu exerci\u021bii de matematic\u0103 tot mai consistente. Tema unitar\u0103 \u0219i " +
+      "personajul simpatic \u021bin copilul conectat de la o pagin\u0103 la alta \u2014 numai bun pentru un " +
+      "proiect tematic despre insecte, prim\u0103var\u0103 sau transform\u0103rile din natur\u0103.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "7 plan\u0219e A4 portret: o fi\u0219\u0103 de grafomotricitate cu \u0219ase trasee, dou\u0103 plan\u0219e de colorat " +
+              "cu multe detalii, \u0219irul numerelor 1\u201325 cu spa\u021bii de completat, o fi\u0219\u0103 de adun\u0103ri cu " +
+              "suport vizual, una de asociere num\u0103r\u2013obiecte\u2013cuv\u00e2nt (1\u201310) \u0219i o fi\u0219\u0103 final\u0103 de calcule " +
+              "cu spa\u021biu liber pentru desen." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor. Fi\u0219a de trasare merge perfect ca \u00eenc\u0103lzire \u00eenaintea celor de scris. " +
+              "Plan\u0219ele de colorat sunt bogate \u00een detalii \u2014 la cei mici, propune\u021bi-le s\u0103 coloreze doar " +
+              "o parte pe zi, ca s\u0103 nu oboseasc\u0103. La fi\u0219a de asociere, ar\u0103ta\u021bi-i copilului c\u0103 se " +
+              "porne\u0219te \u00eentotdeauna de la num\u0103rarea obiectelor, nu de la cifr\u0103. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Motricitate fin\u0103 \u0219i control al creionului",
+      "Num\u0103rat \u0219i completarea \u0219irului 1\u201325",
+      "Adun\u0103ri cu suport vizual",
+      "Asocierea cifr\u0103 \u2013 cantitate \u2013 cuv\u00e2nt scris",
+      "Coordonare ochi\u2013m\u00e2n\u0103 prin colorat"
+    ]
+  },
+  "numaratoare cu buburuze": {
+    intro:
+      "Zece fi\u0219e vesele \u00een care buburuzele fac toat\u0103 treaba: ajut\u0103 la trasarea cifrelor, se las\u0103 " +
+      "num\u0103rate pe frunze \u0219i \u00een r\u00e2nduri, apoi \u00ee\u0219i caut\u0103 perechea dup\u0103 num\u0103rul de puncte de pe aripi. " +
+      "Setul porne\u0219te de la scrierea cifrelor 0\u20139 pe linii punctate \u0219i ajunge, pas cu pas, la num\u0103rat " +
+      "p\u00e2n\u0103 la 12, la asocieri num\u0103r\u2013cantitate \u0219i la carduri cu variante de r\u0103spuns. Personajul " +
+      "unic \u2014 buburuza cu punctele ei u\u0219or de num\u0103rat \u2014 d\u0103 unitate \u00eentregului set \u0219i \u00eel face " +
+      "numai bun pentru o s\u0103pt\u0103m\u00e2n\u0103 tematic\u0103 despre insecte sau prim\u0103var\u0103.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "10 plan\u0219e A4 portret: dou\u0103 fi\u0219e de trasare a cifrelor (0\u20139 \u0219i 1\u201312, cu colorat), o fi\u0219\u0103 " +
+              "de num\u0103rat \u0219i scris cifra, una de \u00eencercuit num\u0103rul corect, dou\u0103 fi\u0219e de asociere " +
+              "buburuz\u0103\u2013frunz\u0103, o fi\u0219\u0103 de perechi cu acela\u0219i num\u0103r de puncte \u0219i trei fi\u0219e de carduri " +
+              "cu c\u00e2te trei variante de r\u0103spuns, tot mai dificile." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cen ordinea paginilor, de la trasare spre num\u0103rat \u0219i asociere. Fi\u0219ele-card (paginile 8\u201310) " +
+              "pot fi decupate \u0219i plastifiate: copilul prinde cu un cle\u0219ti\u0219or de rufe num\u0103rul corect, iar " +
+              "fi\u0219a se refolose\u0219te la nesf\u00e2r\u0219it \u2014 \u0219i motricitatea fin\u0103 prime\u0219te un bonus. La fi\u0219ele de " +
+              "asociere, cere\u021bi copilului s\u0103 numere punctele cu voce tare \u00eenainte s\u0103 trag\u0103 linia. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Scrierea cifrelor 0\u20139 pe linii punctate",
+      "Num\u0103rat \u00een concentrul 0\u201312",
+      "Asocierea num\u0103rului cu cantitatea",
+      "Comparare \u0219i formare de perechi egale",
+      "Motricitate fin\u0103 \u0219i coordonare ochi\u2013m\u00e2n\u0103"
+    ]
+  },
+  "casutele numerelor": {
+    intro:
+      "\u0218ase fi\u0219e colorate despre \u201eprietenii\u201d numerelor \u2014 complementele lui 8, 9 \u0219i 10, adic\u0103 " +
+      "perechile de numere care, adunate, formeaz\u0103 \u021binta din c\u0103su\u021b\u0103. Copilul completeaz\u0103 termenul " +
+      "lips\u0103 \u00een c\u0103su\u021be cu acoperi\u0219uri colorate, \u00een flori-perechi din gr\u0103din\u0103 \u0219i pe t\u0103bli\u021be de lemn " +
+      "p\u0103zite de anim\u0103lu\u021be simpatice. Fiecare pagin\u0103 are jos o ax\u0103 a numerelor, pe care degetul " +
+      "poate num\u0103ra \u00eenainte p\u00e2n\u0103 la \u021bint\u0103 \u2014 sprijinul perfect p\u00e2n\u0103 c\u00e2nd perechile se re\u021bin pe de rost. " +
+      "Descompunerea lui 10 este temelia calculului rapid din clasa I, iar aici se construie\u0219te prin joc.",
+    sections: [
+      { title: "Ce con\u021bine setul",
+        body: "6 plan\u0219e A4 portret, c\u00e2te 9 exerci\u021bii pe pagin\u0103: C\u0103su\u021bele lui 8, Gr\u0103dina lui 9, dou\u0103 " +
+              "variante ale C\u0103su\u021belor lui 10 \u0219i dou\u0103 fi\u0219e \u201ePrietenii lui 10\u201d cu anim\u0103lu\u021be. \u00cen total, " +
+              "54 de adun\u0103ri cu termen lips\u0103, fiecare cu ax\u0103 a numerelor 0\u2013\u021bint\u0103 ca suport." },
+      { title: "Cum se folose\u0219te",
+        body: "\u00cencepe\u021bi cu \u021binta 8, apoi 9 \u0219i abia la final 10 \u2014 exact ordinea paginilor. Ar\u0103ta\u021bi-i " +
+              "copilului cum s\u0103 porneasc\u0103 de la num\u0103rul dat \u0219i s\u0103 numere pe ax\u0103 c\u00e2\u021bi pa\u0219i mai sunt " +
+              "p\u00e2n\u0103 la \u021bint\u0103. Variantele-pereche ale fi\u0219elor de 10 sunt ideale pentru recapitulare " +
+              "dup\u0103 c\u00e2teva zile sau pentru doi copii care lucreaz\u0103 \u00een acela\u0219i timp. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Complementele numerelor 8, 9 \u0219i 10",
+      "Adun\u0103ri cu termen lips\u0103 (0\u201310)",
+      "Num\u0103rat cu sprijin pe axa numerelor",
+      "Preg\u0103tirea calculului mintal rapid",
+      "Scrierea cifrelor \u00een spa\u021bii date"
+    ]
+  },
+  "alfabet englez de trasat": {
+    intro:
+      "Douăzeci și patru de fișe de alfabet englezesc, de la A la X, câte una pentru fiecare literă. Pe fiecare " +
+      "pagină, copilul trasează întâi litera mare și cea mică — cu numere de ordine și săgeți care arată " +
+      "exact de unde pornește fiecare mișcare — apoi colorează trei obiecte care încep cu litera respectivă " +
+      "și le scrie numele pe liniile punctate: ANT, ANGEL, APPLE pentru Aa, BEAR, BREAD, BEE pentru Bb și " +
+      "așa mai departe. Formatul peisaj lasă loc generos pentru mânuțele care abia învață să scrie, iar " +
+      "desenele mari, cu contur gros, sunt numai bune de colorat.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "24 de planșe A4 peisaj, alb-negru, pentru literele de la A la X. Fiecare fișă are: rând de " +
+              "nume punctat, modelul literei mari și mici cu ordinea mișcărilor, trei imagini de colorat " +
+              "în casete și cuvintele englezești de trasat dedesubt — 72 de cuvinte în total. Primele 15 " +
+              "fișe au cuvintele cu majuscule, de la Pp în jos apar cu litere mici." },
+      { title: "Cum se folosește",
+        body: "Câte o literă pe zi sau pe săptămână, în ordinea din set. Spuneți sunetul literei, nu doar " +
+              "numele ei, și cereți copilului să repete cuvintele cu voce tare în timp ce le trasează. " +
+              "Colorarea vine la final, ca recompensă. Plastifiate, fișele se pot refolosi cu marker. " +
+              "JPG sau PDF A4 peisaj." }
+    ],
+    skills: [
+      "Scrierea literelor mari și mici de tipar",
+      "Ordinea corectă a mișcărilor la scriere",
+      "Vocabular englezesc de bază (72 de cuvinte)",
+      "Conștientizare fonologică: sunetul inițial",
+      "Motricitate fină prin trasare și colorare"
+    ]
+  },
+  "fisa de trasare": {
+    intro:
+      "Patru fișe de trasare cu rame albastre vesele, creionul-mascotă și câte șase benzi de exersat pe " +
+      "pagină. Fiecare bandă are imaginea ei simpatică — trenulețul, racheta, melcul, balena — plus punct de " +
+      "Start colorat și săgeată de direcție, ca mâna să pornească mereu din locul corect. Setul urcă în " +
+      "trepte: linii drepte, apoi oblice, arcade, valuri, zigzaguri și, la final, spiralele — exact traseul " +
+      "recomandat în pregătirea scrisului. Mesajele de încurajare de la finalul paginilor (Bravo! Minunat! " +
+      "Excelent!) fac restul.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "24 de benzi de trasare pe 4 pagini A4, în ordinea dificultății: de la liniile drepte ale " +
+              "trenulețului la spiralele melcului. Fiecare fișă are antet cu nume și dată, iar fiecare " +
+              "rând are punct de start și săgeată de direcție." },
+      { title: "Cum se folosește",
+        body: "O pagină pe ședință e suficientă. Copilul urmărește întâi modelul cu degetul, apoi cu " +
+              "creionul, pornind din punctul de Start. Plastifiate și folosite cu marker care se șterge, " +
+              "fișele devin refolosibile — ideale pentru centrul de scriere. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Trasarea liniilor drepte, oblice și curbe",
+      "Respectarea punctului de start și a direcției",
+      "Control fin al creionului",
+      "Pregătirea elementelor grafice ale literelor",
+      "Rezistență la efort grafic"
+    ]
+  },
+  "trasare de vara": {
+    intro:
+      "Patru fișe de trasare cu aer de vacanță: rățușca cu pălărie de soare, căluțul de mare cu ochelari " +
+      "în formă de inimioare, crabul cu umbreluță și țestoasa cu placă de surf. Sus, copilul trasează " +
+      "contururile punctate chiar din scena de plajă — mingea, găletușa, soarele — iar jos exersează cinci " +
+      "rânduri de modele: valuri, arcade, zigzaguri, creneluri și bucle. E grafomotricitate deghizată în " +
+      "joacă de vară, numai bună pentru caietul de vacanță al piticilor care trec spre grupa mare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "4 planșe A4 color, fiecare cu o scenă mare de plajă cu contururi de trasat și cinci benzi de " +
+              "modele grafice dedesubt. Personajele diferă de la pagină la pagină, modelele se repetă cu " +
+              "mici variații — repetiția care construiește siguranța mâinii." },
+      { title: "Cum se folosește",
+        body: "Începeți cu contururile mari din scenă (mai ușoare, mai satisfăcătoare), apoi treceți la " +
+              "benzile de jos. După trasare, scena se poate colora — două activități într-o singură fișă. " +
+              "Perfecte și pentru serile lungi de vacanță. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Trasare pe contur punctat",
+      "Valuri, zigzaguri, bucle și creneluri",
+      "Coordonare ochi–mână",
+      "Concentrare pe sarcini în doi pași",
+      "Pregătirea scrisului prin joc tematic"
+    ]
+  },
+  "rainbow friends": {
+    intro:
+      "Cinci fișe în limba engleză din seria Rainbow Friends: perechile de numere care fac împreună 6, 7, " +
+      "8, 9 și, la final, 10. Curcubeul zâmbitor din mijloc poartă pe malurile lui numerele-pereche — 0 cu " +
+      "6, 1 cu 5, 2 cu 4... — iar dedesubt copilul completează propozițiile numerice: _ + _ = 8. Seria " +
+      "crește frumos de la 6 la 10, astfel încât strategia se consolidează pas cu pas, iar limba engleză " +
+      "(complete the number sentences) vine natural, ca decor de lucru, nu ca obstacol.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "5 fișe A4 color, câte una pentru perechile lui 6, 7, 8, 9 și 10 — aproximativ 50 de " +
+              "propoziții numerice în total. Curcubeul cu numerele pe maluri servește drept model vizual " +
+              "pe fiecare pagină: capetele arcului sunt chiar perechile căutate." },
+      { title: "Cum se folosește",
+        body: "Recomandăm ordinea din set, de la 6 la 10 — câte o fișă pe zi. Arătați-i copilului trucul " +
+              "curcubeului: unește cu degetul cele două capete ale aceluiași arc și ai găsit perechea. " +
+              "Fișele merg excelent și la opționalul de engleză. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Descompunerea numerelor 6–10 în perechi",
+      "Completarea propozițiilor numerice",
+      "Vocabular matematic în engleză",
+      "Folosirea modelului vizual (curcubeul)",
+      "Pregătirea adunării și scăderii rapide"
+    ]
+  },
+  "scaderi cu fructe si legume": {
+    intro:
+      "Cinci fișe de scădere cu cel mai gustos suport vizual: fructe și legume cu ochișori, de la banane " +
+      "și pepeni la vinete, ardei și dovleci. Copilul numără personajele din caseta din stânga, taie cu " +
+      "creionul câte spune scăderea și scrie rezultatul. Setul urcă în cinci trepte: scăderi mici (2−1, " +
+      "3−2), apoi concentrul 5, concentrul 7–9 și, ca încununare, scăderi peste 10 cu viețuitoare marine " +
+      "(11−7, 15−6). Codul QR de pe fiecare fișă duce direct spre resursele Kiddy MSK.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "24 de scăderi pe 5 pagini, fiecare exercițiu cu mulțimea lui de obiecte de numărat: " +
+              "pepeni, porumb, mere, lămâi, căpșuni, banane, portocale, pere, castraveți, cartofi, ardei, " +
+              "dovleci, vinete, ciuperci, cepe, apoi meduze, crabi, peștișori și caracatițe." },
+      { title: "Cum se folosește",
+        body: "Strategia de aur: copilul taie cu o linie atâtea obiecte câte se scad, apoi numără ce a " +
+              "rămas. La ultima pagină (scăderi din 11–15), obiectele sunt așezate pe rânduri, ca să se " +
+              "vadă ușor trecerea peste 10. O fișă pe zi, de la ușor la greu. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Scăderea cu suport concret (numărare și tăiere)",
+      "Concentrul 0–5, apoi 0–10",
+      "Primele scăderi din numere mai mari de 10",
+      "Scrierea rezultatului în casetă",
+      "Trecerea de la concret la calcul mintal"
+    ]
+  },
+  "number coloring": {
+    intro:
+      "Două planșe de colorat după cod numeric, în limba engleză: Number Coloring. Fiecare zonă din desen " +
+      "poartă un număr, iar legenda de sus arată culoarea potrivită — 1 yellow, 2 green, 3 blue, 4 brown, " +
+      "iar pe a doua pagină apare și 5 pink. Scenele sunt de vară curată: ursulețul în colac și iepurașul " +
+      "cu felia de pepene lângă cifra mare 5, apoi ananasul cu ochelari de soare, cu crab, minge și " +
+      "palmier. Copilul exersează simultan recunoașterea cifrelor, culorile în engleză și răbdarea de a " +
+      "colora în contur — trei în unu.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "2 planșe A4 alb-negru cu zeci de zone numerotate: prima cu 4 culori-cod și cifra 5 la " +
+              "mijloc, a doua cu 5 culori-cod și scena ananasului. Legenda are creioane desenate, cu " +
+              "numele culorii în engleză pe fiecare." },
+      { title: "Cum se folosește",
+        body: "Citiți întâi legenda împreună, cu voce tare: one is yellow, two is green... Copilul poate " +
+              "colora pe numere (toate zonele cu 1, apoi cu 2) sau pe zone, verificând legenda de fiecare " +
+              "dată. La final, imaginea colorată e propria recompensă. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Recunoașterea cifrelor 1–5",
+      "Culorile în limba engleză",
+      "Colorare în contur, pe zone",
+      "Urmărirea unui cod / unei legende",
+      "Concentrare și finalizarea sarcinii"
+    ]
+  },
+  "hai sa numaram": {
+    intro:
+      "Trei postere-planșă în format peisaj pentru primele numere, de la 0 la 5, cu puișori și găinușe " +
+      "pufoase așezate în cuiburi. Fiecare personaj poartă pe burtică un număr mare, iar în cuibul lui stau " +
+      "exact atâtea ouă câte arată cifra — inclusiv cuibul gol al lui zero, conceptul cel mai greu de prins " +
+      "la vârsta mică. Culorile calde și fețele zâmbitoare fac planșele numai bune de afișat pe perete, la " +
+      "grădiniță sau în camera copilului, unde numerele se învață din priviri, zi de zi.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "3 planșe A4 în format peisaj: 0 și 1 (cuibul gol și oul singuratic), 2 și 3, apoi 4 și 5. " +
+              "Fiecare număr are personajul lui cu accesoriu distinctiv — fundiță, papion, floricică — " +
+              "ușor de ținut minte și de povestit." },
+      { title: "Cum se folosește",
+        body: "Afișate la nivelul ochilor copilului, planșele devin joc zilnic: \"arată-mi numărul 3\", " +
+              "\"câte ouă are găinușa cu fundiță?\". Insistați pe pagina cu 0 — \"cuibul gol\" e cea mai " +
+              "simplă imagine a lui zero. Plastifiate, rezistă tot anul școlar. JPG sau PDF A4 peisaj." }
+    ],
+    skills: [
+      "Recunoașterea numerelor de la 0 la 5",
+      "Asocierea cifră–cantitate",
+      "Conceptul de zero (mulțimea goală)",
+      "Numărare cu obiecte concrete",
+      "Vocabular matematic timpuriu"
+    ]
+  },
+  "two digit subtraction": {
+    intro:
+      "Două fișe în limba engleză cu scăderi în concentrul 0–100: Two Digit Subtraction. Prima pagină " +
+      "adună 20 de calcule în casete tip domino, de la scăderi fără împrumut (47−10, 25−22) până la cele cu " +
+      "împrumut (92−53, 81−49, 80−46). A doua pagină ridică ștacheta: 15 scăderi notate cu litere, iar " +
+      "rezultatele se scriu și în cuvinte, în engleză — thirty-six, cu exemplul gata rezolvat. Matematică și " +
+      "engleză într-o singură fișă, exact combinația căutată la clasele cu predare intensivă de limbă.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "35 de scăderi pe 2 pagini A4 alb-negru, economice la tipar. Antet cu Name, Grade și Date. " +
+              "Pagina a doua include secțiunea de scriere a rezultatelor în litere (numerele în engleză de " +
+              "la ten la ninety) — puntea dintre calcul și vocabular." },
+      { title: "Cum se folosește",
+        body: "Începeți cu pagina de calcul pur, apoi treceți la cea cu litere. La scrierea în cuvinte, " +
+              "afișați alături numerele-cheie în engleză (twenty, thirty, forty...) ca sprijin. Fișele merg " +
+              "excelent și la opțional de engleză, ca activitate CLIL. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Scăderea numerelor de două cifre, cu și fără împrumut",
+      "Numerele în limba engleză (10–100)",
+      "Scrierea numerelor în cuvinte",
+      "Lucru pe fișă cu antet în engleză",
+      "Autonomie în calcul scris"
+    ]
+  },
+  "prietenii lui 10 fructe": {
+    intro:
+      "Patru fișe cu cea mai importantă temă de calcul din clasa pregătitoare: perechile care fac împreună " +
+      "10. Merele, căpșunile, perele și portocalele stau câte două deasupra coșulețului cu 10, iar copilul " +
+      "scrie în fructul gol numărul-pereche: 6 cu 4, 3 cu 7, 9 cu 1... Fiecare pagină are jos axa numerelor " +
+      "0–10, pe care cei mici pot număra \"cât mai e până la 10\". Complementele lui 10 învățate acum devin " +
+      "temelia adunării cu trecere peste ordin de mai târziu — iar cu fructe zâmbitoare, temelia se așază singură.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "36 de perechi de completat pe 4 pagini: Prietenii Mărului, Căpșuni Vesele, Pere Pereche și " +
+              "Portocale Istețe. Toate combinațiile de la 1+9 la 9+1 apar de mai multe ori, în ordine " +
+              "mereu amestecată. Antet cu nume și clasă pe fiecare fișă." },
+      { title: "Cum se folosește",
+        body: "Înainte de scris, jucați \"perechea mea\": spuneți un număr, copilul strigă perechea până la " +
+              "10. Pe fișă, cei care ezită pun degetul pe axa numerelor și numără de la numărul dat până la " +
+              "10. O fișă pe zi, și perechile intră în reflex. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Complementele numărului 10",
+      "Adunarea cu termen necunoscut",
+      "Folosirea axei numerelor ca sprijin",
+      "Calcul mintal pregătitor pentru trecerea peste ordin",
+      "Scrierea cifrelor în spații delimitate"
+    ]
+  },
+  "prietenii lui 10 flori": {
+    intro:
+      "Cinci fișe-grădină pentru perechile lui 10: în fiecare ghiveci înfloresc două flori, una cu număr, " +
+      "una goală, iar pe ghiveci scrie ținta — 10. Copilul completează floarea goală cu numărul care " +
+      "întregește perechea: 7 cu 3, 2 cu 8, 5 cu 5... Cele cinci pagini (Ghivecele numerelor, Flori vesele, " +
+      "Prietenele lui 10, Floricele și Grădina lui 10) repetă toate combinațiile în ordini diferite, pentru " +
+      "că la complementele lui 10 repetiția e chiar rețeta succesului. Axa numerelor 0–10 stă jos, la îndemână.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "45 de perechi de completat pe 5 pagini cu design de primăvară: ghivece de lut, flori roz, " +
+              "mov, albastre și galbene, fluturași și albinuța Kiddy. Fiecare fișă are antet cu nume și " +
+              "clasă și axa numerelor ca instrument de sprijin." },
+      { title: "Cum se folosește",
+        body: "Perfect ca serie de consolidare după setul cu fructe: o fișă pe zi, o săptămână întreagă. " +
+              "Pentru varietate, cereți copilului să coloreze la final doar florile cu numere pare, sau să " +
+              "spună perechile cu voce tare în timp ce scrie. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Automatizarea perechilor care fac 10",
+      "Termen necunoscut la adunare",
+      "Citirea axei numerelor",
+      "Ritm și fluență în calcul mintal",
+      "Perseverență prin exercițiu repetat"
+    ]
+  },
+  "the skeletal system": {
+    intro:
+      "Un set în limba engleză despre sistemul osos: The Skeletal System. Pe două fișe de lucru, copilul " +
+      "privește ilustrația alb-negru a unui os sau a unei zone marcate cu săgeată și încercuiește denumirea " +
+      "corectă din două variante: tibia sau pelvis? skull sau fibula? Sunt acoperite 20 de oase, de la " +
+      "femur și humerus la carpals, metatarsals și mandible. Setul include și cheile de răspuns, cu " +
+      "variantele corecte evidențiate — ideale pentru autoverificare sau pentru părintele care nu vrea să " +
+      "caute \"clavicle\" în dicționar la ora temelor.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "4 pagini A4: două fișe de lucru cu câte 10 exerciții de tip alegere duală și cele două chei " +
+              "de răspuns corespunzătoare, cu răspunsurile corecte marcate cu galben. Ilustrații anatomice " +
+              "clare, stil schiță, potrivite și pentru proiecte școlare." },
+      { title: "Cum se folosește",
+        body: "La engleză sau la științe: copilul rezolvă fișa, apoi se verifică singur cu cheia — " +
+              "momentul de autocorectare e cel puțin la fel de valoros ca rezolvarea. Prelungiți cu un joc: " +
+              "\"arată pe tine unde e patella / ulna / spine\". JPG sau PDF A4." }
+    ],
+    skills: [
+      "Vocabular englezesc: denumirile oaselor",
+      "Cunoștințe despre corpul uman",
+      "Citirea ilustrațiilor anatomice",
+      "Alegere duală și eliminarea variantelor",
+      "Autoverificare cu cheia de răspunsuri"
+    ]
+  },
+  "cercuri elemente grafice": {
+    intro:
+      "Patru fișe de grafomotricitate dedicate cercului — elementul grafic din care se nasc literele o, a, d " +
+      "și cifrele rotunde. Copilul trasează cercuri punctate de toate mărimile, integrate în imagini vesele: " +
+      "capul ursulețului, roțile mașinuței, hublourile submarinului, gogoașa cu glazură, aripile fluturașilor. " +
+      "Primele pagini au punct de start și săgeți de direcție, ca mișcarea să pornească de sus și să curgă în " +
+      "sens corect. Rama în fagure de miere și albinuța Kiddy dau setului un aer cald, de atelier prietenos.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "4 planșe A4 color, cu zeci de cercuri de trasat, aranjate în ordinea dificultății: de la " +
+              "cercuri mari, ghidate cu punct de start și săgeți, la cercuri mici (ochii broscuței, buburuza) " +
+              "și, în final, buclele ample ale aripilor de fluture — o singură mișcare, larg curbată." },
+      { title: "Cum se folosește",
+        body: "Întâi copilul urmărește cercul cu degetul, apoi cu creionul, pornind din punctul marcat. " +
+              "Regula de aur: mâna se rotește, foaia stă pe loc. Fișele plastifiate + marker șters devin " +
+              "refolosibile la nesfârșit — ideale pentru centrul de scriere de la grupă. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Trasarea cercului în sens corect",
+      "Control fin al creionului pe curbe închise",
+      "Coordonare ochi–mână",
+      "Pregătirea literelor și cifrelor rotunde",
+      "Rezistență la efort grafic susținut"
+    ]
+  },
+  "matematica vesela cu inghetata": {
+    intro:
+      "Patru fișe de calcul în concentrul 0–10, cu cele mai apetisante suporturi vizuale: cornete de " +
+      "înghețată cu două cupe. Numerele stau chiar pe cupe, iar rezultatul se scrie în cercul de pe cornet — " +
+      "copilul \"completează\" înghețata rezolvând corect. Setul urcă în trepte: adunări simple, apoi adunări " +
+      "până la 10 (inclusiv cu 0), iar la final scăderi. Designul pastel cu soare, curcubeu și albinuța " +
+      "Kiddy face din exercițiu o mică bucurie de vară, perfectă pentru clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "32 de calcule pe 4 pagini: o fișă de adunări fără trecere peste ordin, două fișe de adunări " +
+              "până la 10 (cu întâlnirea importantă a lui 0 ca termen) și o fișă de scăderi 0–10. Fiecare " +
+              "pagină are 8 cornete mari, cu spațiu generos de scris." },
+      { title: "Cum se folosește",
+        body: "Recomandăm ordinea din set — adunările întâi, scăderile la final. La cupele cu 0 (8+0, 0+6), " +
+              "opriți-vă o clipă: \"dacă nu mai adăugăm nimic, cât rămâne?\" — e conceptul care ridică " +
+              "probleme des. Ca recompensă, copilul poate colora cireșica sau căpșunica de pe cupe. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Adunarea în concentrul 0–10",
+      "Scăderea în concentrul 0–10",
+      "Rolul lui 0 în adunare",
+      "Scrierea cifrelor în spațiu delimitat",
+      "Asocierea calculului cu suport vizual"
+    ]
+  },
+  "adunari cu stelute": {
+    intro:
+      "Două fișe-puzzle de adunare pentru micii detectivi ai numerelor: în mijlocul fiecărei steluțe stă un " +
+      "număr-țintă (de la 10 la 16), iar pe brațe sunt adunări cu un termen lipsă. Copilul completează " +
+      "cercurile goale astfel încât fiecare calcul să dea exact rezultatul din centru. Nu mai e calcul " +
+      "direct, ci gândire inversă — \"cât îmi lipsește până la...?\" — pasul care pregătește scăderea și " +
+      "ecuațiile de mai târziu. Opt steluțe în total, cu câte cinci-șase brațe fiecare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "2 planșe A4 cu câte 4 steluțe: țintele 12, 11, 13, 15 pe prima pagină și 10, 12, 14, 16 pe a " +
+              "doua. Fiecare braț are o adunare cu termen lipsă, iar codul QR din colț duce direct la " +
+              "resursele Kiddy MSK. Antetul are câmp de nume pentru lucrul la clasă." },
+      { title: "Cum se folosește",
+        body: "Începeți cu brațele unde termenul dat e mare (9+? = 11) — sunt cele mai ușoare. Dacă cel mic " +
+              "se blochează, întrebați: \"ai 9, câți mai trebuie ca să ajungi la 11?\" și numărați împreună " +
+              "mai departe pe degete. O steluță pe zi e un antrenament excelent de calcul mintal. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Aflarea termenului necunoscut la adunare",
+      "Calcul mintal în concentrul 10–16",
+      "Gândire reversibilă (pre-scădere)",
+      "Verificarea rezultatului prin probă",
+      "Perseverență în sarcini de tip puzzle"
+    ]
+  },
+  "wild animals coloring": {
+    intro:
+      "Șapte pagini de colorat cu animale sălbatice, fiecare cu numele animalului scris în engleză, cu litere " +
+      "mari de contur: Elephant, Lion, Monkey, Koala Bear, Polar Bear, Gorilla și Snake. Ilustrațiile sunt " +
+      "prietenoase, cu ochi mari și contururi groase, iar cuvântul din titlu se colorează și el — așa numele " +
+      "englezesc se fixează natural, prin joacă. Fiecare pagină are un rând pentru nume, deci setul merge " +
+      "perfect și la grupă, ca activitate comună. Potrivit de la grupa mică până la clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "7 planșe A4 alb-negru, ordonate de la desene simple, cu forme mari (elefantul, leul), spre " +
+              "pagini tot mai bogate în detalii (gorila, șarpele cu solzii lui). Fiecare planșă are numele " +
+              "animalului în engleză, spațiu pentru numele copilului și fundal tematic: junglă, banchiză " +
+              "sau creangă de eucalipt." },
+      { title: "Cum se folosește",
+        body: "Înainte de colorat, spuneți numele animalului în engleză și cereți copilului să-l repete. " +
+              "În timpul lucrului, întrebați ce culoare folosește — se pot strecura și culorile în engleză. " +
+              "La final, planșele se pot prinde într-o mică \"expoziție zoo\" pe perete. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Vocabular englezesc: numele animalelor sălbatice",
+      "Motricitate fină și colorare în contur",
+      "Concentrare pe pagini cu grade diferite de detaliu",
+      "Recunoașterea literelor mari de tipar",
+      "Curiozitate despre animale și habitatele lor"
+    ]
+  },
+  "matematica distractiva clasa 3": {
+    intro:
+      "Patru fișe de calcul pentru clasa a III-a, în formatul vesel \"Matematică Distractivă\": 14 exerciții pe " +
+      "pagină, fiecare cu un norișor în care se scrie rezultatul. Operațiile sunt amestecate intenționat — " +
+      "înmulțiri și împărțiri din tabla înmulțirii, adunări și scăderi cu numere de trei cifre, cu trecere " +
+      "peste ordin — ca micul matematician să nu lucreze mecanic, ci să aleagă de fiecare dată strategia " +
+      "potrivită. Antetul are câmpuri de nume, clasă și dată, deci fișele merg folosite direct la clasă.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "56 de calcule în total, pe 4 pagini cu structură identică: două coloane a câte 7 exerciții. " +
+              "Fiecare fișă combină cele patru operații, iar accentul se mută treptat — fișa 3 insistă pe " +
+              "împărțiri, fișa 4 pe scăderi cu numere de 3 cifre. Semnele operațiilor sunt colorate diferit, " +
+              "un sprijin vizual discret pentru atenție." },
+      { title: "Cum se folosește",
+        body: "O fișă pe zi sau pe săptămână, ca antrenament ritmic. Cronometrarea blândă (\"cât reușești în " +
+              "10 minute?\") transformă fișa în joc. La verificare, cereți copilului să explice un calcul cu " +
+              "voce tare — se văd imediat pașii și eventualele confuzii. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Tabla înmulțirii și împărțirea în concentrul 0–100",
+      "Adunarea și scăderea cu trecere peste ordin (0–1000)",
+      "Alegerea strategiei potrivite la operații amestecate",
+      "Lucru independent, în ritm propriu",
+      "Verificarea propriilor rezultate"
+    ]
+  },
+  "trenuletul cititorilor": {
+    intro:
+      "O planșă-activitate de citire pentru primii cititori: un trenuleț colorat cu cinci vagoane, pe care " +
+      "scrie unt, trei, tun, tir și tartă — cuvinte scurte, din familia literei T. Sub trenuleț sunt cinci " +
+      "imagini de decupat: tarta cu căpșuni, tunul, untul, cifra 3 și tirul. Copilul citește cuvântul de pe " +
+      "fiecare vagon, caută imaginea potrivită și o lipește deasupra. Cititul, foarfeca și lipiciul lucrează " +
+      "împreună — exact combinația care fixează literele fără ca cel mic să simtă că \"învață\".",
+    sections: [
+      { title: "Ce conține setul",
+        body: "O planșă A4 în format peisaj, cu trenulețul cu cinci vagoane colorate, cinci casete de lipire, " +
+              "cinci imagini de decupat pe linie punctată și instrucțiunile activității scrise pe fișă. " +
+              "Cuvintele au fost alese din sfera literei T, cu structuri simple de 3–5 litere." },
+      { title: "Cum se folosește",
+        body: "Întâi se citesc împreună cuvintele de pe vagoane, apoi copilul decupează singur imaginile — " +
+              "atenție la foarfecă la cei mici. Înainte de lipire, cereți-i să pună fiecare imagine pe vagon " +
+              "și să \"verifice cu degetul\" citind încă o dată. Abia apoi vine lipiciul. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Citirea cuvintelor scurte cu litera T",
+      "Asocierea cuvânt–imagine",
+      "Decupare pe contur și lipire precisă",
+      "Motricitate fină și coordonare ochi–mână"
+    ]
+  },
+  "masurare in centimetri": {
+    intro:
+      "Două fișe vesele de măsurare pentru primii pași în lumea centimetrilor: opt morcovi și opt știuleți " +
+      "de porumb, fiecare cu rigla lui gradată de la 0 la 10 cm desenată alături. Copilul citește gradația " +
+      "din dreptul vârfului legumei și scrie răspunsul în căsuță. Albinuța Kiddy încurajează de pe margine, " +
+      "iar culorile calde de grădină fac exercițiul mai apetisant decât orice riglă de plastic. Ideal pentru " +
+      "clasa pregătitoare și clasa I, la unitatea de măsurare a lungimii.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "16 măsurători în total: pagina cu morcovi și pagina cu porumb, câte 8 obiecte fiecare, de " +
+              "înălțimi variate. Rigla este desenată lângă fiecare legumă, cu gradații clare din centimetru " +
+              "în centimetru, iar răspunsul se scrie în căsuța de sub obiect." },
+      { title: "Cum se folosește",
+        body: "Arătați întâi cum se citește rigla: pornim de la 0 și urcăm până la vârf. După fișă, dați " +
+              "copilului o riglă adevărată și măsurați împreună obiecte din casă — un creion, o lingură, un " +
+              "morcov adevărat. Compararea (\"care e cel mai lung?\") prelungește frumos exercițiul. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Măsurarea lungimii în centimetri",
+      "Citirea gradațiilor pe riglă",
+      "Compararea și ordonarea după lungime",
+      "Scrierea numerelor în casete",
+      "Legătura dintre matematică și obiectele din jur"
+    ]
+  },
+  "adunari si scaderi de vara": {
+    intro:
+      "Trei mega-fișe de vară în format alb-negru, fiecare cu o scenă de plajă de colorat în mijloc: copiii " +
+      "cu colacul, pisicuțele cu înghețata și cățelușii cu mingea. În jurul scenei sunt aranjate șase zone de " +
+      "lucru: adunări rapide, scăderi rapide, coloane de adunări și scăderi până la 20, exerciții mixte și o " +
+      "problemă în cuvinte cu răspuns de scris. O singură foaie ține copilul ocupat o oră întreagă. Pentru " +
+      "clasa pregătitoare și clasa I.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Peste 150 de calcule pe cele 3 pagini, organizate identic — copilul învață formatul o dată și " +
+              "îl regăsește pe fiecare fișă. Problemele în cuvinte (scoicile lui Andrei și ale Mariei, mingile " +
+              "cățeilor) introduc primul pas spre matematica aplicată. Formatul alb-negru economisește cerneala " +
+              "și oferă bonusul de colorat." },
+      { title: "Cum se folosește",
+        body: "Regula fișei: întâi calculele, apoi coloratul scenei din mijloc — motivația perfectă. La " +
+              "problemă, copilul subliniază numerele din text înainte de a calcula. O fișă pe săptămână ține " +
+              "mintea antrenată toată vara. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Adunarea și scăderea în concentrul 0–20",
+      "Rezolvarea primelor probleme în cuvinte",
+      "Lucru susținut pe o pagină densă",
+      "Colorare-recompensă la final"
+    ]
+  },
+  "planse de citire animale": {
+    intro:
+      "Trei planșe de citire pentru primii pași în lectură: Purcelul roz, Cățelul și Pisica. Fiecare planșă " +
+      "are cinci propoziții scurte, scrise cu litere mari de tipar — exact ca la clasa pregătitoare — și o " +
+      "ilustrație mare, veselă, care confirmă sensul celor citite. Propozițiile folosesc cuvinte simple și " +
+      "onomatopee dragi copiilor: groh-groh, ham-ham, miau-miau.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "15 propoziții în total, cu structuri repetitive care dau încredere micului cititor: fiecare " +
+              "planșă începe cu prezentarea animalului, continuă cu 2–3 însușiri și se încheie cu un detaliu " +
+              "simpatic. Numerotarea propozițiilor ajută la urmărirea rândului." },
+      { title: "Cum se folosește",
+        body: "Copilul citește cu degetul sub fiecare cuvânt, apoi povestește cu vorbele lui ce a aflat despre " +
+              "animal. Întrebări bune de continuare: Ce sunet face? Ce îi place? Cine e mama purcelului? " +
+              "Planșele merg afișate pe perete o săptămână fiecare, ca lectură zilnică. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Citirea propozițiilor scurte cu litere de tipar",
+      "Înțelegerea textului citit (comprehensiune)",
+      "Vocabular: animale domestice și onomatopee",
+      "Povestirea cu propriile cuvinte"
+    ]
+  },
+  "scoici vesele complemente": {
+    intro:
+      "Cinci fișe cu scoici colorate pentru cel mai important concept din calculul rapid: complementele — " +
+      "cât mai lipsește până la un număr dat. Setul crește treaptă cu treaptă: complemente până la 6, 7, 8, " +
+      "9 și, în final, până la 10 — perechile care formează zecea. Fiecare pagină are axa numerelor la bază, " +
+      "ca sprijin vizual pentru verificare. Pentru grupa mare și clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "43 de exerciții de tip scoică + scoică = gălețușă: primul număr e dat, copilul scrie în scoica " +
+              "goală cât mai trebuie până la total. Progresia 6 → 10 pe cinci pagini construiește automat " +
+              "fluența, iar decorul marin cu crabi și steluțe ține exercițiul vesel." },
+      { title: "Cum se folosește",
+        body: "Strategia axei: copilul pune degetul pe primul număr și numără săriturile până la total — " +
+              "câte sărituri, atâta e complementul. După câteva pagini, provocarea: răspunde din minte și " +
+              "verifică apoi pe axă. Complementele lui 10 merită repetate zilnic — sunt temelia adunării cu " +
+              "trecere peste ordin. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Complementele numerelor 6–10 (bonds)",
+      "Utilizarea axei numerelor ca instrument de calcul",
+      "Pregătirea adunării cu trecere peste ordin",
+      "Fluență și calcul mintal"
+    ]
+  },
+  "emotii in engleza": {
+    intro:
+      "Șase postere colorate despre emoții, în limba engleză: Happy, Sad, Angry, Scared, Shy și Proud. Pe " +
+      "fiecare poster, aceiași doi copii — și ghiozdanul, creionul și cărticica lor cu chipuri expresive — " +
+      "trăiesc emoția respectivă, iar în partea de jos fraza-starter We feel … when… invită la conversație. " +
+      "Un instrument simplu și frumos pentru vocabular englezesc și inteligență emoțională deopotrivă.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "6 postere în format portret, cu titlul emoției în litere mari colorate și zeci de detalii " +
+              "expresive de discutat: norișorii plâng la Sad, fulgeră la Angry, iar la Proud apar trofee și " +
+              "medalii. Aceleași personaje pe toate posterele ajută copilul să compare expresiile feței." },
+      { title: "Cum se folosește",
+        body: "Afișați posterele pe rând sau toate împreună, ca panou al emoțiilor. Activitatea de aur: " +
+              "completați împreună fraza We feel happy when… cu exemple din viața copilului. Joc de mimă: un " +
+              "copil mimează emoția, ceilalți o numesc în engleză. Funcționează acasă, la clasă și la " +
+              "after-school. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Vocabular englezesc: 6 emoții de bază",
+      "Recunoașterea emoțiilor după expresia feței",
+      "Exprimarea verbală a propriilor trăiri",
+      "Conversație simplă în engleză (We feel… when…)"
+    ]
+  },
+  "oitele dupa numar": {
+    intro:
+      "O activitate practică de decupare și lipire pentru cei mai mici: pe prima pagină sunt cinci țarcuri " +
+      "de lemn numerotate de la 1 la 5, iar pe a doua — o turmă întreagă de oițe pufoase de decupat. Copilul " +
+      "taie oițele și lipește în fiecare țarc exact atâtea câte arată numărul. Numerație, motricitate fină și " +
+      "joacă de-a ferma, toate într-o singură activitate. Pentru grupa mică și mijlocie.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Pagina cu țarcurile (1–5, fiecare număr într-o buline colorată) și pagina cu 54 de oițe " +
+              "organizate în trei grupe cu contur de decupare — mai multe decât e nevoie, ca să rămână și " +
+              "pentru greșeli sau pentru jocuri suplimentare." },
+      { title: "Cum se folosește",
+        body: "Un adult decupează grupele mari, copilul taie oițele individuale (exercițiu excelent de " +
+              "foarfecă). Apoi: citește numărul, numără oițele în palmă, lipește-le în țarc. Laminați pagina " +
+              "cu țarcuri și folosiți bandă adezivă refolosibilă — jocul merge jucat la nesfârșit. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Asocierea cantitate–cifră în concentrul 1–5",
+      "Decupare pe contur — motricitate fină",
+      "Coordonare bimanuală (ținut, tăiat, lipit)",
+      "Joc simbolic: ferma și turma de oițe"
+    ]
+  },
+  "matematica in vacanta": {
+    intro:
+      "Patru fișe colorate de vacanță cu adunări și scăderi, în două trepte: mai întâi operații în cadrul " +
+      "30, apoi în cadrul 40 — inclusiv cu trecere peste ordin (28+9, 37−19). Fiecare calcul stă pe un " +
+      "cartonaș cu câte un personaj de plajă: balene, crabi, delfini, broscuțe țestoase și castele de nisip. " +
+      "Rezultatul se scrie în cerculețul punctat. Pentru clasa I, ca recapitulare de vacanță.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "80 de operații pe 4 pagini: două fișe în cadrul 30 și două în cadrul 40, fiecare cu câte 10 " +
+              "adunări pe coloana stângă și 10 scăderi pe coloana dreaptă. Dificultatea crește natural de la " +
+              "o pagină la alta, iar personajele diferite pe fiecare rând țin plictiseala departe." },
+      { title: "Cum se folosește",
+        body: "O fișă pe zi sau o coloană pe zi, după puterea copilului. Sugestie de joc: copilul își alege " +
+              "personajul preferat de pe pagină și rezolvă primul calculul acestuia. La calculele cu trecere " +
+              "peste ordin, încurajați descompunerea: 28+9 = 28+2+7. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Adunarea și scăderea în concentrul 0–40",
+      "Trecerea peste ordin prin descompunere",
+      "Fluența calculului în format scurt și variat",
+      "Menținerea cunoștințelor pe vacanță"
+    ]
+  },
+  "coloreaza si descopera": {
+    intro:
+      "Trei planșe mari de tip caută-și-găsește: o grădină cu pitici harnici, o plajă plină de copii veseli " +
+      "și un picnic al pisicuțelor la mare. Fiecare planșă are pe margine o listă de 12 obiecte de găsit — " +
+      "soare, înghețată, pepene, minge, gărgăriță — cu numele scris sub fiecare imagine. Copilul caută, " +
+      "descoperă, apoi colorează întreaga scenă. Pentru grupa mare și clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Trei scene bogate în format peisaj, fiecare cu zeci de personaje și detalii ascunse. Lista " +
+              "laterală funcționează și ca mini-dicționar ilustrat: copilul asociază imaginea cu cuvântul " +
+              "scris — un antrenament discret de citire pentru pregătitoare." },
+      { title: "Cum se folosește",
+        body: "Întâi vânătoarea: copilul bifează fiecare obiect găsit din listă. Apoi coloratul, care poate " +
+              "ține mai multe zile — scenele sunt dense. Joc suplimentar: cere-i să inventeze o poveste despre " +
+              "ce fac piticii sau pisicuțele. Planșele merg excelent și la clasă, ca activitate de final de an. " +
+              "JPG sau PDF A4." }
+    ],
+    skills: [
+      "Atenție vizuală și căutare sistematică",
+      "Asocierea imagine–cuvânt scris",
+      "Colorare de precizie în scene detaliate",
+      "Limbaj: descrierea scenelor și povestire"
+    ]
+  },
+  "numara de vara": {
+    intro:
+      "Patru fișe de numărare cu arome de vară: elementele de plajă (înghețate, mingi, papucei), scoicile " +
+      "din gălețuse, sâmburii din jumătățile de măr și sâmburii din feliile de pepene. Copilul numără și " +
+      "încercuiește cifra corectă dintre trei variante. Ultimele două pagini cer numărare atentă de detalii " +
+      "mici — un antrenament fin de observație. Pentru grupa mică și mijlocie.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "19 exerciții de numărare pe 4 pagini tematice. Dificultatea e gradată inteligent: obiecte mari " +
+              "și distincte la început (înghețate, mingi), apoi obiecte grupate în recipiente (scoici în " +
+              "gălețuse) și, la final, detalii mărunte de numărat cu degetul (sâmburii)." },
+      { title: "Cum se folosește",
+        body: "Regula degetului: fiecare obiect numărat se atinge o singură dată. La sâmburi, copilul poate " +
+              "pune câte un punct cu creionul pe fiecare sâmbure numărat — așa nu se pierde. Fișele merg " +
+              "laminate pentru refolosire cu marker. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Numărarea în concentrul 1–9",
+      "Corespondența unu la unu la obiecte mici",
+      "Atenție la detalii și autocontrol",
+      "Recunoașterea cifrelor dintre variante"
+    ]
+  },
+  "provocare la scadere": {
+    intro:
+      "Perechea de scădere a antrenamentului cu bufnițe: patru fișe în trepte, de la scăderi simple în " +
+      "concentrul 0–10, prin primele scăderi peste 10, până la scăderi cu numere din două cifre și împrumut " +
+      "(96−48, 90−42). Fiecare coloană se încheie cu cercul de scor din 10, pentru autoevaluare. Împreună cu " +
+      "setul de adunare formează un program complet de calcul pentru clasa I și a II-a.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "120 de scăderi pe 4 pagini a câte 3 coloane: pagina 1 — concentrul 0–10 (9−3, 8−5); pagina 2 — " +
+              "concentrul 0–12 (12−7, 11−6); pagina 3 — două cifre fără și cu împrumut ușor (81−22, 55−31); " +
+              "pagina 4 — provocarea maximă (99−37, 96−48, 84−46)." },
+      { title: "Cum se folosește",
+        body: "Parcurgeți treptele în ordine și nu treceți mai departe până când cercul de scor nu arată " +
+              "măcar 8 din 10. La scăderile cu împrumut, strategia numărării înainte ajută: pentru 62−28, " +
+              "numără de la 28 până la 62. Combinați cu fișele de adunare pentru ședințe mixte. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Scăderea în concentrul 0–100, cu și fără împrumut",
+      "Strategii: numărare înainte, descompunere",
+      "Autoevaluare prin cercurile de scor",
+      "Progresie structurată pe patru trepte"
+    ]
+  },
+  "sa numaram": {
+    intro:
+      "Trei fișe vesele de numărare pentru cei mici: în fiecare casetă, copilul numără obiectele simpatice — " +
+      "mere, steluțe, fluturi, căpșuni, gărgărițe, curcubeie, briose — și încercuiește cifra corectă dintre " +
+      "cele trei variante. Cantitățile merg de la 1 la 7, exact intervalul potrivit pentru grupa mică și " +
+      "grupa mijlocie, iar personajele zâmbitoare transformă exercițiul în joacă.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "18 exerciții de numărare pe 3 pagini, cu câte 6 casete fiecare. Obiectele sunt mari, clare și " +
+              "așezate aerisit, iar variantele de răspuns sunt doar trei — suficient pentru alegere conștientă, " +
+              "fără să copleșească un preșcolar mic." },
+      { title: "Cum se folosește",
+        body: "Copilul atinge fiecare obiect cu degetul în timp ce numără cu voce tare (corespondența unu la " +
+              "unu), apoi caută cifra și o încercuiește cu culoarea preferată. Pentru început, lucrați împreună " +
+              "prima casetă. Fișele merg laminate pentru refolosire. Disponibile ca JPG sau PDF A4." }
+    ],
+    skills: [
+      "Numărarea în concentrul 1–7",
+      "Corespondența unu la unu și cantitate–cifră",
+      "Recunoașterea cifrelor scrise",
+      "Motricitate fină prin încercuire"
+    ]
+  },
+  "adunari pana la 5": {
+    intro:
+      "Trei fișe alb-negru de adunare până la 5, în care fiecare exercițiu este ilustrat cu obiecte de " +
+      "numărat: mere, steluțe, baloane, gărgărițe, rățuște, briose și melcișori. Formatul alb-negru nu e " +
+      "întâmplător: după ce rezolvă calculele, copilul poate colora toate desenele — două activități pe o " +
+      "singură foaie, și mult mai economic la imprimare. Pentru grupa mare și clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "30 de adunări cu rezultate până la 5, câte 10 pe pagină, în casete numerotate cu scris mare și " +
+              "spațiu generos pentru răspuns. Chenarul fiecărei pagini este decorat cu rechizite simpatice — " +
+              "creioane, cărți, ghiozdane — numai bune de colorat la final." },
+      { title: "Cum se folosește",
+        body: "Copilul numără obiectele din stânga, apoi pe cele din dreapta semnului plus, le adună și scrie " +
+              "rezultatul pe linie. Regula casei: mai întâi matematica, apoi colorat! Economisește cerneală și " +
+              "tipărește fără grijă — fișele sunt gândite pentru imprimare alb-negru. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Adunarea în concentrul 0–5 cu suport vizual",
+      "Scrierea cifrelor și a rezultatului",
+      "Numărare și verificare independentă",
+      "Colorare în contur — motricitate fină bonus"
+    ]
+  },
+  "numere lipsa set 2": {
+    intro:
+      "Al doilea set de numere lipsă: o fișă în limba română cu șirul 1–20 scris pe mere roșii zâmbitoare și " +
+      "o fișă în limba engleză (Missing Numbers) cu șirul 1–50 pe rânduri colorate, plus un joc bonus de " +
+      "căutare: găsește și încercuiește în grilă cele 15 numere date. De la pregătitoare până la clasa I, " +
+      "setul crește frumos în dificultate de la o pagină la alta.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Pagina 1 (română): 20 de mere așezate pe 5 rânduri, jumătate cu numere scrise, jumătate de " +
+              "completat, plus provocarea de a scrie tot șirul 1–20. Pagina 2 (engleză): grila 1–50 pe rânduri " +
+              "de câte 10, cu numere lipsă de completat și 15 numere de găsit și încercuit în grilă." },
+      { title: "Cum se folosește",
+        body: "La pagina cu mere, copilul citește numerele existente și completează golurile, verificând prin " +
+              "numărare de la 1. La Missing Numbers, rândurile de câte 10 îl ajută să se orienteze în zeci — " +
+              "un pas natural spre înțelegerea sistemului zecimal. Jocul de căutare de la final e recompensa. " +
+              "JPG sau PDF A4." }
+    ],
+    skills: [
+      "Șirul numeric 1–50: completare și orientare",
+      "Organizarea numerelor pe zeci",
+      "Căutare vizuală și atenție la detalii",
+      "Numerele în engleză — familiarizare naturală"
+    ]
+  },
+  "adunare cu bufnite": {
+    intro:
+      "Un program complet de antrenament la adunare în concentrul 0–100, în 5 trepte de dificultate, vegheat " +
+      "de trei bufnițe înțelepte: începe cu adunarea ușoară (zeci întregi plus unități), continuă cu adunarea " +
+      "cu zeci, apoi adunarea până la 100, antrenamentul serios cu treceri peste ordin și, la final, provocarea " +
+      "cu sumele cele mai mari. Fiecare coloană are cerc de scor din 10 — copilul își urmărește singur " +
+      "progresul. Pentru clasa I și clasa a II-a.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "150 de exerciții pe 5 pagini a câte 3 coloane: pagina 1 — 30+8, 70+6 (fără trecere); pagina 2 — " +
+              "45+7, 35+20; pagina 3 — 19+20, 56+17; pagina 4 — 65+19, 64+28 (cu trecere peste ordin); pagina " +
+              "5 — provocarea finală cu 76+24, 90+49 și alte sume care depășesc chiar și 100." },
+      { title: "Cum se folosește",
+        body: "Parcurge paginile în ordine — sunt gândite ca trepte. Completează cercul de scor după fiecare " +
+              "coloană (câte din 10 corecte) și ține o mică evidență a progresului. Pagina 1 merge și contra " +
+              "cronometru, pentru viteză; la paginile 4–5, încurajează copilul să-și verbalizeze strategia: " +
+              "adun întâi zecile, apoi unitățile. JPG sau PDF A4." }
+    ],
+    skills: [
+      "Adunarea în concentrul 0–100, cu și fără trecere peste ordin",
+      "Strategii de calcul: descompunerea în zeci și unități",
+      "Autoevaluare prin cercurile de scor",
+      "Rezistență și viteză de calcul"
+    ]
+  },
+  "antrenament de vara la calcul": {
+    intro:
+      "Un antrenament complet de calcul pentru vacanța de vară: 4 fișe cu adunări și scăderi în concentrul " +
+      "0–20, așezate pe coloane colorate cu decor de plajă — castele de nisip, ananas cu ochelari de soare, " +
+      "crabi și înghețată. Formatul pe coloane, cu câte 10 exerciții fiecare, este ideal pentru antrenamentul " +
+      "zilnic scurt: o coloană pe zi ține mintea în formă fără să strice vacanța. Pentru clasa pregătitoare " +
+      "și începutul clasei I.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Două pagini de adunări (de la 5+3 până la 17+2, fără trecere peste ordin) și două pagini de " +
+              "scăderi (de la 5−1 până la 20−10). În total 120 de exerciții de calcul, organizate pe 12 coloane " +
+              "tematice, cu casete clare pentru scrierea rezultatului." },
+      { title: "Cum se folosește",
+        body: "Recomandăm ritmul de vacanță: o singură coloană pe zi (10 calcule, cam 5 minute), dimineața, " +
+              "înainte de joacă. Copilul poate colora decorul coloanei după ce o termină — o mică recompensă " +
+              "vizuală. Descarcă paginile individual sau setul complet ca PDF pentru tipărire A4." }
+    ],
+    skills: [
+      "Adunarea și scăderea în concentrul 0–20",
+      "Automatizarea calculului mintal prin exercițiu zilnic",
+      "Scrierea îngrijită a rezultatelor în casete",
+      "Rutina de învățare pe timp de vacanță"
+    ]
+  },
+  "numere lipsa de vara": {
+    intro:
+      "Două fișe de vară pentru consolidarea șirului numeric: copilul completează numerele lipsă de la 1 la " +
+      "20, respectiv de la 1 la 30, scrise pe mingi de plajă, scoici, felii de pepene, steluțe de mare, " +
+      "gălețușe și colaci de înot. Fiecare fișă se încheie cu o provocare bonus: scrierea întregului șir în " +
+      "ordine. Pentru grupa mare și clasa pregătitoare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Pagina 1 lucrează șirul 1–20 (cu numele și data sus, ca o fișă adevărată de școală), iar pagina " +
+              "2 extinde până la 30 — cu mai multe rânduri și mai multe numere de completat. Obiectele de plajă " +
+              "grupate pe rânduri ajută copilul să se orienteze în zeci." },
+      { title: "Cum se folosește",
+        body: "Copilul citește cu voce tare numerele existente, apoi completează golurile. Pentru verificare, " +
+              "numără tot rândul de la început. Provocarea bonus de la final fixează șirul complet. Fișele merg " +
+              "laminate pentru refolosire cu marker lavabil. Disponibile ca JPG sau PDF A4." }
+    ],
+    skills: [
+      "Șirul numeric 1–30: continuare și completare",
+      "Scrierea cifrelor și a numerelor din două cifre",
+      "Orientarea în șir: predecesor și succesor",
+      "Perseverență prin provocarea bonus"
+    ]
+  },
+  "traseaza si coloreaza vara": {
+    intro:
+      "Patru planșe mari de grafomotricitate cu tematică de vară: copilul trasează liniile punctate care " +
+      "conturează întregul peisaj — plajă cu castel de nisip, aventură la mare cu cufăr de comori, tărâm " +
+      "magic cu unicorni și picnic cu pisicuțe — apoi colorează totul după pofta inimii. Două activități " +
+      "într-una singură, pentru grupa mijlocie și grupa mare.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Fiecare planșă este o scenă completă cu zeci de elemente de trasat: linii drepte, curbe, " +
+              "zig-zag, cercuri și spirale, integrate natural în desen (razele soarelui, valurile mării, sfoara " +
+              "zmeului, coada pisicii). Personajele zâmbitoare fac exercițiul să pară joacă, nu temă." },
+      { title: "Cum se folosește",
+        body: "Întâi trasarea, cu creion bine ascuțit, ținând planșa fixă; apoi colorarea, care relaxează mâna " +
+              "după efortul de precizie. Nu e nevoie să termine totul într-o zi — planșele sunt bogate și pot " +
+              "ține 2–3 sesiuni. Descarcă individual sau ca PDF complet A4." }
+    ],
+    skills: [
+      "Grafomotricitate: trasarea liniilor drepte, curbe și frânte",
+      "Controlul creionului și presiunea corectă",
+      "Coordonare ochi–mână și răbdare",
+      "Creativitate prin colorare liberă"
+    ]
+  },
+  "flori cu numere si albinuta": {
+    intro:
+      "Un mini-set de decupaje pentru activități practice: 10 flori roz cu numerele de la 1 la 10, plus " +
+      "albinuța Kiddy — mascota noastră — în format mare. Contururile punctate arată exact pe unde se taie, " +
+      "iar rezultatul poate deveni joc de numerație, decor de clasă sau panou de prezență. Pentru grupa mică " +
+      "și mijlocie, cu foarfece de siguranță și un adult prin preajmă.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Pagina 1: cele 10 flori cu numere, numai bune de decupat și plastifiat. Pagina 2: albinuța " +
+              "Kiddy în mărime mare, cu linia de decupare marcată — gata să vegheze colțul de învățare al " +
+              "copilului sau panoul clasei." },
+      { title: "Idei de utilizare",
+        body: "Florile devin: șir numeric pe perete, joc de ordonare (amestecă-le și cere copilului să le " +
+              "așeze la loc), joc de asociere cantitate–cifră (pune lângă fiecare floare tot atâtea pietricele) " +
+              "sau numere pentru scaunele de la serbare. Decuparea în sine este un excelent exercițiu de " +
+              "motricitate fină. Disponibile ca JPG sau PDF A4." }
+    ],
+    skills: [
+      "Motricitate fină prin decupare pe contur",
+      "Recunoașterea cifrelor 1–10",
+      "Jocuri de ordonare și asociere cantitate–cifră",
+      "Spirit practic: creează-ți singur materialele de joacă"
+    ]
+  },
+  "count and choose set 1": {
+    intro:
+      "Un set de 4 fișe de numărare în limba engleză (Count the objects and choose the correct number), pe trei " +
+      "teme dragi copiilor: vara, jucăriile și animăluțele. Copilul numără obiectele din fiecare casetă și " +
+      "încercuiește cifra corectă dintre cele cinci variante — exersând simultan numerația 1–9 și vocabularul " +
+      "englezesc de bază. Potrivit pentru grupa mare și clasa pregătitoare (5–7 ani).",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Două pagini de vară (palmieri, surferi, scoici, înghețată, lămâi, fluturi), o pagină cu jucării " +
+              "(carusel, yo-yo, rachete, zaruri, unicorni, roboței) și o pagină cu animale simpatice (tigri, rațe, " +
+              "koala, bufnițe). Fiecare pagină are 8 exerciții cu câte 5 variante de răspuns." },
+      { title: "Cum se folosește",
+        body: "Copilul numără obiectele atingându-le cu degetul, apoi caută și încercuiește cifra corectă. Poți " +
+              "numi obiectele în engleză împreună cu el (palm tree, ice cream, teddy bear) pentru un mini-moment " +
+              "de vocabular. Descarcă paginile individual sau setul complet ca PDF pentru tipărire A4." }
+    ],
+    skills: [
+      "Numerația 1–9 și corespondența cantitate–cifră",
+      "Recunoașterea cifrelor dintre mai multe variante",
+      "Vocabular englezesc de bază (vară, jucării, animale)",
+      "Atenție vizuală și lucru independent"
+    ]
+  },
+  "fisa de vara ordonare numere": {
+    intro:
+      "Două fișe de vară pentru ordonarea numerelor până la 50: copilul privește săgeata de la începutul " +
+      "rândului — verde pentru crescător, roșie pentru descrescător — apoi așază cele cinci numere în ordinea " +
+      "cerută, scriindu-le în căsuțe. Un exercițiu excelent de recapitulare pe vacanță, potrivit pentru " +
+      "clasa pregătitoare avansată și clasa I.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Fiecare pagină are 10 rânduri cu câte 5 numere amestecate (până la 50), alternând ordonarea " +
+              "crescătoare cu cea descrescătoare. Designul vesel de vară — soare cu ochelari, palmieri, castel " +
+              "de nisip, crab — transformă recapitularea într-o joacă de plajă." },
+      { title: "Cum se folosește",
+        body: "Înainte de scriere, roagă copilul să citească toate numerele din rând cu voce tare și să le " +
+              "găsească pe cel mai mic și pe cel mai mare — apoi ordonarea devine simplă. Fișele merg rezolvate " +
+              "și pe folie de plastic cu marker, pentru refolosire. Disponibile individual (JPG) sau ca PDF A4." }
+    ],
+    skills: [
+      "Compararea și ordonarea numerelor 0–50",
+      "Înțelegerea termenilor crescător și descrescător",
+      "Scrierea cifrelor în spațiu delimitat",
+      "Concentrare și verificare independentă"
+    ]
+  },
+  "greater less equal": {
+    intro:
+      "Un set de 6 fișe în limba engleză pentru compararea numerelor până la 15, cu semnele >, < și =. " +
+      "Fiecare pagină are 10 perechi de numere, iar copilul încercuiește semnul corect dintre cele trei " +
+      "variante. Setul include multe perechi egale (7 și 7, 13 și 13) — exact capcanele care îi ajută pe " +
+      "copii să înțeleagă cu adevărat semnul egal. Potrivit pentru clasa pregătitoare și clasa I.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "60 de exerciții de comparare în total, cu dificultate progresivă: perechi mici (1 și 1, 3 și 1), " +
+              "perechi egale strecurate printre cele inegale și numere peste 10 (11, 12, 13, 14, 15), care cer " +
+              "atenție la ordinea cifrelor. Formatul curat, cu butoanele >, = și < desenate pe fiecare rând, " +
+              "păstrează atenția pe sarcină." },
+      { title: "Cum se folosește",
+        body: "Trucul clasic al crocodilului flămând funcționează de minune: gura semnului se deschide mereu " +
+              "spre numărul mai mare. Pentru perechile egale, copilul verifică cifră cu cifră. Poți folosi " +
+              "fișele și pentru vocabular englezesc: greater than, less than, equal. Descarcă individual sau " +
+              "ca PDF complet A4." }
+    ],
+    skills: [
+      "Compararea numerelor 0–15",
+      "Utilizarea corectă a semnelor >, < și =",
+      "Înțelegerea egalității numerice",
+      "Vocabular matematic englezesc (greater, less, equal)"
+    ]
+  },
+  "antonyms for kids": {
+    intro:
+      "O colecție de 5 planșe-worksheet în limba engleză cu 60 de perechi de antonime ilustrate: de la " +
+      "hot/cold și big/small până la deep/shallow și sharp/blunt. Fiecare pereche are imagini sugestive care " +
+      "fac sensul cuvintelor evident fără traducere — exact cum se învață natural o limbă străină. Potrivite " +
+      "pentru elevii de clasa I–a IV-a care învață engleza, dar și pentru preșcolari, cu ajutorul unui adult.",
+    sections: [
+      { title: "Ce conține setul",
+        body: "Cele 5 worksheets acoperă 60 de perechi organizate tematic: însușiri de bază (worksheet 1), " +
+              "poziții și cantități (worksheet 2 și 4), verbe de acțiune (worksheet 3) și adjective descriptive " +
+              "mai avansate (worksheet 5). Fiecare pereche este numerotată și ilustrată cu personaje vesele." },
+      { title: "Cum se folosește",
+        body: "Planșele funcționează în trei moduri: ca poster de perete pentru expunere zilnică, ca material " +
+              "de joc (acoperă un cuvânt și cere-i copilului perechea) sau ca suport de lecție la clasă. " +
+              "Recomandăm câte un worksheet pe săptămână, cu recapitulare prin jocul de mimă: copilul mimează " +
+              "un cuvânt, tu ghicești antonimul. Descarcă individual sau ca PDF complet." }
+    ],
+    skills: [
+      "Vocabular englezesc: 120 de cuvinte în perechi de antonime",
+      "Înțelegerea conceptului de opus / antonim",
+      "Asocierea cuvânt–imagine fără traducere",
+      "Pronunție și conversație simplă în engleză"
+    ]
+  },
+  "scaderi set 1": {
+    intro:
+      "Un set de 6 fișe de scădere în limba română, în care fiecare exercițiu este ilustrat cu obiecte " +
+      "prietenoase: mere și portocale zâmbitoare, floricele, inimioare și steluțe. Copilul numără obiectele, " +
+      "rezolvă scăderea și scrie rezultatul pe linie — pasul firesc după stăpânirea adunării. Setul lucrează " +
+      "scăderea în concentrul 0–8 și este potrivit pentru clasa pregătitoare și grupa mare (5–7 ani).",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 6 pagini conțin câte 6 exerciții fiecare, cu dificultate variată: scăderi cu 1 (2−1, 4−1), " +
+          "scăderi cu diferențe mici (5−4, 7−6) și scăderi mai solicitante (8−5, 8−3, 7−4). Fiecare exercițiu " +
+          "are alături mulțimea de obiecte desenată, astfel încât copilul să poată număra concret, tăia cu " +
+          "creionul obiectele scăzute și verifica singur rezultatul."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Strategia recomandată: copilul numără toate obiectele din rând, taie cu creionul atâtea obiecte " +
+          "câte se scad, apoi numără câte au rămas și scrie rezultatul. După câteva pagini, încurajează-l să " +
+          "rezolve întâi din minte și să verifice apoi cu imaginile. Descarcă paginile individual (JPG) sau " +
+          "întregul set ca PDF, gata de tipărit pe A4."
+      }
+    ],
+    skills: [
+      "Scăderea în concentrul 0–8 cu suport vizual",
+      "Strategia numără–taie–verifică pentru scădere",
+      "Scrierea cifrelor și a rezultatului pe liniatură",
+      "Trecerea de la calcul concret la calcul mintal",
+      "Atenție, răbdare și lucru independent"
+    ]
+  },
+  "numara baloane si gargarite": {
+    intro:
+      "Două fișe vesele de numărare și recunoaștere a cifrelor: copilul numără baloanele din fiecare buchet " +
+      "și bulinele de pe aripile gărgărițelor, apoi încercuiește numărul corect dintre cele trei variante. " +
+      "O activitate scurtă și atractivă pentru consolidarea numerației 1–9, potrivită pentru grupa mijlocie " +
+      "și grupa mare (4–6 ani).",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Prima fișă lucrează numărarea baloanelor (buchete de la 2 la 8 baloane), iar a doua numărarea " +
+          "bulinelor de pe gărgărițe — un exercițiu ceva mai fin, pentru că bulinele sunt așezate pe ambele " +
+          "aripi. La fiecare rând, copilul alege răspunsul corect din trei variante, exersând simultan " +
+          "numărarea și recunoașterea cifrelor scrise."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Încurajează copilul să atingă cu degetul fiecare obiect în timp ce numără (corespondența unu la " +
+          "unu), apoi să caute cifra potrivită și să o încercuiască cu o culoare veselă. Fișele pot fi " +
+          "refolosite: laminate sau puse într-o folie de plastic, se pot rezolva cu marker lavabil. Descarcă " +
+          "paginile individual sau setul complet ca PDF pentru tipărire A4."
+      }
+    ],
+    skills: [
+      "Numerația 1–9 și corespondența unu la unu",
+      "Recunoașterea cifrelor scrise",
+      "Asocierea cantitate–simbol numeric",
+      "Atenție la detalii și motricitate fină (încercuire)"
+    ]
+  },
+  "adunare jucarii set 1": {
+    intro:
+      "Un set de 7 fișe de adunare în limba engleză (Addition), în care fiecare exercițiu este ilustrat cu " +
+      "jucării dragi copiilor: ursuleți de pluș, păpuși, trenulețe, mingi de plajă, roboței și mașinuțe. " +
+      "Copilul numără obiectele din imagine, rezolvă adunarea și scrie rezultatul pe linie — o trecere " +
+      "naturală de la numărarea concretă la operația matematică. Potrivit pentru grupa mare și clasa " +
+      "pregătitoare (5–7 ani), acasă sau la clasă.",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 7 pagini lucrează adunarea în concentrul 0–10, cu suport vizual pe fiecare exercițiu: " +
+          "pagini cu sume mici (până la 5–6) pentru început, apoi adunări cu rezultate până la 8, 9 și 10. " +
+          "Fiecare fișă are câte 6 exerciții, o singură temă vizuală pe pagină (doar ursuleți, doar trenulețe " +
+          "etc.) și spațiu generos de scris, ca cei mici să nu fie distrași de la sarcină."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Recomandăm parcurgerea în ordine, de la sumele mici către 10: copilul numără mai întâi obiectele " +
+          "cu degetul, spune operația cu voce tare, apoi scrie rezultatul. Fișele fiind în limba engleză, " +
+          "pot fi folosite și pentru familiarizarea cu vocabularul matematic englezesc (addition, count, " +
+          "solve). Descarcă fiecare pagină separat (JPG) sau întregul set ca PDF, gata de tipărit pe A4."
+      }
+    ],
+    skills: [
+      "Adunarea în concentrul 0–10 cu suport vizual",
+      "Numărare și corespondența cantitate–cifră",
+      "Scrierea cifrelor și a rezultatului pe liniatură",
+      "Vocabular matematic în limba engleză (addition, count, solve)",
+      "Atenție, concentrare și lucru independent"
+    ]
+  },
+  "grupa mica primavara pachet 1": {
+    intro:
+      "Un pachet complet de 10 fișe tematice de primăvară, gândit special pentru copiii de grupă mică " +
+      "(3–4 ani). Activitățile pornesc de la lucruri pe care cei mici le văd afară în acest anotimp — flori, " +
+      "fluturi, buburuze, albinuțe — și le transformă în exerciții scurte, colorate și ușor de urmărit, " +
+      "potrivite pentru durata de atenție a vârstei.",
+    sections: [
+      {
+        title: "Ce conține pachetul",
+        body:
+          "Cele 10 pagini acoperă mai multe tipuri de activitate: recunoașterea și formarea grupelor de câte 3, " +
+          "asocierea mulțimii cu cifra corespunzătoare (1, 2, 3), trasarea cifrei 3 după model cu puncte de pornire, " +
+          "exerciții de grafomotricitate (linii frânte, ondulate și în zig-zag de la o floare la alta), un labirint " +
+          "în care albina caută drumul spre flori și pagini de colorat cu elemente de primăvară."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Fișele pot fi parcurse în ordine, ca un mic caiet de lucru, sau individual, alegând doar activitatea " +
+          "potrivită momentului. Poți descărca fiecare pagină separat (imagine JPG) sau întregul pachet ca PDF, " +
+          "gata de tipărit pe format A4. Recomandăm creioane colorate groase și sesiuni scurte de 10–15 minute, " +
+          "cu pauze, pentru a păstra plăcerea de a lucra."
+      }
+    ],
+    skills: [
+      "Primele noțiuni matematice: numărul 3, grupe și cantități",
+      "Motricitate fină și control al creionului (trasare, colorare)",
+      "Atenție, concentrare și rezolvare de probleme (labirintul)",
+      "Vocabular de primăvară și observarea naturii"
+    ],
+    tips:
+      "Sfat pentru părinți și educatori: lăsați copilul să numească cu voce tare ce vede în fiecare imagine " +
+      "înainte de a rezolva — denumirea elementelor întărește vocabularul și face legătura între cifră și cantitate."
+  },
+
+  "SEMNE GRAFICE PRIMAVARA": {
+    intro:
+      "Un set de 8 fișe de grafomotricitate cu temă de primăvară, în care fiecare pagină are un singur personaj " +
+      "sau o singură floare desenată cu linie punctată. Copilul trasează conturul peste puncte, apoi colorează — " +
+      "doi pași simpli care pregătesc mâna pentru scris și fac exercițiul plăcut, ca o joacă.",
+    sections: [
+      {
+        title: "Ce conține setul",
+        body:
+          "Cele 8 fișe acoperă personaje și flori specifice anotimpului: fluturele, omida, ghioceii, rândunica, " +
+          "zambilele, albinuța, narcisele și iepurașul. Conturul punctat este mare și clar, potrivit pentru mânuțe " +
+          "mici, iar formele variate (linii lungi, curbe, spirale, bucle) antrenează tipuri diferite de mișcare."
+      },
+      {
+        title: "Cum se folosește",
+        body:
+          "Fiecare fișă se rezolvă în doi pași: întâi se trasează conturul punctat cu un creion, apoi se colorează " +
+          "desenul. Poți descărca fiecare pagină separat (imagine JPG) sau întregul set ca PDF, gata de tipărit pe " +
+          "format A4. Recomandăm un creion gros sau o cariocă subțire și sesiuni scurte, ca să nu obosească mâna."
+      }
+    ],
+    skills: [
+      "Motricitate fină și coordonare ochi-mână",
+      "Pregătirea mâinii pentru scris (control al traseului)",
+      "Atenție la detalii și răbdare",
+      "Vocabular de primăvară: flori, insecte, animale"
+    ],
+    tips:
+      "Sfat pentru părinți și educatori: încurajați copilul să traseze fără să grăbească și să respecte direcția " +
+      "liniei. La final, întrebați-l ce culori a ales și de ce — așa exersează și exprimarea, nu doar mâna."
+  }
+};
+
+function setDescriptionData(){
+  const key = pdfKey(data.pdf);
+  if(SET_DESCRIPTIONS[key]) return SET_DESCRIPTIONS[key];
+  // text generat automat pentru fișele fără descriere proprie
+  const lvl = LVL_NAME[data.level] || data.level || "";
+  const teme = data.themes.map(t=>THEME_NAME[t]||t).join(", ");
+  let s = "Acest material";
+  if(lvl) s += " este creat pentru " + lvl.toLowerCase();
+  if(teme) s += " și are ca temă " + teme.toLowerCase();
+  s += ". Conține " + (data.pages || "mai multe") + " pagini de activități pe care le poți răsfoi în galeria de mai sus, descărca individual sau salva ca PDF complet.";
+  return s; // string simplu
+}
+
+/* construiește HTML-ul casetei "Despre acest set" */
+function setDescriptionHTML(){
+  const d = setDescriptionData();
+  if(typeof d === "string"){
+    return `<h2>Despre acest set</h2><p>${d}</p>`;
+  }
+  let html = `<h2>Despre acest set</h2>`;
+  if(d.intro) html += `<p class="lead">${d.intro}</p>`;
+  (d.sections||[]).forEach(sec=>{
+    html += `<h3>${sec.title}</h3><p>${sec.body}</p>`;
+  });
+  if(d.skills && d.skills.length){
+    html += `<h3>Ce dezvoltă</h3><ul class="skills">` +
+            d.skills.map(s=>`<li>${s}</li>`).join("") + `</ul>`;
+  }
+  if(d.tips) html += `<p class="tip">💡 ${d.tips}</p>`;
+  return html;
+}
+
+const mainTheme = data.themes[0] || "primavara";
+const accent = THEME_COLOR[mainTheme] || "#ff8a3d";
+document.documentElement.style.setProperty("--accent-theme", accent);
+document.title = data.title + " — Kiddy MSK";
+
+/* ===== Detectare automată a imaginilor numerotate =====
+   Pornim de la imaginea dată (ex. .../23.jpg) și încercăm
+   atât înainte cât și înapoi până nu mai găsim fișiere.
+   Funcționează indiferent dacă numerotarea începe de la 1 sau alt număr. */
+
+function parseImg(url){
+  // separă: bază + număr + extensie  (ex: ".../folder/" "23" ".jpg")
+  const m = url.match(/^(.*?)(\d+)(\.[a-zA-Z]+)(?:[?#].*)?$/);
+  if(!m) return null;
+  return { base:m[1], num:parseInt(m[2]), pad:m[2].length, ext:m[3] };
+}
+function buildUrl(p, n){
+  const numStr = String(n).padStart(p.pad, "0");
+  return p.base + numStr + p.ext;
+}
+function loadImage(url){
+  return new Promise(res=>{
+    const im = new Image();
+    im.onload = ()=>res(true);
+    im.onerror = ()=>res(false);
+    im.src = encodeURI(url);
+  });
+}
+
+async function detectImages(){
+  const parsed = parseImg(data.img);
+  // Dacă nu putem analiza URL-ul, afișăm doar imaginea dată
+  if(!parsed){ return [data.img]; }
+
+  const found = [];
+  const maxProbe = 300; // siguranță
+
+  // 1) confirmăm imaginea de start
+  if(await loadImage(buildUrl(parsed, parsed.num))){
+    found.push({n:parsed.num, url:buildUrl(parsed, parsed.num)});
+  } else {
+    // dacă nici imaginea dată nu există, întoarcem doar URL-ul brut
+    return [data.img];
+  }
+
+  // 2) căutăm înapoi (numere mai mici), max 2 lipsuri consecutive
+  let misses=0;
+  for(let n=parsed.num-1; n>=parsed.num-maxProbe && n>=0; n--){
+    const url=buildUrl(parsed,n);
+    if(await loadImage(url)){ found.unshift({n, url}); misses=0; }
+    else { misses++; if(misses>=2) break; }
+  }
+  // 3) căutăm înainte (numere mai mari), max 2 lipsuri consecutive
+  misses=0;
+  for(let n=parsed.num+1; n<=parsed.num+maxProbe; n++){
+    const url=buildUrl(parsed,n);
+    if(await loadImage(url)){ found.push({n, url}); misses=0; }
+    else { misses++; if(misses>=2) break; }
+  }
+  // ordonăm crescător după număr și întoarcem doar URL-urile
+  found.sort((a,b)=>a.n-b.n);
+  return found.map(f=>f.url);
+}
+
+/* ===== Construire HTML cap pagină ===== */
+function renderHead(){
+  const grp = lvlGroup(data.level);
+  const lvlColor = grp==="gradi" ? "var(--gradi)" : "var(--scoala)";
+  const lvlIcon  = grp==="gradi" ? "🎈" : "🎒";
+  const tags = data.themes.map(t=>
+    `<span class="tag-pill" style="background:${THEME_BG[t]||'#eee'};color:${THEME_COLOR[t]||'#333'}">${ICONS[t]||''} ${THEME_NAME[t]||t}</span>`
+  ).join("");
+
+  return `
+    <div class="fisa-head">
+      ${data.level?`<span class="lvl-badge" style="background:${lvlColor}">${lvlIcon} ${LVL_NAME[data.level]||data.level}</span>`:''}
+      <h1>${data.title}</h1>
+      ${data.cat?`<span class="fisa-cat">${data.cat}</span>`:''}
+      ${data.desc?`<p class="fisa-desc">${data.desc}</p>`:''}
+      ${tags?`<div class="fisa-tags">${tags}</div>`:''}
+    </div>`;
+}
+
+/* ===== Slider ===== */
+let images = [];
+let current = 0;
+
+function renderSlider(){
+  return `
+    <div class="slider-wrap">
+      <div class="stage">
+        <div class="stage-inner" id="stage-inner">
+          <span class="page-count" id="page-count"></span>
+          <div class="loading" id="loading">
+            <div class="spin"></div>
+            <span>Se încarcă paginile…</span>
+          </div>
+          <button class="nav-arrow prev" id="btn-prev" aria-label="Pagina anterioară">‹</button>
+          <button class="nav-arrow next" id="btn-next" aria-label="Pagina următoare">›</button>
+        </div>
+      </div>
+
+      <p class="page-desc" id="page-desc"></p>
+
+      <div class="slide-actions">
+        <a class="btn btn-dl-page" id="btn-dl-page" download target="_blank">⬇️ Descarcă pagina</a>
+        ${ data.pdf2
+            ? `<a class="btn btn-dl-pdf" href="${data.pdf}" target="_blank">📥 PDF Partea 1</a>
+               <a class="btn btn-dl-pdf" href="${data.pdf2}" target="_blank">📥 PDF Partea 2</a>`
+            : (data.pdf?`<a class="btn btn-dl-pdf" href="${data.pdf}" target="_blank">📥 Descarcă PDF complet</a>`:'')
+        }
+      </div>
+
+      <div class="thumbs" id="thumbs"></div>
+
+      <div class="set-desc">
+        ${setDescriptionHTML()}
+      </div>
+    </div>`;
+}
+
+function showSlide(i){
+  if(i<0||i>=images.length) return;
+  current = i;
+  document.querySelectorAll("#stage-inner img").forEach((el,idx)=>el.classList.toggle("on", idx===i));
+  document.getElementById("page-count").textContent = (i+1)+" / "+images.length;
+  // descriere pagină
+  const pd = document.getElementById("page-desc");
+  const entry = pageDescs && pageDescs[i] ? pageDescs[i] : null;
+  if(entry){
+    if(typeof entry === "string"){
+      pd.innerHTML = `<p>${entry}</p>`;
+    } else {
+      pd.innerHTML =
+        (entry.title ? `<h3>${entry.title}</h3>` : "") +
+        (entry.body  ? `<p>${entry.body}</p>` : "");
+    }
+    pd.style.display = "block";
+  } else {
+    pd.innerHTML = `<p>Pagina ${i+1} din ${images.length}</p>`;
+    pd.style.display = "block";
+  }
+  document.getElementById("btn-prev").disabled = (i===0);
+  document.getElementById("btn-next").disabled = (i===images.length-1);
+  // buton descarcă pagina curentă
+  const dl = document.getElementById("btn-dl-page");
+  dl.href = encodeURI(images[i]);
+  // thumbnails active
+  document.querySelectorAll(".thumb").forEach((t,idx)=>t.classList.toggle("active", idx===i));
+  // scroll thumbnail activ în vizor
+  const at = document.querySelector(".thumb.active");
+  if(at) at.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+}
+
+function buildGallery(){
+  const inner = document.getElementById("stage-inner");
+  const loading = document.getElementById("loading");
+
+  if(images.length===0){
+    document.getElementById("content").innerHTML = `
+      <div class="error-box">
+        <div class="big">🔍</div>
+        <h1 style="font-family:'Fredoka';font-size:26px;margin-bottom:8px">Nu am găsit imaginile</h1>
+        <p>Nu am putut încărca paginile acestei fișe.</p>
+        <p style="margin-top:14px"><a href="index.html">← Înapoi la materiale</a></p>
+      </div>`;
+    return;
+  }
+
+  // injectăm <img> pentru fiecare pagină
+  const imgsHtml = images.map((url,idx)=>
+    `<img src="${encodeURI(url)}" alt="${data.title} — pagina ${idx+1}" loading="${idx<2?'eager':'lazy'}">`
+  ).join("");
+  loading.insertAdjacentHTML("beforebegin", imgsHtml);
+  loading.remove();
+
+  // thumbnails
+  document.getElementById("thumbs").innerHTML = images.map((url,idx)=>
+    `<div class="thumb" data-i="${idx}"><img src="${encodeURI(url)}" alt="pagina ${idx+1}" loading="lazy"></div>`
+  ).join("");
+  document.querySelectorAll(".thumb").forEach(t=>
+    t.addEventListener("click",()=>showSlide(parseInt(t.dataset.i)))
+  );
+
+  // butoane navigare
+  document.getElementById("btn-prev").addEventListener("click",()=>showSlide(current-1));
+  document.getElementById("btn-next").addEventListener("click",()=>showSlide(current+1));
+  document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft") showSlide(current-1);
+    if(e.key==="ArrowRight") showSlide(current+1);
+  });
+
+  showSlide(0);
+}
+
+/* ===== Init ===== */
+async function init(){
+  if(!data.img){
+    document.getElementById("content").innerHTML = `
+      <div class="error-box">
+        <div class="big">📄</div>
+        <h1 style="font-family:'Fredoka';font-size:26px">Fișă inexistentă</h1>
+        <p style="margin-top:10px"><a href="index.html">← Înapoi la materiale</a></p>
+      </div>`;
+    return;
+  }
+  document.getElementById("content").innerHTML = renderHead() + renderSlider();
+  images = await detectImages();
+  buildGallery();
+}
+init();
+</script>
+</body>
+</html>
