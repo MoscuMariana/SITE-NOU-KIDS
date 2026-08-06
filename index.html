@@ -1404,17 +1404,14 @@ let activeLevels=new Set(), activeThemes=new Set();
 
 /* Construiește link-ul către pagina de slider (fisa.html) cu toate datele fișei */
 function fisaUrl(f){
-  const p = new URLSearchParams();
-  p.set("title", f.title||"");
-  p.set("cat",   f.cat||"");
-  p.set("desc",  f.desc||"");
-  p.set("pages", f.pages||"");
-  p.set("level", f.level||"");
-  p.set("themes",(f.themes||[]).join(","));
-  p.set("img",   f.img||"");
-  p.set("pdf",   f.pdf||"");
-  if(f.pdf2) p.set("pdf2", f.pdf2);
-  return "fisa.html?"+p.toString();
+  // pagina statica dedicata fisei (SEO); slider-ul ramane accesibil de acolo
+  const dir = decodeURIComponent(String(f.img||"")
+                .replace("https://kiddy-msk.com/",""))
+                .replace(/\/[^\/]*$/,"");
+  const slug = dir.toLowerCase().replace(/[\/ .]/g,"-")
+                  .replace(/[^a-z0-9\-]/g,"").replace(/-+/g,"-")
+                  .replace(/^-|-$/g,"");
+  return "fise/"+slug+".html";
 }
 
 function renderFise(){
